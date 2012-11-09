@@ -1,0 +1,37 @@
+<?php echo $this->doctype(); ?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" >
+	<?=$this->headMeta() ?>
+	<?=$this->headTitle() ?>
+	<? echo $this->partial('layout/head-client', array('effectJs' => $this->jsList, 'effectCss' => $this->cssList)) ?>
+	<? echo $this->partial('layout/head-admin') ?>
+</head>
+<body>
+<?php
+if($this->sessionAdmin->hasPrivilege()) {
+	$co = $this->factory->_m('Layout');
+	$userLayoutDocs = $co->addFilter('default', 0)
+		->fetchDoc();
+	
+	echo $this->partial('layout/toolbar', array(
+		'layoutFront' => $this->layoutFront,
+		'userLayoutDocs' => $userLayoutDocs,
+		'sessionAdmin' => $this->sessionAdmin
+	));
+}
+?>
+
+<?php echo $this->content; ?>
+
+<?php if($this->sessionAdmin->hasPrivilege()) { ?>
+<div id="lightbox-blackbox"></div>
+<div id="lightbox-whitebox">
+	<div class='closer'></div>
+	<div class='content'></div>
+</div>
+<div class="ajaxbox">Loading......</div>
+<div class="mini-brick-mask"></div>
+<?php } ?>
+</body>
+</html>

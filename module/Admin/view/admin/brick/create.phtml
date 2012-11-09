@@ -1,0 +1,7 @@
+<div class='extension-group'>
+<?php foreach($this->rowset as $row) {?>
+	<a href='#/admin/brick.ajax/list-group/layoutId/<?php echo $this->layoutId?>/stageId/<?php echo $this->stageId?>/spriteName/<?php echo $this->spriteName?>/groupName/<?php echo $row->name?>'>
+		<?php echo $row->label?>
+	</a>
+<?php }?>
+</div>

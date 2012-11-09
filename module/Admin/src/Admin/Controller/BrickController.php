@@ -1,0 +1,259 @@
+<?php
+namespace Admin\Controller;
+
+use Zend\Mvc\Controller\AbstractActionController;
+use Admin\Form\Brick\EditForm;
+
+class BrickController extends AbstractActionController
+{
+    protected $_pageSize = 20;
+    
+    public function indexAction()
+    {
+        $this->brickConfig()->setActionMenu(array())
+			->setActionTitle('模块管理');
+    }
+    
+    public function createAction()
+    {
+    	$layoutId = $this->params()->fromRoute('layoutId');
+    	$stageId = $this->params()->fromRoute('stageId');
+    	$spriteName = $this->params()->fromRoute('spriteName');
+    	
+    	if(empty($layoutId) || is_null($stageId) || empty($spriteName)) {
+    		throw new Exception('url error');
+    	}
+    	
+		$centerDbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+		$tb = new \Zend\Db\TableGateway\TableGateway('extension_group', $centerDbAdapter);
+		$rowset = $tb->select();
+	    
+		$this->brickConfig()->setActionMenu(array())
+			->setActionTitle('选择模块类型');
+		
+		return array(
+			'layoutId'		=> $layoutId,
+			'stageId'		=> $stageId,
+			'spriteName'	=> $spriteName,
+			'rowset'		=> $rowset
+		);
+    }
+    
+    public function listGroupAction()
+    {
+    	$layoutId = $this->params()->fromRoute('layoutId');
+    	$stageId = $this->params()->fromRoute('stageId');
+    	$spriteName = $this->params()->fromRoute('spriteName');
+    	$groupName = $this->params()->fromRoute('groupName');
+    	
+    	if(empty($layoutId) || is_null($stageId) || empty($spriteName) || empty($groupName)) {
+    		throw new Exception('url error');
+    	}
+	    
+	    $centerDbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+		$tb = new \Zend\Db\TableGateway\TableGateway('extension_v2', $centerDbAdapter);
+    	$rowset = $tb->selectWith($tb->getSql()->select()
+    		->where(array('deprecated' => 0))
+    		->where(array('groupName' => $groupName))
+    		->order('sort'));
+    	
+    	$this->brickConfig()->setActionMenu(array())
+			->setActionTitle($groupName);
+		return array(
+			'layoutId'		=> $layoutId,
+	    	'stageId'		=> $stageId,
+	    	'spriteName'	=> $spriteName,
+	    	'rowset'		=> $rowset
+    	);
+    }
+    
+    public function editAction()
+    {
+    	$brickId = $this->params()->fromRoute('id');
+    	
+    	$factory = $this->dbFactory();
+    	$co = $factory->_m('Brick');
+    	if(empty($brickId)) {
+    		$brick = $co->create();
+    		$brick->extName = $this->params()->fromRoute('extName');
+    	} else {
+    		$brick = $co->find($brickId);
+    	}
+    	$solidBrick = $brick->createSolid($this);
+    	$tplArr = $solidBrick->getTplArray();
+    	
+    	$form = new EditForm();
+    	$form = $solidBrick->configParam($form);
+    	$form->get('tplName')->setValueOptions($tplArr);
+    	
+    	$form->setData($this->params()->fromRoute());
+    	$form->setData($brick->toArray());
+    	if($this->getRequest()->isPost()) {
+    		$postData = $this->getRequest()->getPost();
+        	$form->setData($postData);
+        	
+        	if($form->isValid()) {
+	    		$brick->setFromArray($form->getData());
+	    		if($brick->stageId == '0') {
+	    			$brick->layoutId = 0;
+	    		}
+	    		
+	    		$brick->active = 1;
+				$brick->save();
+			    $brickId = $brick->brickId;
+	            return $this->switchContext('brick');
+    		}
+    		
+    	}
+    	
+        $this->brickConfig()->setActionTitle('编辑模块:'.$brick->extName)
+        	->setActionMenu(array('save', 'delete', 'edit-tpl' => array(
+        		'callback' => '/admin/brick/edit-tpl/brick-id/'.$brickId,
+        		'label' => '新建TPL文件'
+        	)));
+        
+    	return array(
+    		'form' => $form,
+    	);
+    }
+    
+    public function deleteAction()
+    {
+    	$brickId = $this->params()->fromRoute('id');
+    	
+    	$factory = $this->dbFactory();
+    	$brick = $factory->_m('Brick')->find($brickId);
+    	if(is_null($brick)) {
+    		throw new Exception('brick not found');
+    	}
+    	
+		$brick->delete();
+    	return $this->switchContext('brick');
+    }
+    
+    public function editTplAction()
+    {
+    	$brickId = $this->params()->fromRoute('brick-id');
+    	$tplName = $this->params()->fromRoute('tpl-name');
+    	
+    	$brick = App_Factory::_m('Brick')->find($brickId);
+    	if(is_null($brick)) {
+    		throw new Exception('Brick not found by id :'.$brickId);
+    	}
+    	$extName = substr($brick->extName, 6);
+    	$solidBrick = $brick->createSolidBrick($this->getRequest());
+    	
+    	require(APP_PATH.'/admin/forms/Brick/EditTpl.php');
+    	$form = new Form_Brick_EditTpl();
+    	$fileFolder = TEMPLATE_PATH.'/Front_'.$extName;
+    	
+    	if(!empty($tplName)) {
+    		$filePath = $fileFolder.'/'.$tplName;
+			$fh = fopen($filePath, 'r');
+			$tplFileData = fread($fh, filesize($filePath));
+			fclose($fh);
+			$form->tplFileName->setValue($tplName);
+			$form->tplFileContent->setValue($tplFileData);
+    	}
+    	if($this->getRequest()->isPost() && $form->isValid($this->params()->fromRoutes())) {
+    		$siteInfo = Zend_Registry::get('siteInfo');
+    		$siteId = $siteInfo['id'];
+    		
+    		if(!is_dir($fileFolder)) {
+    			mkdir($fileFolder);
+    		}
+    		$filePath = $fileFolder.'/'.$form->getValue('tplFileName');
+    		$fh = fopen($filePath, 'w');
+    		fwrite($fh, $form->getValue('tplFileContent'));
+    		fclose($fh);
+    		$this->_helper->switchContent->gotoSimple('edit', null, null, array('brick-id' => $brickId), true);
+    	}
+    	
+    	$tplFile = CONTAINER_PATH.'/extension/brick/Front/'.$extName.'/view.tpl';
+		$fh = fopen($tplFile, 'r');
+		$viewFileData = fread($fh, filesize($tplFile));
+		fclose($fh);
+    	
+		$this->view->brickId = $brickId;
+    	$this->view->extName = $extName;
+		$this->view->tplArray = $solidBrick->getTplArray();
+    	$this->view->viewFileData = $viewFileData;
+    	$this->view->form = $form;
+    	$this->_helper->template->head('编辑<em>'.$extName.'</em>')
+    		->actionMenu(array('save'));
+    }
+    
+    public function getTplContentAjaxAction()
+    {
+    	$extName = $this->params()->fromRoute('extName');
+    	$tplName = $this->params()->fromRoute('tplName');
+    	
+    	$tplFile = CONTAINER_PATH.'/extension/brick/Front/'.$extName.'/'.$tplName;
+		$fh = fopen($tplFile, 'r');
+		$tplFileData = fread($fh, filesize($tplFile));
+		fclose($fh);
+    	$this->view->tplFileData = $tplFileData;
+    	$this->_helper->layout->disableLayout(); 
+    }
+    
+    public function editCssAction()
+    {
+    	$brickId = $this->params()->fromRoute('brick-id');
+    	$db = Zend_Registry::get('db');
+    	try {
+    		$db->describeTable('css');
+    	} catch(Exception $e) {
+    		echo "<div style='padding: 25px;'>table not implemented!</div>";
+    		exit(0);
+    	}
+    	$brick = Class_Base::_('Brick')->find($brickId)->current();
+    	if(is_null($brick)) {
+    		throw new Exception('Brick not found');
+    	}
+    	$extName = substr($brick->extName, 6);
+    	$cssSuffix = empty($brick->cssSuffix) ? '' : '-'.$brick->cssSuffix;
+    	$cssName = 'brick-'.strtolower($extName).$cssSuffix;
+    	
+    	$tb = new Zend_Db_Table('css');
+    	$row = $tb->fetchRow($tb->select()->where('id = ?', $cssName));
+    	
+    	require_once APP_PATH.'/admin/forms/Brick/EditCss.php';
+    	$form = new Form_Brick_EditCss();
+    	if(is_null($row)) {
+	    	$idField = $form->getElement('id');
+	    	$idField->setValue($cssName);
+	    	$row = $tb->createRow();
+	    	$row->type = 'brick';
+    	} else {
+    		$form->populate($row->toArray());
+    	}
+    	if($this->getRequest()->isPost() && $form->isValid($this->params()->fromRoutes())) {
+    		$row->setFromArray($form->getValues());
+    		$row->inFile = false;
+    		$row->save();
+    	}
+    	$this->view->form = $form;
+    	$this->view->controls = array(
+			'ajax-save' => array('callback' => '/admin/brick/edit-css/brick-id/'.$brickId)
+        );
+    }
+    
+    public function saveLocationJsonAction()
+    {
+    	$layoutId = $this->params()->fromRoute('layoutId');
+    	$stageId = $this->params()->fromRoute('stageId');
+    	$brickId = $this->params()->fromRoute('brickId');
+    	$spriteName = $this->params()->fromRoute('spriteName');
+    	
+    	$tb = new Zend_Db_Table('layout_stage_brick');
+    	$row = $tb->createRow();
+    	$row->layoutId = $layoutId;
+    	$row->stageId = $stageId;
+    	$row->brickId = $brickId;
+    	$row->spriteName = $spriteName;
+    	
+    	$row->save();
+    	
+    	$this->_helper->json(array('result' => 'success'));
+    }
+}

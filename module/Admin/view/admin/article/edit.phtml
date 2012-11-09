@@ -1,0 +1,43 @@
+<?php ob_start(); ?>
+<div id='attachment'>
+	<div class=''>您可以为文章添加多张图片，并选择您最满意的一张作为其缩略图</div>
+	<div class=''>
+		<div class=''>当前缩略图</div>
+		<div class='introicon'>
+			<img class='introicon-img' src='<?php echo $this->outputImage($this->article->introicon)?>' />
+		</div>
+	</div>
+	<ul id='graphic-list'></ul>
+	<button data-callback='appendAttachmentListener' class="icon-selector" type="button" name="graphic">添加图片</button>
+	<hr />
+	<div class=''>您可以为添加附件提供下载</div>
+	<ul id='download-list'></ul>
+	<button data-callback='appendAttachmentListener' class="icon-selector" type="button" name="download">添加附件下载</button>
+</div>
+<?php $content = ob_get_contents(); ob_end_clean(); ?>
+
+<?php echo $this->tabForm($this->form, array(array('handleLabel' => '图片和附件', 'content' => $content)))?>
+
+<script>
+	var tmp = jQuery.parseJSON('{"obj" : <?php echo \Zend\Json\Json::encode($this->article->attachment)?>}');
+	var attachmentBackboneSourceObj = tmp.obj;
+	var xTime = "<?php echo $this->time?>";
+	var xSig = "<?php echo $this->sig?>";
+	var thumbWidth = "<?php echo $this->thumbWidth?>";
+	var thumbHeight = "<?php echo $this->thumbHeight?>";
+</script>
+<script data-main="<?=Class_Server::libUrl()?>/admin/script/app/attachment" src="<?=Class_Server::extUrl()?>/require-jquery.js"></script>
+<script type='text/template' id='graphic-template'>
+	<div class='article-image'><img src='http://storage.aliyun.com/public-misc/{{ window.SITE_FOLDER }}/_thumb/{{ urlname }}'></div>
+	<div class='article-name'>{{ filename }}</div>
+	<div class='set-introicon' urlname='{{ urlname }}'>设置为缩略图</div>
+	<input type='hidden' name='attaUrl[]' value='{{ urlname }}' />
+	<input type='hidden' name='attaName[]' value='{{ filename }}' />
+	<input type='hidden' name='attaType[]' value='graphic' />
+</script>
+<script type='text/template' id='download-template'>
+	<div class='article-name'>{{ filename }}</div>
+	<input type='hidden' name='attaUrl[]' value='{{ urlname }}' />
+	<input type='hidden' name='attaName[]' value='{{ filename }}' />
+	<input type='hidden' name='attaType[]' value='download' />
+</script>
