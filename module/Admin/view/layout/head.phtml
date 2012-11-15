@@ -33,6 +33,6 @@ var FINDER;
 var EventMessenger = {};
 _.extend(EventMessenger, Backbone.Events);
 
-window.ORG_CODE = "<?php echo $this->siteConfig->organizationCode?>";
-window.SITE_FOLDER = "<?php echo $this->siteConfig->remoteSiteId?>";
+window.ORG_CODE = "<?php echo $this->siteConfig('organizationCode')?>";
+window.SITE_FOLDER = "<?php echo $this->siteConfig('remoteSiteId')?>";
 </script>
