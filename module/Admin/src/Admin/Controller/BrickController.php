@@ -95,7 +95,7 @@ class BrickController extends AbstractActionController
         	if($form->isValid()) {
 	    		$brick->setFromArray($form->getData());
 	    		if($brick->stageId == '0') {
-	    			$brick->layoutId = 0;
+	    			$brick->layoutId = '0';
 	    		}
 	    		
 	    		$brick->active = 1;
