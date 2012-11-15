@@ -45,7 +45,7 @@ $autoLoader = new Zend\Loader\StandardAutoloader(array(
 $autoLoader->register();
 
 $serverConfig = include 'config/server.config.php';
-$siteConfig = new \Fucms\SiteConfig($serverConfig['enviroment'], $serverConfig['lib'], $siteArr);
+$siteConfig = new \Fucms\SiteConfig($serverConfig, $siteArr);
 
 $application = Zend\Mvc\Application::init(include 'config/application.config.php');
 $serviceManager = $application->getServiceManager();

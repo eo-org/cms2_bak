@@ -1,5 +1,5 @@
 <?php
 return array(
-	'enviroment' => 'localhost',
-	'lib' => 'v3'
+	'libVersion' => 'v3',
+	'fileServer' => 'st.onlinefu.com'
 );
