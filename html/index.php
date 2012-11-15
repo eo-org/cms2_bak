@@ -1,5 +1,23 @@
 <?php
 $time = microtime();
+
+/**
+ * Validate Site Domains!
+ * 
+ */
+$requestHost = $_SERVER['HTTP_HOST'];
+$m = new Mongo('127.0.0.1', array('persist' => 'x'));
+$db = $m->selectDb('server_center');
+$siteArr = $db->site->findOne(array('domain' => $requestHost));
+if(is_null($siteArr)) {
+	header('Location: http://www.enorange.com/no-site/');
+	exit(0);
+}
+if(!$siteArr['active']) {
+	header('Location: http://www.enorange.com/site-expired/');
+	exit(0);
+}
+
 /**
  * This makes our life easier when dealing with paths. Everything is relative
  * to the application root now.
@@ -27,13 +45,13 @@ $autoLoader = new Zend\Loader\StandardAutoloader(array(
 $autoLoader->register();
 
 $serverConfig = include 'config/server.config.php';
-\Fucms\Site\Config::config($serverConfig);
+$siteConfig = new \Fucms\SiteConfig($serverConfig['enviroment'], $serverConfig['lib'], $siteArr);
 
-$application = Zend\Mvc\Application::init(include 'config/application.config.php')->run();
+$application = Zend\Mvc\Application::init(include 'config/application.config.php');
+$serviceManager = $application->getServiceManager();
+$serviceManager->setService('Fucms\SiteConfig', $siteConfig);
 
-$finishTime = microtime();
+$application->run();
+
+//$finishTime = microtime();
 //echo $finishTime - $time;
-
-
-
-

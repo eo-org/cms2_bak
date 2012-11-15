@@ -80,6 +80,14 @@ return array(
             ),
         ),
     ),
+    'controller_plugins' => array(
+    	'invokables' => array(
+    		'brickConfig'	=> 'Brick\Helper\Controller\Config',
+    		'dbFactory'		=> 'Core\Controller\Plugin\DbFactory',
+    		'switchContext'	=> 'Core\Controller\Plugin\SwitchContext',
+    		'siteConfig'	=> 'Core\Controller\Plugin\SiteConfig'
+    	)
+    ),
     'view_manager' => array(
         'display_not_found_reason' => true,
         'display_exceptions'       => true,
@@ -95,6 +103,17 @@ return array(
             'application/index/index'	=> __DIR__ . '/../view/application/index/index.phtml',
             'error/404'					=> __DIR__ . '/../view/error/404.phtml',
             'error/index'				=> __DIR__ . '/../view/error/index.phtml',
+        ),
+    ),
+    'view_helpers' => array(
+        'invokables' => array(
+    		'singleForm'			=> 'Core\View\Helper\SingleForm',
+    		'brickConfigForm'		=> 'Core\View\Helper\BrickConfigForm',
+            'tabForm'				=> 'Core\View\Helper\TabForm',
+            'bootstrapRow'			=> 'Core\View\Helper\BootstrapRow',
+            'bootstrapCollection'	=> 'Core\View\Helper\BootstrapCollection',
+    		'outputImage'			=> 'Core\View\Helper\OutputImage',
+    		'siteConfig'			=> 'Core\View\Helper\SiteConfig'
         ),
     ),
 );

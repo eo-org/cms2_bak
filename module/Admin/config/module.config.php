@@ -19,13 +19,6 @@ return array(
 			'layout.ajax'	=> 'Admin\Controller\LayoutController',
         ),
     ),
-    'controller_plugins' => array(
-    	'invokables' => array(
-    		'brickConfig'	=> 'Brick\Helper\Controller\Config',
-    		'dbFactory'		=> 'Core\Controller\Plugin\DbFactory',
-    		'switchContext'	=> 'Core\Controller\Plugin\SwitchContext',
-    	)
-    ),
     'view_manager' => array(
         'template_path_stack' => array(
             'admin' => __DIR__ . '/../view',
@@ -33,16 +26,6 @@ return array(
         'template_map' => array(
     		'layout/head'			=> __DIR__ . '/../view/layout/head.phtml',
         	'layout/admin-toolbar'	=> __DIR__ . '/../view/layout/toolbar.phtml',
-        ),
-    ),
-    'view_helpers' => array(
-        'invokables' => array(
-    		'singleForm'			=> 'Core\View\Helper\SingleForm',
-    		'brickConfigForm'		=> 'Core\View\Helper\BrickConfigForm',
-            'tabForm'				=> 'Core\View\Helper\TabForm',
-            'bootstrapRow'			=> 'Core\View\Helper\BootstrapRow',
-            'bootstrapCollection'	=> 'Core\View\Helper\BootstrapCollection',
-    		'outputImage'			=> 'Core\View\Helper\OutputImage',
         ),
     ),
     'router' => array(

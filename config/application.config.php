@@ -12,7 +12,6 @@ return array(
         ),
         'module_paths' => array(
             './module',
-        	'./vendor',
         ),
     ),
 );

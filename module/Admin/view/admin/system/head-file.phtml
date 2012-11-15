@@ -1,10 +1,10 @@
-<?php $this->headLink()->appendStylesheet(Class_Server::libUrl().'/admin/style/headfile.css'); ?>
+<?php $this->headLink()->appendStylesheet($this->siteConfig('libUrl').'/admin/style/headfile.css'); ?>
 <div class='create-file button'><a href='javascript:void(0)'>添加文件</a></div>
 <ul class='head-files'>
 
 </ul>
 
-<script data-main="<?=Class_Server::libUrl()?>/admin/script/app/head-file" src="<?=Class_Server::extUrl()?>/require-jquery.js"></script>
+<script data-main="<?=$this->siteConfig('libUrl')?>/admin/script/app/head-file" src="<?=$this->siteConfig('extUrl')?>/require-jquery.js"></script>
 
 <script type='text/template' id='headfile-item-template'>
 	<div class='head-file'>

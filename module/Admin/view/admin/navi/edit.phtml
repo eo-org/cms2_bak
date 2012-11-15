@@ -1,4 +1,4 @@
-<?php $this->headLink()->appendStylesheet(Class_Server::libUrl().'/admin/style/tree-editor.css'); ?>
+<?php $this->headLink()->appendStylesheet($this->siteConfig('libUrl').'/admin/style/tree-editor.css'); ?>
 <div class='container-bg'>
 	<ul class='container'>
 		<li class='drop-to-sort' parent-id='0'></li>
@@ -33,7 +33,7 @@ saveSort = function() {
 var tree = {type: 'navi', id: '<?php echo $this->naviDoc->getId()?>'};
 </script>
 
-<script data-main="<?=Class_Server::libUrl()?>/admin/script/app/treeleaf" src="<?=Class_Server::extUrl()?>/require-jquery.js"></script>
+<script data-main="<?=$this->siteConfig('libUrl')?>/admin/script/app/treeleaf" src="<?=$this->siteConfig('extUrl')?>/require-jquery.js"></script>
 
 <script type='text/template' id='treeleaf-item-template'>
 	<% if(parentId == '') {%>

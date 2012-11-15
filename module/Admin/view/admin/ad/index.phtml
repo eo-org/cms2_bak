@@ -1,18 +1,18 @@
-<?php $this->headLink()->appendStylesheet(Class_Server::libUrl().'/admin/style/ad.css');?>
+<?php $this->headLink()->appendStylesheet($this->siteConfig('libUrl').'/admin/style/ad.css');?>
 <ul class="ad">
 	
 </ul>
 
 <script>
 var sectionId = "<?php echo $this->sectionId?>";
-var fileUrl = "<?php echo Class_Server::getImageUrl().'/'.Class_Server::getSiteFolder()?>";
+var fileFolderUrl = "<?php echo $this->siteConfig('fileFolderUrl')?>";
 </script>
 
-<script data-main="<?=Class_Server::libUrl()?>/admin/script/app/ad" src="<?=Class_Server::extUrl()?>/require-jquery.js"></script>
+<script data-main="<?=$this->siteConfig('libUrl')?>/admin/script/app/ad" src="<?=$this->siteConfig('extUrl')?>/require-jquery.js"></script>
 
 <script type="text/template" id="ad">
 	<div class="thumb">
-		<img src="{{fileUrl}}/_thumb/{{filename}}">
+		<img src="{{fileFolderUrl}}/_thumb/{{filename}}">
 	</div>
 	<dl>
 		<dt>连接地址</dt><dd>:{{link}}</dd>

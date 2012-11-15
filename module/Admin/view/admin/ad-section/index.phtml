@@ -1,13 +1,13 @@
-<?php $this->headLink()->appendStylesheet(Class_Server::libUrl().'/admin/style/ad.css');?>
+<?php $this->headLink()->appendStylesheet($this->siteConfig('libUrl').'/admin/style/ad.css');?>
 <ul class="ad-section">
 
 </ul>
 
 <script>
-var fileUrl = "<?php echo Class_Server::getImageUrl().'/'.Class_Server::getSiteFolder()?>";
+var fileUrl = "<?php echo $this->siteConfig('fileFolderUrl')?>";
 </script>
 
-<script data-main="<?=Class_Server::libUrl()?>/admin/script/app/ad-section" src="<?=Class_Server::extUrl()?>/require-jquery.js"></script>
+<script data-main="<?=$this->siteConfig('libUrl')?>/admin/script/app/ad-section" src="<?=$this->siteConfig('extUrl')?>/require-jquery.js"></script>
 
 <script type="text/template" id="ad-section">
 	<div class="images">

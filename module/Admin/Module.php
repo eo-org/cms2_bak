@@ -39,9 +39,13 @@ class Module
         );
     }
     
-	public function userAuth($e)
+	public function userAuth(MvcEvent $e)
 	{
+		$controller = $e->getTarget();
+		$orgCode = $controller->siteConfig('organizationCode');
+		
 		$fsa = new Admin();
+		$fsa->setOrgCode($orgCode);
 		$ssoAuth = new SsoAuth($fsa);
 		$ssoAuth->auth();
 	}
@@ -56,8 +60,6 @@ class Module
 			$controller->layout('layout/layout.phtml');
 		}
 		
-		$fsa = new Admin();
-		$orgCode = $fsa->getOrgCode();
 		$routeMatch = $e->getRouteMatch();
 		$brickRegister = new Register($controller, new RegisterConfigAdmin());
 		$jsList = $brickRegister->getJsList();
@@ -66,11 +68,10 @@ class Module
 		
 		$viewModel = $e->getViewModel();
 		$viewModel->setVariables(array(
-				'routeMatch' => $routeMatch,
-				'orgCode' => $orgCode,
-				'brickViewList' => $brickViewList,
-				'jsList' => $jsList,
-				'cssList' => $cssList,
+				'routeMatch'	=> $routeMatch,
+				'brickViewList'	=> $brickViewList,
+				'jsList'		=> $jsList,
+				'cssList'		=> $cssList
 		));
 	}
 }

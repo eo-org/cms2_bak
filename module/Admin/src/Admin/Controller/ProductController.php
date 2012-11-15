@@ -86,7 +86,7 @@ class ProductController extends AbstractActionController
 		
 		$thumbWidth = empty($infoDoc->thumbWidth) ? 200 : $infoDoc->thumbWidth;
 		$thumbHeight = empty($infoDoc->thumbHeight) ? 200 : $infoDoc->thumbHeight;
-		$siteId = \Class_Server::getSiteFolder();
+		$siteId = $this->siteConfig('extUrl');
 		$time = time();
 		$fileServerKey = 'gioqnfieowhczt7vt87qhitonqfn8eaw9y8s90a6fnvuzioguifeb';
 		$sig = md5($siteId.$time.$fileServerKey);
