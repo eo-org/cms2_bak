@@ -7,7 +7,7 @@ class EditForm extends Form
 {
     public function __construct()
     {
-    	parent::__construct('layout-create');
+    	parent::__construct('layout-edit');
     	
     	$this->add(array(
     		'name' => 'label',

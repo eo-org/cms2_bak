@@ -5,6 +5,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Admin\Form\Layout\CreateForm;
 use Admin\Form\Layout\EditForm;
+use Admin\Form\Layout\EditDefaultForm;
 
 class LayoutController extends AbstractActionController
 {
@@ -67,7 +68,14 @@ class LayoutController extends AbstractActionController
         $factory = $this->dbFactory();
         $layoutDoc = $factory->_m('Layout')->find($layoutId);
         
-        $form = new EditForm();
+    	if($layoutDoc->default == 1) {
+    		$form = new EditDefaultForm();
+        	$this->brickConfig()->setActionMenu(array('save'));
+        } else {
+        	$form = new EditForm();
+			$this->brickConfig()->setActionMenu(array('save', 'delete'));
+        }
+        
         $form->setData($layoutDoc->toArray());
         if($this->getRequest()->isPost()) {
         	$postData = $this->getRequest()->getPost();
@@ -79,11 +87,6 @@ class LayoutController extends AbstractActionController
         	}
         }
         
-        if($layoutDoc->default == 1) {
-        	$this->brickConfig()->setActionMenu(array('save'));
-        } else {
-			$this->brickConfig()->setActionMenu(array('save', 'delete'));
-        }
         $this->brickConfig()->setActionTitle('编辑页面布局');
         
         return array('form' => $form);
