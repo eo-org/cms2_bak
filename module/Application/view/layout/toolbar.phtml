@@ -34,9 +34,8 @@
 			<li><a id='enter-sprite-mode' href='javascript:void(0);'>添加模块</a></li>
 			<li><a id='enter-brick-mode' href='javascript:void(0);'>编辑页面模块</a></li>
 			<?php
-			//if($this->csa->getUserData('userType') == 'designer') {
-			if(false) {
-				if($this->fsa->getSessionData('localCssMode') == 'active') {?>
+			if($this->sessionAdmin->getUserData('userType') == 'designer') {
+				if($this->sessionAdmin->getUserData('localCssMode') == 'active') {?>
 			<li><a id='unload-local-css' href='javascript:void(0);' style='color: red;'>停止读取本地CSS</a></li>
 			<li><a id='reload-local-css' href='javascript:void(0);' style='color: green;'>Reload CSS</a></li>
 				<?php } else {?>

@@ -10,18 +10,19 @@ use Zend\View\Helper\HeadMeta;
 use Zend\EventManager\StaticEventManager;
 use Fucms\Brick\Register;
 use Fucms\Brick\Service\RegisterConfig;
-use Fucms\Session\Admin;
+use Fucms\Session\Admin as SessionAdmin;
 
 class Module
 {
-	public $siteDoc = null;
+	public $infoDoc = null;
 	
 	public function init($moduleManager)
 	{
 		$sharedEvents = StaticEventManager::getInstance();
 		$sharedEvents->attach('Zend\Mvc\Application', 'dispatch.error', array($this, 'onError'), 100);
-		$sharedEvents->attach(__NAMESPACE__, 'dispatch', array($this, 'setLayout'), 10);
 		$sharedEvents->attach(__NAMESPACE__, 'dispatch', array($this, 'setTranslator'), 11);
+		$sharedEvents->attach(__NAMESPACE__, 'dispatch', array($this, 'setLayout'), 10);
+		$sharedEvents->attach(__NAMESPACE__, 'dispatch', array($this, 'setHeadFile'), -1);
 	}
 	
 	public function getConfig()
@@ -60,11 +61,11 @@ class Module
 		
 		$factory = $controller->dbFactory();
 		$co = $factory->_m('Info');
-		$this->siteDoc = $co->fetchOne();
+		$this->infoDoc = $co->fetchOne();
 		
 		$locale = 'zh_CN';
-		if(!is_null($this->siteDoc)) {
-			$locale = $this->siteDoc->language;
+		if(!is_null($this->infoDoc)) {
+			$locale = $this->infoDoc->language;
 		}
 		$translator = Translator::factory(array(
 			'locale' => $locale,
@@ -86,15 +87,15 @@ class Module
 		$factory = $controller->dbFactory();
 		$rm = $e->getRouteMatch();
 		
-		$siteDoc = $this->siteDoc;
-		$controller->setSiteDoc($siteDoc);
+		$infoDoc = $this->infoDoc;
+		$controller->setSiteDoc($infoDoc);
 		$doctypeHelper = new Doctype();
 		$doctypeHelper->setDoctype('HTML5');
-		if(!is_null($siteDoc)) {
+		if(!is_null($infoDoc)) {
 			$renderer = $sm->get('Zend\View\Renderer\PhpRenderer');
-    		$renderer->headTitle($siteDoc->pageTitle);
-			$renderer->headMeta()->setName('keywords', $siteDoc->metakey);
-			$renderer->headMeta()->setName('description', $siteDoc->metadesc);
+    		$renderer->headTitle($infoDoc->pageTitle);
+			$renderer->headMeta()->setName('keywords', $infoDoc->metakey);
+			$renderer->headMeta()->setName('description', $infoDoc->metadesc);
 		}
 		
 		$layoutFront = $sm->get('Fucms\Layout\Front');
@@ -105,7 +106,7 @@ class Module
 		$sm->setService('Brick\Register', $brickRegister);
 		$controller->setBrickRegister($brickRegister);
 		
-		$sessionAdmin	= new Admin();
+		$sessionAdmin	= new SessionAdmin();
 		$viewModel		= $controller->layout();
 		$jsList			= $brickRegister->getJsList();
 		$cssList		= $brickRegister->getCssList();
@@ -117,6 +118,36 @@ class Module
 			'jsList' => $jsList,
 			'cssList' => $cssList,
 		));
+	}
+	
+	public function setHeadFile(MvcEvent $e)
+	{
+		$controller = $e->getTarget();
+		$sm = $controller->getServiceLocator();
+		$factory = $controller->dbFactory();
+		
+		$siteConfig = $sm->get('Fucms\SiteConfig');
+		$viewHelper = $sm->get('ViewHelperManager');
+		$headFileCo = $factory->_m('HeadFile');
+		$headFileDocs = $headFileCo->fetchDoc();
+		
+		$sessionAdmin = new SessionAdmin();
+		$fileUrl = $siteConfig->fileFolderUrl;
+		if($sessionAdmin->getUserData('localCssMode') == 'active') {
+			$fileUrl = 'http://local.host/'.$siteConfig->globalSiteId;
+		}
+		
+		foreach($headFileDocs as $doc) {
+			if($doc->folder == 'helper') {
+				$viewHelper->get('HeadScript')->appendFile($siteConfig->libUrl.'/front/script/helper/'.$doc->filename);
+			} else {
+				if($doc->type == 'css') {
+					$viewHelper->get('HeadLink')->appendStylesheet($fileUrl.'/'.$doc->filename);
+				} else {
+					$viewHelper->get('HeadScript')->appendFile($fileUrl.'/'.$doc->filename);
+				}
+			}
+		}
 	}
 	
 	public function onError(MvcEvent $e)

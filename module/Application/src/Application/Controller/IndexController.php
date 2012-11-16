@@ -2,6 +2,7 @@
 namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
+use Fucms\Session\Admin as SessionAdmin;
 
 class IndexController extends AbstractActionController
 {
@@ -10,6 +11,15 @@ class IndexController extends AbstractActionController
 	
     public function indexAction()
     {
+    	$localCssMode = $this->params()->fromQuery('local-css-mode');
+    	if($localCssMode == 'activate') {
+    		$sessionAdmin = new SessionAdmin();
+    		$sessionAdmin->addUserData('localCssMode', 'active');
+    	} elseif($localCssMode == 'deactivate')  {
+    		$sessionAdmin = new SessionAdmin();
+    		$sessionAdmin->addUserData('localCssMode', 'deactivate');
+    	}
+    	
     	$sm = $this->getServiceLocator();
     	$lf = $sm->get('Fucms\Layout\Front');
     	$layoutDoc	= $lf->getLayoutDoc();

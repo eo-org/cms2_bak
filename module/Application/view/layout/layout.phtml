@@ -6,8 +6,16 @@
 	<?=$this->headTitle() ?>
 	<? echo $this->partial('layout/head-client', array('effectJs' => $this->jsList, 'effectCss' => $this->cssList)) ?>
 	<? echo $this->partial('layout/head-admin') ?>
+	<?=$this->headLink() ?>
+	<?=$this->headScript() ?>
 </head>
+<?php
+$ra = $this->layoutFront->getResourceAlias();
+if($ra == null) {?>
 <body>
+<?php } else {?>
+<body id='<?php echo $ra?>'>
+<?php }?>
 <?php
 if($this->sessionAdmin->hasPrivilege()) {
 	$co = $this->factory->_m('Layout');
@@ -22,7 +30,7 @@ if($this->sessionAdmin->hasPrivilege()) {
 }
 ?>
 
-<?php echo $this->content; ?>
+<div class='bg-wrapper'><?php echo $this->content; ?></div>
 
 <?php if($this->sessionAdmin->hasPrivilege()) { ?>
 <div id="lightbox-blackbox"></div>

@@ -1,5 +1,5 @@
 <?php
 return array(
 	'libVersion' => 'v3',
-	'fileServer' => 'st.onlinefu.com'
+	'fileServer' => 'lib.eo.test'
 );
