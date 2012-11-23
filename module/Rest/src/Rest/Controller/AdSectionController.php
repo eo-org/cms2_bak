@@ -1,10 +1,8 @@
 <?php
 namespace Rest\Controller;
 
-use MongoId;
-use MongoRegex;
 use Zend\Mvc\Controller\AbstractRestfulController;
-use Zend\Serializer\Adapter\Json;
+use Zend\Json\Json;
 
 class AdSectionController extends AbstractRestfulController
 {
@@ -23,10 +21,11 @@ class AdSectionController extends AbstractRestfulController
 	
 	public function create($data)
 	{
-		$modelString = file_get_contents('php://input');
-		$jsonArray = Zend_Json::decode($modelString);
+		$dataStr = $data['model'];
+		$dataArr = Json::decode($dataStr, Json::TYPE_ARRAY);
 		
-		$doc = App_Factory::_m('Ad_Section')->create($jsonArray);
+		$factory = $this->dbFactory();
+		$doc = $factory->_m('Ad_Section')->create($dataArr);
 		$doc->save();
 		
 		$this->getResponse()->getHeaders()->addHeaderLine('result', 'sucess');
@@ -35,12 +34,12 @@ class AdSectionController extends AbstractRestfulController
 	
 	public function update($id, $data)
 	{
+		$dataStr = $data['model'];
+		$dataArr = Json::decode($dataStr, Json::TYPE_ARRAY);
+		
 		$factory = $this->dbFactory();
 		$co = $factory->_m('Ad_Section');
 		$doc = $co->find($id);
-		$dataStr = $data['model'];
-		$adapter = new Json();
-		$dataArr = $adapter->unserialize($dataStr);
 		$doc->setFromArray($dataArr);
 		$doc->save();
 		
