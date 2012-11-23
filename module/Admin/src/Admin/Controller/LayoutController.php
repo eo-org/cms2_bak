@@ -6,6 +6,7 @@ use Zend\View\Model\JsonModel;
 use Admin\Form\Layout\CreateForm;
 use Admin\Form\Layout\EditForm;
 use Admin\Form\Layout\EditDefaultForm;
+use Admin\Form\Layout\EditStageForm;
 
 class LayoutController extends AbstractActionController
 {
@@ -75,6 +76,7 @@ class LayoutController extends AbstractActionController
         	$form = new EditForm();
 			$this->brickConfig()->setActionMenu(array('save', 'delete'));
         }
+        $this->brickConfig()->setActionTitle('编辑页面布局');
         
         $form->setData($layoutDoc->toArray());
         if($this->getRequest()->isPost()) {
@@ -87,15 +89,14 @@ class LayoutController extends AbstractActionController
         	}
         }
         
-        $this->brickConfig()->setActionTitle('编辑页面布局');
-        
         return array('form' => $form);
     }
     
     public function editStageAction()
     {
-    	$stageId = $this->getRequest()->getParam('stageId');
-    	$co = App_Factory::_m('Layout');
+    	$stageId = $this->params()->fromRoute('stageId');
+    	$factory = $this->dbFactory();
+    	$co = $factory->_m('Layout');
     	$doc = $co->addFilter('stage.stageId', $stageId)->fetchOne();
     	
     	$stages = $doc->stage;
@@ -107,70 +108,35 @@ class LayoutController extends AbstractActionController
     		}
     	}
     	
-    	require_once APP_PATH.'/admin/forms/Layout/EditStage.php';
-        $form = new Form_Layout_EditStage();
-        $form->populate($stages[$tempKey]);
-    	if($this->getRequest()->isPost() && $form->isValid($this->getRequest()->getParams())) {
-        	$stages[$tempKey]['uniqueId'] = $form->getValue('uniqueId');
-			$doc->stage = $stages;
-        	$doc->save();
+        $form = new EditStageForm();
+        $form->setData($stages[$tempKey]);
+    	if($this->getRequest()->isPost()) {
+    		$postData = $this->getRequest()->getPost();
+        	$form->setData($postData);
         	
-            return $this->switchContext('layout');
+        	if($form->isValid()) {
+	        	$stages[$tempKey]['uniqueId'] = $form->get('uniqueId')->getValue();
+				$doc->stage = $stages;
+	        	$doc->save();
+	        	
+	            return $this->switchContext('layout');
+    		}
         }
         
-        $this->view->form = $form;
-        $this->_helper->template->actionMenu(array('save'));
+        $this->brickConfig()->setActionMenu(array('save'))
+        	->setActionTitle('设置 Stage Id');
+        
+        return array('form' => $form);
     }
     
     public function setPageAction()
     {
-//    	$type = $this->getRequest()->getParam('type');
-//    	$id = $this->getRequest()->getParam('id');
-//        
-//        require APP_PATH.'/admin/forms/Layout/SetPage.php';
-//        $form = new Form_Layout_SetPage($type);
-//        
-//        if($this->getRequest()->isPost() && $form->isValid($this->getRequest()->getParams())) {
-//        	
-//	        if($type == 'static-artical') {
-//	        	$linkRow = Class_Base::_('Artical')->find($id)->current();
-//	        } else if($type == 'static-list') {
-//	        	$linkRow = Class_Base::_('Group')->find($id)->current();
-//	        }
-//        	
-//        	$linkRow->layoutId = $form->getValue('selectedLayoutId');
-//        	$linkRow->save();
-//			echo 'success';
-//			$this->_helper->viewRenderer->setNoRender(true);
-//			exit(0);
-//        }
-//        
-//        $this->view->form = $form;
-//        $this->view->id = $id;
-//        
-//        $this->view->controls = array(
-//			'ajax-save' => array('callback' => '/admin/layout/set-page/type/'.$type.'/id/'.$id)
-//        );
+    	
     }
     
     public function deleteAction()
     {
-//    	$layoutId = $this->getRequest()->getParam('layoutId');
-//    	
-//    	$co = App_Factory::_m('Layout');
-//		$doc = $co->find($layoutId);
-//    	if(is_null($doc)) {
-//    		throw new Exception('layout not found');
-//    	}
-////    	$db = Zend_Registry::get('db');
-////		$linkTable = Class_Base::_('Layout_Brick');
-////		$linkTable->delete($db->quoteInto('layoutId = ?', $layoutId));
-////		$layout->delete();
-//
-//    	$co = App_Factory::_m('Brick');
-//    	
-//    	
-//		$this->_helper->switchContent->gotoSimple('index', null, null, array(), true);
+    	
     }
     
     public function getLayoutJsonAction()
