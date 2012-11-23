@@ -14,6 +14,7 @@ class ProductController extends AbstractRestfulController
 		$currentPage = $filter['page'];
 		$sIndex = $filter['sIndex'];
 		$sOrder = intval($filter['sOrder']);
+		$qGroup = $filter['qGroup'];
 		$queryStr = $filter['query'];
 		
 		$pageSize = 20;
@@ -23,9 +24,16 @@ class ProductController extends AbstractRestfulController
 		
 		$factory = $this->dbFactory();
 		$co = $factory->_m('Product');
-		$co->setFields(array('label', 'name', 'groupId'));
+		$co->setFields(array('label', 'name', 'groupId', 'status'));
         $co->setPage($currentPage)->setPageSize($pageSize)
 			->sort($sIndex, $sOrder);
+			
+		if($qGroup == 'all') {
+			$co->addFilter('status', array('$ne' => 'trash'));
+		} else {
+			$co->addFilter('status', $qGroup);
+		}
+		
 		if($queryStr != 'none') {
 			$queryArr = explode('-', $queryStr);
 			foreach($queryArr as $qItem) {
@@ -44,11 +52,14 @@ class ProductController extends AbstractRestfulController
 		$data = $co->fetchAll(true);
 		$dataSize = $co->count();
 		
+		$dataGroupCount = $co->statusCount();
+		
 		$result = array();
 		$result['data'] = $data;
         $result['dataSize'] = $dataSize;
         $result['pageSize'] = $pageSize;
         $result['currentPage'] = $currentPage;
+		$result['groupCount'] = $dataGroupCount;
 		
 		return $result;
 	}
@@ -70,6 +81,10 @@ class ProductController extends AbstractRestfulController
 	
 	public function delete($id)
 	{
-		
+		$factory = $this->dbFactory();
+		$co = $factory->_m('Product');
+		$doc = $co->find($id);
+		$doc->toggleTrash();
+		$this->getResponse()->getHeaders()->addHeaderLine('result', 'sucess');
 	}
 }

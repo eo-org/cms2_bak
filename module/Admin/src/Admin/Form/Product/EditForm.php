@@ -56,6 +56,10 @@ class EditForm extends Form
     		'options' => array('label' => '插入图片')
     	));
     	$this->add(array(
+    		'name' => 'status',
+    		'attributes' => array('type' => 'hidden', 'value' => 'publish')
+    	));
+    	$this->add(array(
     		'name' => 'price',
     		'attributes' => array('type' => 'text'),
     		'options' => array('label' => '产品单价')
@@ -85,7 +89,7 @@ class EditForm extends Form
     public function getTabSettings()
     {
     	return array(
-    		array('handleLabel' => '基本信息', 'content' => array('label', 'name', 'groupId', 'sku', 'fulltext', 'appendImage', 'price')),
+    		array('handleLabel' => '基本信息', 'content' => array('label', 'name', 'groupId', 'sku', 'fulltext', 'appendImage', 'price', 'status')),
     		array('handleLabel' => '选填信息', 'content' => array('introtext', 'metakey', 'weight', 'introicon'))
     	);
     }

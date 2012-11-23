@@ -37,6 +37,10 @@ class EditForm extends Form
     		'options' => array('label' => '插入图片', 'callback' => 'appendToEditor',)
     	));
     	$this->add(array(
+    		'name' => 'status',
+    		'attributes' => array('type' => 'hidden', 'value' => 'publish')
+    	));
+    	$this->add(array(
     		'name' => 'introtext',
     		'attributes' => array('type' => 'textarea'),
     		'options' => array('label' => '文章摘要')
@@ -55,7 +59,7 @@ class EditForm extends Form
     public function getTabSettings()
     {
     	return array(
-    		array('handleLabel' => '基本信息', 'content' => array('label', 'groupId', 'fulltext', 'appendImage')),
+    		array('handleLabel' => '基本信息', 'content' => array('label', 'groupId', 'fulltext', 'appendImage', 'status')),
     		array('handleLabel' => '选填信息', 'content' => array('introtext', 'metakey', 'introicon'))
     	);
     }

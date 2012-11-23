@@ -1,6 +1,7 @@
 <?php
 namespace Rest\Controller;
 
+use MongoRegex;
 use Zend\Mvc\Controller\AbstractRestfulController;
 
 class ArticleController extends AbstractRestfulController
@@ -12,6 +13,7 @@ class ArticleController extends AbstractRestfulController
 		$currentPage = $filter['page'];
 		$sIndex = $filter['sIndex'];
 		$sOrder = intval($filter['sOrder']);
+		$qGroup = $filter['qGroup'];
 		$queryStr = $filter['query'];
 		
 		$pageSize = 20;
@@ -21,9 +23,16 @@ class ArticleController extends AbstractRestfulController
 		
 		$factory = $this->getServiceLocator()->get('Core\Mongo\Factory');
 		$co = $factory->_m('Article');
-		$co->setFields(array('label'));
+		$co->setFields(array('label', 'status'));
         $co->setPage($currentPage)->setPageSize($pageSize)
 			->sort($sIndex, $sOrder);
+		
+		if($qGroup == 'all') {
+			$co->addFilter('status', array('$ne' => 'trash'));
+		} else {
+			$co->addFilter('status', $qGroup);
+		}
+		
 		if($queryStr != 'none') {
 			$queryArr = explode('-', $queryStr);
 			foreach($queryArr as $qItem) {
@@ -42,11 +51,14 @@ class ArticleController extends AbstractRestfulController
 		$data = $co->fetchAll(true);
 		$dataSize = $co->count();
 		
+		$dataGroupCount = $co->statusCount();
+		
 		$result = array();
 		$result['data'] = $data;
         $result['dataSize'] = $dataSize;
         $result['pageSize'] = $pageSize;
         $result['currentPage'] = $currentPage;
+		$result['groupCount'] = $dataGroupCount;
 		
 		return $result;
 	}
@@ -63,11 +75,15 @@ class ArticleController extends AbstractRestfulController
 	
 	public function update($id, $data)
 	{
-	
+		
 	}
 	
 	public function delete($id)
 	{
-		
+		$factory = $this->dbFactory();
+		$co = $factory->_m('Article');
+		$doc = $co->find($id);
+		$doc->toggleTrash();
+		$this->getResponse()->getHeaders()->addHeaderLine('result', 'sucess');
 	}
 }
