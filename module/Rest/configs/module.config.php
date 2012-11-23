@@ -5,6 +5,7 @@ return array(
 			'navi.json'			=> 'Rest\Controller\NaviController',
 			'article.json'		=> 'Rest\Controller\ArticleController',
 			'book.json'			=> 'Rest\Controller\BookController',
+			'product-type.json'	=> 'Rest\Controller\ProductTypeController',
 			'product.json'		=> 'Rest\Controller\ProductController',
 			'ad-section.json'	=> 'Rest\Controller\AdSectionController',
 			'ad.json'			=> 'Rest\Controller\AdController',

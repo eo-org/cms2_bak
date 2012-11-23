@@ -15,7 +15,7 @@ class ProductController extends AbstractActionController
 	public function createAction()
 	{
 		$factory = $this->dbFactory();
-		$attributesetCo = $factory->_am('Attributeset');
+		$attributesetCo = $factory->_m('Attributeset');
 		
 		$attrDocSet = $attributesetCo->setFields(array('label'))
 			->addFilter('type', 'product')

@@ -6,6 +6,7 @@ return array(
 			'navi'			=> 'Admin\Controller\NaviController',
 			'article'		=> 'Admin\Controller\ArticleController',
 			'book'			=> 'Admin\Controller\BookController',
+			'product-type'	=> 'Admin\Controller\ProductTypeController',
 			'product'		=> 'Admin\Controller\ProductController',
 			'ad-section'	=> 'Admin\Controller\AdSectionController',
 			'ad'			=> 'Admin\Controller\AdController',
