@@ -1,8 +1,10 @@
-<?php if(count($this->tplArray['user']) > 0) { ?>
+<?php
+$userTplArr = $this->tplArray[1];
+if(count($userTplArr['options']) > 0) { ?>
 	<fieldset>
 		<legend>编辑现有TPL文件</legend>
-		<?php foreach($this->tplArray['user'] as $t) {?>
-		<a href='#/admin/brick/edit-tpl/brick-id/<?php echo $this->brickId?>/tpl-name/<?php echo $t?>'><?php echo $t?></a>&nbsp;&nbsp;&nbsp;
+		<?php foreach($userTplArr['options'] as $t) {?>
+		<a href='#/admin/brick.ajax/edit-tpl/brick-id/<?php echo $this->brickId?>/tpl-name/<?php echo $t?>'><?php echo $t?></a>&nbsp;&nbsp;&nbsp;
 		<?php }?>
 	</fieldset>
 	<div class='clear'></div>
@@ -10,7 +12,7 @@
 <?php } ?>
 
 <div class='left-form' style='float: left;'>
-	<?php echo $this->form?>
+	<?php echo $this->brickConfigForm($this->form)?>
 </div>
 
 <div class='right-form' style='float: right; width: 540px;'>

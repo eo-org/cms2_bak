@@ -3,6 +3,7 @@ namespace Admin\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Admin\Form\Brick\EditForm;
+use Admin\Form\Brick\EditTplForm;
 
 class BrickController extends AbstractActionController
 {
@@ -108,7 +109,7 @@ class BrickController extends AbstractActionController
     	
         $this->brickConfig()->setActionTitle('编辑模块:'.$brick->extName)
         	->setActionMenu(array('save', 'delete', 'edit-tpl' => array(
-        		'callback' => '/admin/brick/edit-tpl/brick-id/'.$brickId,
+        		'callback' => '/admin/brick.ajax/edit-tpl/brick-id/'.$brickId,
         		'label' => '新建TPL文件'
         	)));
         
@@ -136,51 +137,61 @@ class BrickController extends AbstractActionController
     	$brickId = $this->params()->fromRoute('brick-id');
     	$tplName = $this->params()->fromRoute('tpl-name');
     	
-    	$brick = App_Factory::_m('Brick')->find($brickId);
+    	$factory = $this->dbFactory();
+    	$brick = $factory->_m('Brick')->find($brickId);
     	if(is_null($brick)) {
     		throw new Exception('Brick not found by id :'.$brickId);
     	}
+    	$solidBrick = $brick->createSolid($this);
+    	$tplArr = $solidBrick->getTplArray();
+    	
     	$extName = substr($brick->extName, 6);
-    	$solidBrick = $brick->createSolidBrick($this->getRequest());
+    	$fileFolder = $solidBrick->twigPath();
     	
-    	require(APP_PATH.'/admin/forms/Brick/EditTpl.php');
-    	$form = new Form_Brick_EditTpl();
-    	$fileFolder = TEMPLATE_PATH.'/Front_'.$extName;
-    	
+    	$form = new EditTplForm();
     	if(!empty($tplName)) {
     		$filePath = $fileFolder.'/'.$tplName;
 			$fh = fopen($filePath, 'r');
 			$tplFileData = fread($fh, filesize($filePath));
 			fclose($fh);
-			$form->tplFileName->setValue($tplName);
-			$form->tplFileContent->setValue($tplFileData);
+			$form->get('tplFileName')->setValue($tplName);
+			$form->get('tplFileContent')->setValue($tplFileData);
     	}
-    	if($this->getRequest()->isPost() && $form->isValid($this->params()->fromRoutes())) {
-    		$siteInfo = Zend_Registry::get('siteInfo');
-    		$siteId = $siteInfo['id'];
-    		
-    		if(!is_dir($fileFolder)) {
-    			mkdir($fileFolder);
-    		}
-    		$filePath = $fileFolder.'/'.$form->getValue('tplFileName');
-    		$fh = fopen($filePath, 'w');
-    		fwrite($fh, $form->getValue('tplFileContent'));
-    		fclose($fh);
-    		$this->_helper->switchContent->gotoSimple('edit', null, null, array('brick-id' => $brickId), true);
+    	$form->setData($this->params()->fromRoute());
+    	if($this->getRequest()->isPost()) {
+    		$postData = $this->getRequest()->getPost();
+        	$form->setData($postData);
+        	if($form->isValid()) {
+	        	$sm = $this->getServiceLocator();
+	    		$SiteConfig = $sm->get('Fucms\SiteConfig');
+	    		$siteId = $SiteConfig->globalSiteId;
+	    		
+	    		if(!is_dir($fileFolder)) {
+	    			mkdir($fileFolder);
+	    		}
+	    		$filePath = $fileFolder.'/'.$form->getInputFilter()->getValue('tplFileName');
+	    		$fh = fopen($filePath, 'w');
+	    		fwrite($fh, $form->get('tplFileContent')->getValue());
+	    		fclose($fh);
+	    		return $this->switchContext('brick', 'edit', array('id' => $brickId), true);
+        	}
     	}
     	
-    	$tplFile = CONTAINER_PATH.'/extension/brick/Front/'.$extName.'/view.tpl';
+    	$tplFile = BASE_PATH.'/extension/view/front/'.$extName.'/view.tpl';
 		$fh = fopen($tplFile, 'r');
 		$viewFileData = fread($fh, filesize($tplFile));
 		fclose($fh);
     	
-		$this->view->brickId = $brickId;
-    	$this->view->extName = $extName;
-		$this->view->tplArray = $solidBrick->getTplArray();
-    	$this->view->viewFileData = $viewFileData;
-    	$this->view->form = $form;
-    	$this->_helper->template->head('编辑<em>'.$extName.'</em>')
-    		->actionMenu(array('save'));
+		$this->brickConfig()->setActionTitle('编辑TPL文件:'.$brick->extName)
+        	->setActionMenu(array('save'));
+        
+		return array(
+			'brickId'		=> $brickId,
+	    	'extName'		=> $extName,
+			'tplArray'		=> $tplArr,
+	    	'viewFileData'	=> $viewFileData,
+	    	'form'			=> $form,
+	    );
     }
     
     public function getTplContentAjaxAction()
@@ -188,7 +199,7 @@ class BrickController extends AbstractActionController
     	$extName = $this->params()->fromRoute('extName');
     	$tplName = $this->params()->fromRoute('tplName');
     	
-    	$tplFile = CONTAINER_PATH.'/extension/brick/Front/'.$extName.'/'.$tplName;
+    	$tplFile = BASE_PATH.'/extension/brick/Front/'.$extName.'/'.$tplName;
 		$fh = fopen($tplFile, 'r');
 		$tplFileData = fread($fh, filesize($tplFile));
 		fclose($fh);
@@ -238,6 +249,7 @@ class BrickController extends AbstractActionController
         );
     }
     
+    /*
     public function saveLocationJsonAction()
     {
     	$layoutId = $this->params()->fromRoute('layoutId');
@@ -256,4 +268,5 @@ class BrickController extends AbstractActionController
     	
     	$this->_helper->json(array('result' => 'success'));
     }
+    */
 }

@@ -25,7 +25,7 @@ if(!$siteArr['active']) {
 chdir(dirname(__DIR__));
 
 define("BASE_PATH", getenv('BASE_PATH'));
-define("CACHE_PATH", BASE_PATH.'/cms-misc/cache');
+//define("CACHE_PATH", BASE_PATH.'/cms-misc/cache');
 
 include BASE_PATH.'/inc/Zend/Loader/StandardAutoloader.php';
 
