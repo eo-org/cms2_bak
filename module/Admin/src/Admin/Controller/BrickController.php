@@ -177,6 +177,7 @@ class BrickController extends AbstractActionController
         	}
     	}
     	
+    	$extName = strtolower(str_replace('_', '/', $extName));
     	$tplFile = BASE_PATH.'/extension/view/front/'.$extName.'/view.tpl';
 		$fh = fopen($tplFile, 'r');
 		$viewFileData = fread($fh, filesize($tplFile));
@@ -196,15 +197,17 @@ class BrickController extends AbstractActionController
     
     public function getTplContentAjaxAction()
     {
-    	$extName = $this->params()->fromRoute('extName');
-    	$tplName = $this->params()->fromRoute('tplName');
+    	$this->brickConfig()->setActionTitle('')
+        	->setActionMenu(array());
     	
-    	$tplFile = BASE_PATH.'/extension/brick/Front/'.$extName.'/'.$tplName;
+    	$extName = $this->params()->fromPost('extName');
+    	$tplName = $this->params()->fromPost('tplName');
+    	
+    	$tplFile = BASE_PATH.'/extension/view/front/'.$extName.'/'.$tplName;
 		$fh = fopen($tplFile, 'r');
 		$tplFileData = fread($fh, filesize($tplFile));
 		fclose($fh);
-    	$this->view->tplFileData = $tplFileData;
-    	$this->_helper->layout->disableLayout(); 
+    	return array('tplFileData' => $tplFileData);
     }
     
     public function editCssAction()

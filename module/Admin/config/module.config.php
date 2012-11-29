@@ -15,6 +15,7 @@ return array(
 			'site'			=> 'Admin\Controller\SiteController',
 			'brick'			=> 'Admin\Controller\BrickController',
 			'brick.ajax'	=> 'Admin\Controller\BrickController',
+			'brick.bone'	=> 'Admin\Controller\BrickController',
 			'group'			=> 'Admin\Controller\GroupController',
 			'layout'		=> 'Admin\Controller\LayoutController',
 			'layout.ajax'	=> 'Admin\Controller\LayoutController',

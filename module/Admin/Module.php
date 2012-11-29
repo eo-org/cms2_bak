@@ -54,8 +54,11 @@ class Module
 	{
 		$controller = $e->getTarget();
 		$controllerName = $controller->params()->fromRoute('controller');
-		if(substr($controllerName, -5) == '.ajax') {
+		$suffix = substr($controllerName, -5);
+		if($suffix == '.ajax') {
 			$controller->layout('layout/layout.ajax.phtml');
+		} else if($suffix == '.bone') {
+			$controller->layout('layout/layout.bone.phtml');
 		} else {
 			$controller->layout('layout/layout.phtml');
 		}
