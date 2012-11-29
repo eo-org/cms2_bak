@@ -167,7 +167,11 @@ class BrickController extends AbstractActionController
 	    		$siteId = $SiteConfig->globalSiteId;
 	    		
 	    		if(!is_dir($fileFolder)) {
-	    			mkdir($fileFolder);
+	    			try {
+	    				mkdir($fileFolder);
+	    			} catch(Exception $e) {
+	    				die('not able to create folder "'.$fileFolder.'"');
+	    			}
 	    		}
 	    		$filePath = $fileFolder.'/'.$form->getInputFilter()->getValue('tplFileName');
 	    		$fh = fopen($filePath, 'w');
