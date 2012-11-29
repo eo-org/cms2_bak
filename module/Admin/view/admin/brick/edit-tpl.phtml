@@ -47,7 +47,7 @@ if(count($userTplArr['options']) > 0) { ?>
 		var extName = $(this).attr('extName');
 		$.ajax({
 			type: "POST",
-			url: '/admin/brick/get-tpl-content-ajax',
+			url: '/admin/brick.ajax/get-tpl-content-ajax',
 			data: 'extName=' + extName + '&tplName=' + $(this).val(),
 			success: function(html) {
 				td.val(html);
