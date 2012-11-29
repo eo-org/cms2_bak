@@ -30,6 +30,8 @@ class SiteController extends AbstractRestfulController
 		$serverDoc->active = true;
 		$serverDoc->save();
 		
+		mkdir(BASE_PATH.'/tpl/'.$dataArr['globalId']);
+		
 		$this->getResponse()->getHeaders()->addHeaderLine('result', 'sucess');
 	}
 	
