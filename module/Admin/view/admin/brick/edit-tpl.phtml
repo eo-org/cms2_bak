@@ -11,7 +11,7 @@ if(count($userTplArr['options']) > 0) { ?>
 	<hr />
 <?php } ?>
 
-<div class='left-form' style='float: left;'>
+<div class='left-form' style='float: left; width: 400px;'>
 	<?php echo $this->brickConfigForm($this->form)?>
 </div>
 
@@ -20,7 +20,8 @@ if(count($userTplArr['options']) > 0) { ?>
 		查看tpl文件内容：
 		<select id='system-tpl-selector' extName='<?php echo $this->extName?>'>
 		<?php
-		foreach($this->tplArray['system'] as $t) {
+		$sysTplArr = $this->tplArray[0];
+		foreach($sysTplArr['options'] as $t) {
 			if($t == 'view.tpl') {
 				echo "<option value='".$t."' selected>".$t."</li>";
 			} else {
