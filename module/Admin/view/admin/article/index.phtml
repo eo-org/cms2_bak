@@ -4,20 +4,22 @@
 			<th class='group-count' colspan=3></th>
 		</tr>
 		<tr class='title-row'>
-			<th class='s-index' s-index='_id' style='width: 165px;'>ID</th>
-			<th class='s-index' s-index='label' style='width: 485px;'>标题</th>
+			<th class='s-index' s-index='label'>标题</th>
+			<th>目录</th>
 			<th></th>
 		</tr>
 		<tr class='search-row'>
-			<th></th>
 			<th><input class='q-index' q-index='label' type='text' name='' value='' /></th>
+			<th><select class='q-index' q-index='groupId' name='groupId'>
+				<?php echo $this->selectOptions($this->optVal, array('' => '[All Aticles]'))?>
+			</select></th>
 			<th><div class='query-invoker' class='button'>Search</div></th>
 		</tr>
 	</thead>
 	<tbody class='datalist-body'>
 	</tbody>
 	<tfoot class='datalist-foot'>
-		<tr class='paginator-row'><td id='datalist-paginator' colspan='3'></td></tr>
+		<tr class='paginator-row'><td id='datalist-paginator' colspan=3></td></tr>
 		<tr class='bulk-action-row'><th class='group-count' colspan=3></th></tr>
 	</tfoot>
 </table>
@@ -28,10 +30,10 @@
 
 <script type='text/template' id='data-row'>
 <td>
-	{{data.id}}
+	{{data.label}}
 </td>
 <td>
-	{{data.label}}
+	{{data.groupId}}
 </td>
 <td>
 	<a href='/admin/article/edit/id/{{data.id}}'>编辑</a>
@@ -41,10 +43,10 @@
 
 <script type='text/template' id='data-trash-row'>
 <td>
-	{{data.id}}
+	{{data.label}}
 </td>
 <td>
-	{{data.label}}
+	{{data.groupId}}
 </td>
 <td>
 	<a class='ajax-to-trash' data-id='{{data.id}}' href='/admin/article/delete/id/{{data.id}}'>还原</a>

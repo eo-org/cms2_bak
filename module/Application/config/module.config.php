@@ -113,7 +113,8 @@ return array(
             'bootstrapRow'			=> 'Core\View\Helper\BootstrapRow',
             'bootstrapCollection'	=> 'Core\View\Helper\BootstrapCollection',
     		'outputImage'			=> 'Core\View\Helper\OutputImage',
-    		'siteConfig'			=> 'Core\View\Helper\SiteConfig'
+    		'siteConfig'			=> 'Core\View\Helper\SiteConfig',
+    		'selectOptions'			=> 'Core\View\Helper\SelectOptions',
         ),
     ),
 );

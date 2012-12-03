@@ -10,6 +10,14 @@ class ArticleController extends AbstractActionController
     {
 		$this->brickConfig()->setActionMenu(array('create-edit'))
 			->setActionTitle('文章列表');
+
+		$factory = $this->dbFactory();
+		$groupDoc = $factory->_m('Group')->findArticleGroup();
+    	$optVal = $groupDoc->toMultioptions('label');
+		
+		return array(
+			'optVal' => $optVal
+		);
     }
     
     public function editAction()

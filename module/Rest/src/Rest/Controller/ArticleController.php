@@ -23,7 +23,7 @@ class ArticleController extends AbstractRestfulController
 		
 		$factory = $this->getServiceLocator()->get('Core\Mongo\Factory');
 		$co = $factory->_m('Article');
-		$co->setFields(array('label', 'status'));
+		$co->setFields(array('label', 'groupId', 'status'));
         $co->setPage($currentPage)->setPageSize($pageSize)
 			->sort($sIndex, $sOrder);
 		
@@ -43,6 +43,9 @@ class ArticleController extends AbstractRestfulController
 						break;
 					case 'label':
 						$co->addFilter($key, new MongoRegex("/".$val."/"));
+						break;
+					case 'groupId':
+						$co->addFilter($key, $val);
 						break;
 				}
 			}
