@@ -16,7 +16,7 @@ class EditTplForm extends Form
         ));
     	$this->add(array(
     		'name' => 'tplFileContent',
-    		'attributes' => array('type' => 'textarea'),
+    		'attributes' => array('type' => 'textarea', 'id' => 'codemirror-editor'),
     		'options' => array('label' => 'TPL文件内容')
     	));
     }

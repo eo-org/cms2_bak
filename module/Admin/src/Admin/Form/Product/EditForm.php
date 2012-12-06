@@ -42,7 +42,7 @@ class EditForm extends Form
     		'name' => 'fulltext',
     		'attributes' => array(
     			'type' => 'textarea',
-    			'id' => 'ck_text_editor',
+    			'class' => 'ckeditor',
     		),
     		'options' => array('label' => '产品说明')
     	));

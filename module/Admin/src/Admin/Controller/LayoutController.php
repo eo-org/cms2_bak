@@ -12,28 +12,8 @@ class LayoutController extends AbstractActionController
 {
     public function indexAction()
     {
-        $labels = array(
-            'label' => '页面名',
-        	'controllerName' => 'Folder Url',
-        	'~contextMenu' => ''
-        );
-        $hashParam = $this->getRequest()->getParam('hashParam');
-        $partialHTML = $this->view->partial('select-search-header-front.phtml', array(
-            'labels' => $labels,
-            'url' => '/admin/layout/get-layout-json/',
-            'actionId' => 'id',
-        	'click' => array(
-            	'action' => 'contextMenu',
-            	'menuItems' => array(
-            		array('编辑', '/admin/layout/edit/id/')
-            	)
-            ),
-            'initSelectRun' => 'true',
-            'hashParam' => $hashParam
-        ));
-
-        $this->view->assign('partialHTML', $partialHTML);
-        $this->_helper->template->actionMenu(array('create'));
+		$this->brickConfig()->setActionMenu(array())
+			->setActionTitle('页面列表');
     }
     
     public function createAction()
@@ -136,7 +116,11 @@ class LayoutController extends AbstractActionController
     
     public function deleteAction()
     {
-    	
+    	$layoutId = $this->params()->fromRoute('id');
+        $factory = $this->dbFactory();
+        $layoutDoc = $factory->_m('Layout')->find($layoutId);
+        $layoutDoc->delete();
+        return $this->switchContext('layout');
     }
     
     public function getLayoutJsonAction()

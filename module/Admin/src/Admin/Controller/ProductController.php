@@ -10,6 +10,14 @@ class ProductController extends AbstractActionController
     {
 		$this->brickConfig()->setActionMenu(array('create'))
 			->setActionTitle('产品列表');
+		
+		$factory = $this->dbFactory();
+		$groupDoc = $factory->_m('Group')->findProductGroup();
+    	$optVal = $groupDoc->toMultioptions('label');
+		
+		return array(
+			'optVal' => $optVal
+		);
     }
 	
 	public function createAction()

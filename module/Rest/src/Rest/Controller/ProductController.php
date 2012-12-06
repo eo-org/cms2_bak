@@ -45,6 +45,9 @@ class ProductController extends AbstractRestfulController
 					case 'label':
 						$co->addFilter($key, new MongoRegex("/".$val."/"));
 						break;
+					case 'groupId':
+						$co->addFilter($key, $val);
+						break;
 				}
 			}
 		}

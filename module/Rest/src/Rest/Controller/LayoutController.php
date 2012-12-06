@@ -8,7 +8,34 @@ class LayoutController extends AbstractRestfulController
 {
 	public function getList()
     {
-    	
+    	$filter = $this->getRequest()->getQuery(); 
+		
+		$currentPage = $filter['page'];
+		$sIndex = $filter['sIndex'];
+		$sOrder = intval($filter['sOrder']);
+		$queryStr = $filter['query'];
+		
+		$pageSize = 20;
+		if(empty($currentPage)) {
+			$currentPage = 1;
+		}
+		
+		$factory = $this->getServiceLocator()->get('Core\Mongo\Factory');
+		$co = $factory->_m('Layout');
+		$co->setFields(array('label', 'type', 'default'));
+        $co->setPage($currentPage)->setPageSize($pageSize)
+			->sort('default', -1);
+		
+		$data = $co->fetchAll(true);
+		$dataSize = $co->count();
+		
+		$result = array();
+		$result['data'] = $data;
+        $result['dataSize'] = $dataSize;
+        $result['pageSize'] = $pageSize;
+        $result['currentPage'] = $currentPage;
+		
+		return $result;
     }
     
     public function get($id)
