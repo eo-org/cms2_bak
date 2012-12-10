@@ -22,6 +22,10 @@ if($ra == null) {?>
 <?php }?>
 <?php
 if($this->sessionAdmin->hasPrivilege()) {
+	
+	
+	echo $this->sessionAdmin;
+	
 	$co = $this->factory->_m('Layout');
 	$userLayoutDocs = $co->addFilter('default', 0)
 		->fetchDoc();

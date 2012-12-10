@@ -44,9 +44,9 @@ class Module
 		$controller = $e->getTarget();
 		$orgCode = $controller->siteConfig('organizationCode');
 		
-		$fsa = new SessionAdmin();
-		$fsa->setOrgCode($orgCode);
-		$ssoAuth = new SsoAuth($fsa);
+		$sessionAdmin = new SessionAdmin();
+		$sessionAdmin->setOrgCode($orgCode);
+		$ssoAuth = new SsoAuth($sessionAdmin);
 		$ssoAuth->auth();
 	}
 	
