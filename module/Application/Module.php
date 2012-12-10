@@ -139,7 +139,11 @@ class Module
 		
 		foreach($headFileDocs as $doc) {
 			if($doc->folder == 'helper') {
-				$viewHelper->get('HeadScript')->appendFile($siteConfig->libUrl.'/front/script/helper/'.$doc->filename);
+				if($doc->type == 'css') {
+					$viewHelper->get('HeadLink')->appendStylesheet($siteConfig->libUrl.'/front/script/helper/'.$doc->filename);
+				} else {
+					$viewHelper->get('HeadScript')->appendFile($siteConfig->libUrl.'/front/script/helper/'.$doc->filename);
+				}
 			} else {
 				if($doc->type == 'css') {
 					$viewHelper->get('HeadLink')->appendStylesheet($fileUrl.'/'.$doc->filename);
