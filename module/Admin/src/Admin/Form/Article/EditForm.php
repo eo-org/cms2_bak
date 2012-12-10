@@ -52,7 +52,7 @@ class EditForm extends Form
         ));
         $this->add(array(
         	'name' => 'introicon',
-        	'attributes' => array('type' => 'hidden')
+        	'attributes' => array('type' => 'hidden', 'id' => 'introicon')
         ));
     }
     
