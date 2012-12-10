@@ -7,7 +7,7 @@
 	<? echo $this->partial('layout/head-client', array('effectJs' => $this->jsList, 'effectCss' => $this->cssList)) ?>
 	<?
 	if($this->sessionAdmin->hasPrivilege()) {
-		echo $this->partial('layout/head-admin') 
+		echo $this->partial('layout/head-admin');
 	}
 	?>
 	<?=$this->headLink() ?>
