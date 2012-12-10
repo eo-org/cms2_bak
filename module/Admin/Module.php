@@ -7,7 +7,7 @@ use Zend\ModuleManager\ModuleEvent;
 use Zend\EventManager\StaticEventManager;
 use Zend\Session\Container;
 use Core\Session\SsoAuth;
-use Fucms\Session\Admin;
+use Fucms\Session\Admin as SessionAdmin;
 use Fucms\Brick\Register;
 use Fucms\Brick\Service\RegisterConfigAdmin;
 
@@ -44,7 +44,7 @@ class Module
 		$controller = $e->getTarget();
 		$orgCode = $controller->siteConfig('organizationCode');
 		
-		$fsa = new Admin();
+		$fsa = new SessionAdmin();
 		$fsa->setOrgCode($orgCode);
 		$ssoAuth = new SsoAuth($fsa);
 		$ssoAuth->auth();

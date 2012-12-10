@@ -5,7 +5,11 @@
 	<?=$this->headMeta() ?>
 	<?=$this->headTitle() ?>
 	<? echo $this->partial('layout/head-client', array('effectJs' => $this->jsList, 'effectCss' => $this->cssList)) ?>
-	<? echo $this->partial('layout/head-admin') ?>
+	<?
+	if($this->sessionAdmin->hasPrivilege()) {
+		echo $this->partial('layout/head-admin') 
+	}
+	?>
 	<?=$this->headLink() ?>
 	<?=$this->headScript() ?>
 </head>
