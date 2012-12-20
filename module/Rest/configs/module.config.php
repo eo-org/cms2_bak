@@ -16,6 +16,7 @@ return array(
 			'group.json'		=> 'Rest\Controller\GroupController',
 			'layout.html'		=> 'Rest\Controller\LayoutController',
 			'layout.json'		=> 'Rest\Controller\LayoutController',
+			'domain.json'		=> 'Rest\Controller\DomainController'
 		)
 	),
 	'router' => array(
@@ -33,7 +34,7 @@ return array(
 							'route' => '[/:controller][/:id]',
 							'constraints' => array(
 								'controller' => '[a-z-.]*',
-								'id' => '[a-z0-9]*'
+								'id' => '[a-z0-9.]*'
 							)
 						),
 					),

@@ -82,10 +82,11 @@ return array(
     ),
     'controller_plugins' => array(
     	'invokables' => array(
-    		'brickConfig'	=> 'Brick\Helper\Controller\Config',
-    		'dbFactory'		=> 'Core\Controller\Plugin\DbFactory',
-    		'switchContext'	=> 'Core\Controller\Plugin\SwitchContext',
-    		'siteConfig'	=> 'Core\Controller\Plugin\SiteConfig'
+    		'brickConfig'		=> 'Brick\Helper\Controller\Config',
+    		'dbFactory'			=> 'Core\Controller\Plugin\DbFactory',
+    		'documentManager'	=> 'Core\Controller\Plugin\DocumentManager',
+    		'switchContext'		=> 'Core\Controller\Plugin\SwitchContext',
+    		'siteConfig'		=> 'Core\Controller\Plugin\SiteConfig'
     	)
     ),
     'view_manager' => array(

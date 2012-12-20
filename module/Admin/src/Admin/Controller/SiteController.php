@@ -32,4 +32,12 @@ class SiteController extends AbstractActionController
         
         return array('form' => $form);
     }
+    
+    public function domainAction()
+    {
+    	$this->brickConfig()->setActionTitle('网站域名设定')
+	    	->setActionMenu(array(
+	    		array('label' => '绑定新域名', 'method' => 'bindDomain', 'callback' => '/rest/domain.json')
+	    	));
+    }
 }

@@ -1,5 +1,6 @@
 <?php
 return array(
+	/*
 	'db' => array(
 		'driver'	=> 'Pdo',
     	'dsn'		=> 'mysql:dbname=sitelist;host=58.51.194.8',
@@ -7,6 +8,7 @@ return array(
 			PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''
 		)
     ),
+    */
     'mongo_db' => array(
         'driver'	=> 'MongoDb',
         'host'		=> '127.0.0.1',

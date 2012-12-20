@@ -8,8 +8,8 @@ class TreeleafController extends AbstractRestfulController
 {
 	public function getList()
 	{
-		$treeType = $this->getRequest()->getHeader('Tree_Type')->getFieldValue();
-		$treeId = $this->getRequest()->getHeader('Tree_Id')->getFieldValue();
+		$treeType = $this->getRequest()->getHeader('X-Tree-Type')->getFieldValue();
+		$treeId = $this->getRequest()->getHeader('X-Tree-Id')->getFieldValue();
 		
 		$factory = $this->dbFactory();
 		switch($treeType) {
@@ -47,8 +47,8 @@ class TreeleafController extends AbstractRestfulController
 	
 	public function create($data)
 	{
-		$treeType = $this->getRequest()->getHeader('Tree_Type')->getFieldValue();
-		$treeId = $this->getRequest()->getHeader('Tree_Id')->getFieldValue();
+		$treeType = $this->getRequest()->getHeader('X-Tree-Type')->getFieldValue();
+		$treeId = $this->getRequest()->getHeader('X-Tree-Id')->getFieldValue();
 		
 		$factory = $this->dbFactory();
 		switch($treeType) {
@@ -81,7 +81,7 @@ class TreeleafController extends AbstractRestfulController
 	
 	public function update($id, $data)
 	{
-		$treeType = $this->getRequest()->getHeader('Tree_Type')->getFieldValue();
+		$treeType = $this->getRequest()->getHeader('X-Tree-Type')->getFieldValue();
 		
 		$factory = $this->dbFactory();
 		switch($treeType) {
@@ -108,7 +108,7 @@ class TreeleafController extends AbstractRestfulController
 	
 	public function delete($id)
 	{
-		$treeType = $this->getRequest()->getHeader('Tree_Type')->getFieldValue();
+		$treeType = $this->getRequest()->getHeader('X-Tree-Type')->getFieldValue();
 		
 		$factory = $this->dbFactory();
 		switch($treeType) {

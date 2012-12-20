@@ -5,10 +5,12 @@ $time = microtime();
  * Validate Site Domains!
  * 
  */
+
 $requestHost = $_SERVER['HTTP_HOST'];
-$m = new Mongo('127.0.0.1', array('persist' => 'x'));
+$m = new MongoClient('127.0.0.1');
 $db = $m->selectDb('server_center');
-$siteArr = $db->site->findOne(array('domain' => $requestHost));
+$siteArr = $db->site->findOne(array('domains.domainName' => $requestHost));
+
 if(is_null($siteArr)) {
 	header('Location: http://www.enorange.com/no-site/');
 	exit(0);
@@ -31,10 +33,12 @@ include BASE_PATH.'/inc/Zend/Loader/StandardAutoloader.php';
 
 $autoLoader = new Zend\Loader\StandardAutoloader(array(
     'namespaces' => array(
-        'Zend'	=> BASE_PATH.'/inc/Zend',
-		'Core'	=> BASE_PATH.'/inc/Core',
-		'Fucms' => BASE_PATH.'/library-cms/Fucms',
-		'Brick' => BASE_PATH.'/extension/Brick'
+        'Zend'		=> BASE_PATH.'/inc/Zend',
+		'Core'		=> BASE_PATH.'/inc/Core',
+		'Fucms'		=> BASE_PATH.'/library-cms/Fucms',
+		'Brick'		=> BASE_PATH.'/extension/Brick',
+    	'Doctrine'	=> BASE_PATH.'/inc/Doctrine',
+    	'Document'	=> BASE_PATH.'/library-cms/Document'
     ),
     'prefixes' => array(
     	'Twig'	=> BASE_PATH.'/inc/Twig',

@@ -4,6 +4,8 @@ namespace Application\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Fucms\Session\Admin as SessionAdmin;
 
+use Document\User;
+
 class IndexController extends AbstractActionController
 {
 	public $brickRegister = null;
