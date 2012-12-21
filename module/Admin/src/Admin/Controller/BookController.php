@@ -70,6 +70,7 @@ class BookController extends AbstractActionController
     public function editPageAction()
     {
     	$id = $this->params('id');
+    	$editor = $this->params()->fromQuery('editor');
     	
     	$factory = $this->dbFactory();
     	$co = $factory->_m('Book_Page');
@@ -86,6 +87,10 @@ class BookController extends AbstractActionController
     		$this->brickConfig()->setActionTitle('新增加书页')
         		->setActionMenu(array('save'));
     	}
+    	if(is_null($editor)) {
+    		$editor = $pageDoc->editor;
+    	}
+    	
     	if(is_null($bookId)) {
     		throw new Exception('book id missing');
     	}
@@ -93,6 +98,10 @@ class BookController extends AbstractActionController
     		->find($bookId);
     	
     	$form = new PageEditForm();
+    	if($editor == 'cm') {
+    		$textEditor = $form->get('fulltext');
+    		$textEditor->setAttributes(array('id' => 'codemirror-editor', 'class' => 'cm'));
+    	}
     	$form->setData($pageDoc->toArray());
     	if($this->getRequest()->isPost()) {
     		$postData = $this->getRequest()->getPost();
@@ -104,13 +113,19 @@ class BookController extends AbstractActionController
 	    			$pageDoc->parentId = '';
 	    			$pageDoc->sort = 0;
 	    		}
+	    		if($editor == 'cm') {
+	    			$pageDoc->editor = 'cm';
+	    		} else {
+	    			$pageDoc->editor = 'ck';
+	    		}
 	    		$pageDoc->save();
 	    		return $this->redirect()->toRoute(null, array('action' => 'edit-page-index', 'controller' => 'book', 'id' => $bookId));
     		}
     	}
     	
     	return array(
-    		'form' => $form
+    		'form' => $form,
+    		'editor' => $editor
     	);
     }
 }
