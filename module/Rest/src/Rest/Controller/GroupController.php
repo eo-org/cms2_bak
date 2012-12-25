@@ -41,7 +41,7 @@ class GroupController extends AbstractRestfulController
     	
 		$factory = $this->dbFactory();
     	$co = $factory->_m('Group_Item');
-    	$docs = $co->setFields(array('label', 'parentId', 'sort', 'alias', 'className'))
+    	$docs = $co->setFields(array('label', 'parentId', 'sort', 'alias', 'layoutAlias', 'className'))
     		->addFilter('groupType', $treeId)
 			->sort('sort', 1)
 			->fetchDoc();

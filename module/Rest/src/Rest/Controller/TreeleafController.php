@@ -21,12 +21,12 @@ class TreeleafController extends AbstractRestfulController
 			case 'book':
 				$co = $factory->_m('Book_Page')
 					->addFilter('bookId', $treeId)
-					->setFields(array('label', 'link', 'parentId', 'sort'));
+					->setFields(array('label', 'alias', 'parentId', 'sort'));
 				break;
 			case 'group':
 				$co = $factory->_m('Group_Item')
 					->addFilter('groupType', $treeId)
-					->setFields(array('label', 'alias', 'parentId', 'className', 'sort'));
+					->setFields(array('label', 'alias', 'layoutAlias', 'parentId', 'className', 'sort'));
 				break;
 		}
 		

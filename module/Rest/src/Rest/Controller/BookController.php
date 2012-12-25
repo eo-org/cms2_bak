@@ -22,7 +22,7 @@ class BookController extends AbstractRestfulController
 		
 		$factory = $this->dbFactory();
 		$co = $factory->_m('Book');
-		$co->setFields(array('label'));
+		$co->setFields(array('label', 'alias'));
         $co->setPage($currentPage)->setPageSize($pageSize)
 			->sort($sIndex, $sOrder);
 		if($queryStr != 'none') {
@@ -84,7 +84,7 @@ class BookController extends AbstractRestfulController
     	
 		$factory = $this->dbFactory();
     	$co = $factory->_m('Book_Page');
-    	$docs = $co->setFields(array('label', 'parentId', 'sort', 'link'))
+    	$docs = $co->setFields(array('label', 'parentId', 'sort', 'alias'))
     		->addFilter('bookId', $treeId)
 			->sort('sort', 1)
 			->fetchDoc();

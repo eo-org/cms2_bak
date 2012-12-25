@@ -18,16 +18,16 @@ class CreateForm extends Form
     		'name' => 'type',
     		'type' => 'Zend\Form\Element\Select',
     		'options' => array('label' => '数据类型', 'value_options' => array(
-    			'frontpage' => '综合页面',
+    			'index' => '综合页面',
 				'list' => '文章列表',
 				'product-list' => '产品列表',
 				'book' => '手册'
     		))
     	));
     	$this->add(array(
-    		'name' => 'resourceAlias',
+    		'name' => 'alias',
     		'attributes' => array('type' => 'text'),
-    		'options' => array('label' => '数据别名[a-z]')
+    		'options' => array('label' => 'LAYOUT别名[a-z]')
 		));
     }
 }

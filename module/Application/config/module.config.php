@@ -19,13 +19,13 @@ return array(
                 ),
                 'may_terminate' => true,
                 'child_routes' => array(
-                    'user-defined' => array(
+                    'book' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'    => '[:resourceAlias][/:query].shtml',
+                            'route'    => '[:id][/:pageId].shtml',
                 			'constraints' => array(
-		            			'resourceAlias' => '[a-z]*',
-                				'query' => '[a-z0-9-_]*'
+		            			'resourceAlias' => '[a-z0-9]*',
+                				'query' => '[a-z0-9]*'
 		            		)
                         ),
                     ),
@@ -75,7 +75,25 @@ return array(
 		            			
 		            		)
 		            	)
-		            )
+		            ),
+                	'frontpage' => array(
+                		'type'		=> 'Segment',
+                		'options'	=> array(
+                			'route' => '[:id].htm',
+                			'constraints' => array(
+                				'id' => '[a-z0-9]*'
+                			)
+                		)
+                	),
+                	'layout' => array(
+                		'type'		=> 'Segment',
+                		'options'	=> array(
+                			'route' => '[:id].layout',
+                			'constraints' => array(
+                				'id' => '[a-z0-9]*'
+                			)
+                		)
+                	)
                 ),
             ),
         ),

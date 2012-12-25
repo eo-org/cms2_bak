@@ -22,12 +22,19 @@ class EditForm extends Form
     		),
     		'options' => array('label' => '手册别名(alias)')
     	));
+    	$this->add(array(
+    		'name' => 'layoutAlias',
+    		'attributes' => array(
+    			'type' => 'text'
+    		),
+    		'options' => array('label' => 'LAYOUT别名(alias)')
+    	));
     }
     
     public function getTabSettings()
     {
     	return array(
-    		array('handleLabel' => '基本信息', 'content' => array('label', 'alias')),
+    		array('handleLabel' => '基本信息', 'content' => array('label', 'alias', 'layoutAlias')),
     	);
     }
 }

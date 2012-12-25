@@ -5,6 +5,7 @@
 				<select id='layout-selector' name='layout'>
 					<optgroup label='默认页面'>
 						<option value='/' data-layoutAlias='index'>首页</option>
+						<option value='/book.shtml' data-layoutAlias='book'>默认手册</option>
 						<option value='/article-0.shtml' data-layoutAlias='article'>文章内容</option>
 						<option value='/list-0/page1.shtml' data-layoutAlias='list'>文章列表</option>
 						<option value='/product-0.shtml' data-layoutAlias='product'>产品详情</option>
@@ -24,7 +25,7 @@
 					</optgroup -->
 					<optgroup label='自定义页面'>
 					<?php foreach($this->userLayoutDocs as $doc) {?>
-						<option value='/<?php echo $doc->resourceAlias?>.shtml' data-layoutAlias='<?php echo $doc->getId()?>'><?php echo $doc->label?></option>
+						<option value='/<?php echo $doc->alias?>.layout' data-layoutAlias='<?php echo $doc->alias?>'><?php echo $doc->label?>[<?php echo $doc->type?>]</option>
 					<?php }?>
 					</optgroup>
 					<option style='background: #789; border-radius: 2px; font: italic;' value='#/admin/layout.ajax/create'>创建新页面</option>
