@@ -18,6 +18,7 @@ class EditForm extends Form
     		'name' => 'type',
     		'type' => 'Zend\Form\Element\Select',
     		'options' => array('label' => '数据类型', 'value_options' => array(
+    			'index' => '综合页面',
 				'list' => '文章列表',
 				'product-list' => '产品列表',
 				'book' => '手册'
