@@ -14,13 +14,13 @@
 	<?=$this->headScript() ?>
 </head>
 <?php
-//$ra = $this->layoutFront->getResourceAlias();
-$ra = null;
-if($ra == null) {?>
+$cid = $this->layoutFront->getContext()->getContextId();
+if(is_null($cid)) {
+?>
 <body>
-<?php } else {?>
-<body id='<?php echo $ra?>'>
-<?php }?>
+<?php } else { ?>
+<body id='<?php echo $cid?>'>
+<?php } ?>
 <?php
 if($this->sessionAdmin->hasPrivilege()) {
 	$co = $this->factory->_m('Layout');

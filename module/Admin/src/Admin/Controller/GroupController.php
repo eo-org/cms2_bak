@@ -32,7 +32,10 @@ class GroupController extends AbstractActionController
     		$doc->save();
     	}
     	
-    	return array('doc' => $doc);
+    	return array(
+    		'doc' => $doc,
+    		'groupType' => $type
+    	);
     }
     
 	public function editItemAction()

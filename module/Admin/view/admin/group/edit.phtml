@@ -42,12 +42,23 @@ var tree = {type: 'group', id: '<?php echo $this->doc->type?>'};
 	<% } %>
 		<div class='drag-handle' draggable='true'></div>
 		<div class='leaf-label'><a href='javascript:void(0)' class='edit' id='{{ id }}'>{{ label }}</a></div>
-		<div class='leaf-link'>
-		<% if(alias) { %>
-			{{ alias }}
-		<% } else { %>
-			{{ id }}
-		<% } %>
+		<div class='leaf-link'>[
+		<?php if ($this->groupType == 'article') { ?>
+			<% if(alias) { %>
+				/list-{{ alias }}/page1.shtml
+			<% } else { %>
+				/list-{{ id }}/page1.shtml
+			<% } %>
+		<?php  } else { ?>
+			<% if(alias) { %>
+				/product-list-{{ alias }}/page1.shtml
+			<% } else { %>
+				/product-list-{{ id }}/page1.shtml
+			<% } %>
+		<?php  } ?>
+		]</div>
+		<div class='leaf-layout-alias'>
+			{{ layoutAlias }}
 		</div>
 		<div class='clear'></div>
 	</div>
