@@ -41,7 +41,13 @@ var tree = {type: 'group', id: '<?php echo $this->doc->type?>'};
 	<div class='leaf-line'>
 	<% } %>
 		<div class='drag-handle' draggable='true'></div>
-		<div class='leaf-label'><a href='javascript:void(0)' class='edit' id='{{ id }}'>{{ label }}</a></div>
+		<div class='leaf-label'><a href='javascript:void(0)' class='edit' id='{{ id }}'>
+			<% if(disabled == 'yes') { %>
+			[{{ label }}]
+			<% } else { %>
+			{{ label }}
+			<% } %>
+		</a></div>
 		<div class='leaf-link'>[
 		<?php if ($this->groupType == 'article') { ?>
 			<% if(alias) { %>
@@ -72,6 +78,11 @@ var tree = {type: 'group', id: '<?php echo $this->doc->type?>'};
 	<div class='editor-contenr'>
 		<div class='label-el'>分组名：</div>
 		<div><input class='edit-value' name='label' type='text' value='{{ label }}'></div>
+		<div class='label-el'>显示为文字(不能点击)：</div>
+		<div><select class='edit-value' name='disabled'>
+			<option value='no'>否</option>
+			<option value='yes' <%if(disabled == 'yes') {print('selected="true"')}%> >是</option>
+		</select></div>
 		<div class='link-el'>分组地址(别名)：</div>
 		<div><input class='edit-value' name='alias' type='text' value='{{ alias }}'></div>
 		<div class='link-el'>Layout(别名)：</div>
