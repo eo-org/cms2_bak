@@ -26,7 +26,7 @@ class TreeleafController extends AbstractRestfulController
 			case 'group':
 				$co = $factory->_m('Group_Item')
 					->addFilter('groupType', $treeId)
-					->setFields(array('label', 'alias', 'layoutAlias', 'parentId', 'className', 'sort', 'disabled'));
+					->setFields(array('label', 'alias', 'layoutAlias', 'parentId', 'className', 'iconName', 'bannerName', 'sort', 'disabled'));
 				break;
 		}
 		
