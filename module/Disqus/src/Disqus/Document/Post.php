@@ -25,6 +25,9 @@ class Post extends AbstractDocument
 	protected $userName;
 	
 	/** @ODM\Field(type="string")  */
+	protected $topic;
+	
+	/** @ODM\Field(type="string")  */
 	protected $content;
 	
 	/** @ODM\Field(type="date")  */

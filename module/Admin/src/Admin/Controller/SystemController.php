@@ -2,7 +2,7 @@
 namespace Admin\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
-use Admin\Form\Article\EditForm;
+use Admin\Form\System\OrgnizationForm;
 
 class SystemController extends AbstractActionController 
 {
@@ -22,6 +22,37 @@ class SystemController extends AbstractActionController
 		
 		return array(
 			'docs' => $docs
+		);
+	}
+	
+	public function transferAction()
+	{
+		$this->brickConfig()->setActionMenu(array('save'))
+			->setActionTitle('转移网站所有权');
+		
+		$config = $this->getServiceLocator()->get('Fucms\SiteConfig');
+		$remoteSiteId = $config->remoteSiteId;
+		$dm = $this->documentManager();
+		$siteDoc = $dm->createQueryBuilder('Document\ServerCenter\Site')
+			->field('remoteSiteId')->equals($remoteSiteId)
+			->getQuery()
+			->getSingleResult();
+		
+		$form = new OrgnizationForm();
+		$form->setData($siteDoc->toArray());
+		if($this->getRequest()->isPost()) {
+        	$postData = $this->getRequest()->getPost();
+        	$form->setData($postData);
+        	if($form->isValid()) {
+	        	$siteDoc->setFromArray($form->getData());
+	        	$dm->flush($siteDoc);
+	        	$this->flashMessenger()->addMessage('网站基本信息已经成功保存');
+		        return $this->redirect()->toRoute('admin/actionroutes/wildcard', array('action' => 'index', 'controller' => 'system'));
+        	}
+        }
+		
+		return array(
+			'form' => $form
 		);
 	}
 }
