@@ -14,7 +14,7 @@ return array(
 			'system'		=> 'Admin\Controller\SystemController',
 			'site'			=> 'Admin\Controller\SiteController',
 			'brick'			=> 'Admin\Controller\BrickController',
-			'brick.ajax'	=> 'Admin\Controller\BrickController',
+//			'brick.ajax'	=> 'Admin\Controller\BrickController',
 			'brick.bone'	=> 'Admin\Controller\BrickController',
 			'group'			=> 'Admin\Controller\GroupController',
 			'layout'		=> 'Admin\Controller\LayoutController',
@@ -26,6 +26,9 @@ return array(
             'admin' => __DIR__ . '/../view',
         ),
         'template_map' => array(
+        	'layout-admin/layout'	=> __DIR__ . '/../view/layout/layout.phtml',
+        	'layout-admin/ajax'		=> __DIR__ . '/../view/layout/layout.ajax.phtml',
+        	'layout-admin/bone'		=> __DIR__ . '/../view/layout/layout.bone.phtml',
     		'layout/head'			=> __DIR__ . '/../view/layout/head.phtml',
         	'layout/admin-toolbar'	=> __DIR__ . '/../view/layout/toolbar.phtml',
         ),
@@ -33,31 +36,51 @@ return array(
     'router' => array(
         'routes' => array(
             'admin' => array(
-    			'type' => 'segment',
+    			'type' => 'literal',
     			'options' => array(
     				'route' => '/admin',
     				'defaults' => array(
     					'controller' => 'index',
-    					'action' => 'index'
+    					'action' =>'index',
     				)
     			),
     			'may_terminate' => true,
     			'child_routes' => array(
-		    		'childroutes' => array(
-    					'type'    => 'segment',
+    				'formatroutes' => array(
+    					'type' => 'segment',
+    					'options' => array(
+    						'route' => '[/:controller[.:format]][/:action]',
+    						'constraints' => array(
+    							'controller' => '[a-z-]*',
+    							'format' => '(ajax|bone)',
+    							'action' => '[a-z-]*'
+    						),
+    					),
+    					'child_routes' => array(
+    						'wildcard' => array(
+    							'type' => 'wildcard',
+    						),
+    					),
+    				),
+		    		'actionroutes' => array(
+    					'type' => 'segment',
 		                'options' => array(
-		                    'route'    => '[/:controller][/:action]',
+		                    'route' => '[/:controller][/:action]',
 		                    'constraints' => array(
-		    					'controller' => '[a-z-.]*',
+		    					'controller' => '[a-z-]*',
 		                        'action' => '[a-z-]*'
 		                    ),
+		                	'defaults' => array(
+		                		'action' => 'index'
+		                	)
 		                ),
-						'child_routes'  => array(
+						'child_routes' => array(
 							'wildcard' => array(
 								'type' => 'wildcard',
 							),
 						),
-    				)
+    				),
+    				
     			)
             ),
         ),

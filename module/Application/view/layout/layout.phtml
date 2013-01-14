@@ -35,7 +35,7 @@ if($this->sessionAdmin->hasPrivilege()) {
 }
 ?>
 
-<div class='bg-wrapper'><?php echo $this->content; ?></div>
+<div class='bg-wrapper'><?php echo $this->partial('layout/body', array('layoutFront' => $this->layoutFront)); ?></div>
 
 <?php if($this->sessionAdmin->hasPrivilege()) { ?>
 <div id="lightbox-blackbox"></div>

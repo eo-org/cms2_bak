@@ -41,7 +41,7 @@ class BookController extends AbstractActionController
 	    		$doc = $doc->setFromArray($form->getData());
 	    		$doc->save();
 	    		$this->flashMessenger()->addMessage('手册:'.$doc->label.' 已经成功保存');
-		        return $this->redirect()->toRoute(null, array('action' => 'index', 'controller' => 'book'));
+		        return $this->redirect()->toRoute('admin/actionroutes/wildcard', array('action' => 'index', 'controller' => 'book'));
 	        }
     	}
     	return array(
@@ -119,7 +119,7 @@ class BookController extends AbstractActionController
 	    			$pageDoc->editor = 'ck';
 	    		}
 	    		$pageDoc->save();
-	    		return $this->redirect()->toRoute(null, array('action' => 'edit-page-index', 'controller' => 'book', 'id' => $bookId));
+	    		return $this->redirect()->toRoute('admin/actionroutes/wildcard', array('action' => 'edit-page-index', 'controller' => 'book', 'id' => $bookId));
     		}
     	}
     	

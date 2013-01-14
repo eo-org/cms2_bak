@@ -96,6 +96,7 @@ class LayoutController extends AbstractActionController
         	
         	if($form->isValid()) {
 	        	$stages[$tempKey]['uniqueId'] = $form->get('uniqueId')->getValue();
+	        	$stages[$tempKey]['isViewContentHolder'] = $form->get('isViewContentHolder')->getValue();
 				$doc->stage = $stages;
 	        	$doc->save();
 	        	

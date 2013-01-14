@@ -67,11 +67,11 @@ class ArticleController extends AbstractActionController
 	            }
 	            $doc->save();
 	            $this->flashMessenger()->addMessage('文章:'.$doc->label.' 已经成功保存');
-	            return $this->redirect()->toRoute(null, array('action' => 'index', 'controller' => 'article'));
+	            return $this->redirect()->toRoute('admin/actionroutes/wildcard', array('action' => 'index', 'controller' => 'article'));
         	}
         }
         	
-        $co = $factory::_m('Info');
+        $co = $factory->_m('Info');
 		$infoDoc = $co->fetchOne();
 		
 		$thumbWidth = empty($infoDoc->thumbWidth) ? 200 : $infoDoc->thumbWidth;
@@ -103,6 +103,6 @@ class ArticleController extends AbstractActionController
         }
         $doc->delete();
         $this->flashMessenger()->addMessage('文章:'.$doc->label.'已删除！');
-		return $this->redirect()->toRoute(null, array('action' => 'index', 'controller' => 'article'));
+		return $this->redirect()->toRoute('admin/actionroutes/wildcard', array('action' => 'index', 'controller' => 'article'));
     }
 }

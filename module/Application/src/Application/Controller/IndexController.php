@@ -2,6 +2,7 @@
 namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\ViewModel;
 use Fucms\Session\Admin as SessionAdmin;
 
 use Document\User;
@@ -22,105 +23,42 @@ class IndexController extends AbstractActionController
     		$sessionAdmin->addUserData('localCssMode', 'deactivate');
     	}
     	
-    	$sm = $this->getServiceLocator();
-    	$lf = $sm->get('Fucms\Layout\Front');
-    	$layoutDoc	= $lf->getLayoutDoc();
-    	$brickRegister = $sm->get('Brick\Register');
+    	return new viewModel();
     	
-    	$brickViewList = $brickRegister->renderAll();
-    	$stageList = $layoutDoc->stage;
+//     	$sm = $this->getServiceLocator();
+//     	$lf = $sm->get('Fucms\Layout\Front');
+//     	$layoutDoc	= $lf->getLayoutDoc();
+//     	$brickRegister = $sm->get('Brick\Register');
     	
-        return array(
-        	'hideHead' => $layoutDoc->hideHead,
-        	'hideTail' => $layoutDoc->hideTail,
-        	'layoutId' => $layoutDoc->getId(),
-        	'stageList' => $stageList,
-        	'brickViewList' => $brickViewList
-        );
+//     	$brickViewList = $brickRegister->renderAll();
+//     	$stageList = $layoutDoc->stage;
     	
-    	
-		
-    /*
-        
-        $controller->registerPlugin(new App_Plugin_BackendSsoAuth(
-        	$csa,
-        	App_Plugin_BackendSsoAuth::CMS,
-        	
-        ));
-        $controller->registerPlugin(new Class_Plugin_HeadFile());
-        $controller->registerPlugin(new Class_Plugin_LayoutSwitch($layout));
-//        $controller->registerPlugin(new Class_Plugin_BrickRegister($layout));
-        
-		$view = new Zend_View();
-		$view->headTitle()->setSeparator('_');
-		
-		Zend_Registry::set('Locale', 'zh_CN');
-		$co = App_Factory::_m('Info');
-		$doc = $co->fetchOne();
-		if(!is_null($doc)) {
-			$view->headTitle($doc->pageTitle);
-			$view->headMeta()->appendName('keywords', $doc->metakey);
-			$view->headMeta()->appendName('description', $doc->metadesc);
-			if(!is_null($doc->language)) {
-				Zend_Registry::set('Locale', $doc->language);
-			}
-		}
-		
-		
-		
-		
-		
-		*/
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	//$mongoAdapter = $sm->get('Core\Mongo\Db\Adapter');
-    	
-    	//\App_Mongo_Db_Collection::setDefaultAdapter($mongoAdapter);
-    	
-    	
-    	
-    	
+//         return array(
+//         	'hideHead' => $layoutDoc->hideHead,
+//         	'hideTail' => $layoutDoc->hideTail,
+//         	'layoutDoc' => $layoutDoc->getId(),
+//         	'stageList' => $stageList,
+//         	'brickViewList' => $brickViewList
+//         );
     }
     
-    public function setBrickRegister($br)
-    {
-    	$this->brickRegister = $br;
-    }
+//     public function setBrickRegister($br)
+//     {
+//     	$this->brickRegister = $br;
+//     }
     
-    public function getBrickRegister()
-    {
-    	return $this->brickRegister;
-    }
+//     public function getBrickRegister()
+//     {
+//     	return $this->brickRegister;
+//     }
     
-    public function setSiteDoc($siteDoc)
-    {
-    	$this->siteDoc = $siteDoc;
-    }
+//     public function setSiteDoc($siteDoc)
+//     {
+//     	$this->siteDoc = $siteDoc;
+//     }
     
-    public function getSiteDoc()
-    {
-    	return $this->siteDoc;
-    }
+//     public function getSiteDoc()
+//     {
+//     	return $this->siteDoc;
+//     }
 }

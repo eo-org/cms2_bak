@@ -85,11 +85,11 @@ class ProductController extends AbstractActionController
 				$doc->setAttachments($attaUrl, $attaName, $attaType);
 	            $doc->save();
 	            $this->flashMessenger()->addMessage('产品:'.$doc->label.' 已经成功保存');
-	            return $this->redirect()->toRoute(null, array('action' => 'index', 'controller' => 'product'));
+	            return $this->redirect()->toRoute('admin/actionroutes/wildcard', array('action' => 'index', 'controller' => 'product'));
         	}
 		}
 		
-		$co = $factory::_m('Info');
+		$co = $factory->_m('Info');
 		$infoDoc = $co->fetchOne();
 		
 		$thumbWidth = empty($infoDoc->thumbWidth) ? 200 : $infoDoc->thumbWidth;

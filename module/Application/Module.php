@@ -1,18 +1,16 @@
 <?php
 namespace Application;
 
+use Zend\ModuleManager\Feature\BootstrapListenerInterface;
+use Zend\EventManager\EventInterface;
 use Zend\I18n\Translator\Translator;
 use Zend\Mvc\MvcEvent;
 use Zend\Mvc\Application;
-use Zend\View\Helper\Doctype;
-use Zend\View\Helper\HeadTitle;
-use Zend\View\Helper\HeadMeta;
 use Zend\EventManager\StaticEventManager;
-use Fucms\Brick\Register;
-use Fucms\Brick\Service\RegisterConfig;
+use Brick\Module\TwigView;
 use Fucms\Session\Admin as SessionAdmin;
 
-class Module
+class Module implements BootstrapListenerInterface
 {
 	public $infoDoc = null;
 	
@@ -21,8 +19,31 @@ class Module
 		$sharedEvents = StaticEventManager::getInstance();
 		$sharedEvents->attach('Zend\Mvc\Application', 'dispatch.error', array($this, 'onError'), 100);
 		$sharedEvents->attach(__NAMESPACE__, 'dispatch', array($this, 'setTranslator'), 11);
-		$sharedEvents->attach(__NAMESPACE__, 'dispatch', array($this, 'setLayout'), 10);
-		$sharedEvents->attach(__NAMESPACE__, 'dispatch', array($this, 'setHeadFile'), -1);
+		$sharedEvents->attach(__NAMESPACE__, 'dispatch', array($this, 'initLayout'), -100);
+//		$sharedEvents->attach(__NAMESPACE__, 'dispatch', array($this, 'setHeadFile'), -1);
+	}
+	
+	public function onBootstrap(EventInterface $event)
+	{
+		$application = $event->getTarget();
+		$sm = $application->getServiceManager();
+		$config = $sm->get('Config');
+		$brickConfig = $config['brick'];
+		
+		$twigEnv = TwigView::getTwigEnv();
+		$twigEnv->addFilter('outputImage',		new \Twig_Filter_Function('Brick\Helper\Twig\Filter::outputImage'));
+		$twigEnv->addFilter('graphicDataJson',	new \Twig_Filter_Function('Brick\Helper\Twig\Filter::graphicDataJson'));
+		$twigEnv->addFilter('substr',			new \Twig_Filter_Function('Brick\Helper\Twig\Filter::substr'));
+		$twigEnv->addFilter('url',				new \Twig_Filter_Function('Brick\Helper\Twig\Filter::url'));
+		$twigEnv->addFilter('pageLink',			new \Twig_Filter_Function('Brick\Helper\Twig\Filter::pageLink'));
+		$twigEnv->addFilter('translate',		new \Twig_Filter_Function('Brick\Helper\Twig\Filter::translate'));
+		
+		$templateDir = array();
+		foreach($brickConfig as $bc) {
+			$templateDir[] = $bc['path_stack'];
+		}
+		$loader = new \Twig_Loader_Filesystem($templateDir);
+		$twigEnv->setLoader($loader);
 	}
 	
 	public function getConfig()
@@ -80,78 +101,10 @@ class Module
 		$sm->setService('translator', $translator);
 	}
 	
-	public function setLayout(MvcEvent $e)
+	public function initLayout(MvcEvent $e)
 	{
-		$controller = $e->getTarget();
-		$sm = $controller->getServiceLocator();
-		$factory = $controller->dbFactory();
-		$rm = $e->getRouteMatch();
-		
-		$infoDoc = $this->infoDoc;
-		$controller->setSiteDoc($infoDoc);
-		$doctypeHelper = new Doctype();
-		$doctypeHelper->setDoctype('HTML5');
-		if(!is_null($infoDoc)) {
-			$renderer = $sm->get('Zend\View\Renderer\PhpRenderer');
-    		$renderer->headTitle($infoDoc->pageTitle);
-			$renderer->headMeta()->setName('keywords', $infoDoc->metakey);
-			$renderer->headMeta()->setName('description', $infoDoc->metadesc);
-		}
-		
-		$layoutFront = $sm->get('Fucms\Layout\Front');
-		$layoutFront->setRouteMatch($rm);
-		$layoutDoc = $layoutFront->getLayoutDoc();
-		
-		$brickRegister = new Register($controller, new RegisterConfig($layoutDoc, $factory));
-		$sm->setService('Brick\Register', $brickRegister);
-		$controller->setBrickRegister($brickRegister);
-		
-		$sessionAdmin	= new SessionAdmin();
-		$viewModel		= $controller->layout();
-		$jsList			= $brickRegister->getJsList();
-		$cssList		= $brickRegister->getCssList();
-		
-		$viewModel->setVariables(array(
-			'factory' => $factory,
-			'sessionAdmin' => $sessionAdmin,
-			'layoutFront' => $layoutFront,
-			'jsList' => $jsList,
-			'cssList' => $cssList,
-		));
-	}
-	
-	public function setHeadFile(MvcEvent $e)
-	{
-		$controller = $e->getTarget();
-		$sm = $controller->getServiceLocator();
-		$factory = $controller->dbFactory();
-		
-		$siteConfig = $sm->get('Fucms\SiteConfig');
-		$viewHelper = $sm->get('ViewHelperManager');
-		$headFileCo = $factory->_m('HeadFile');
-		$headFileDocs = $headFileCo->fetchDoc();
-		
-		$sessionAdmin = new SessionAdmin();
-		$fileUrl = $siteConfig->fileFolderUrl;
-		if($sessionAdmin->getUserData('localCssMode') == 'active') {
-			$fileUrl = 'http://local.host/'.$siteConfig->globalSiteId;
-		}
-		
-		foreach($headFileDocs as $doc) {
-			if($doc->folder == 'helper') {
-				if($doc->type == 'css') {
-					$viewHelper->get('HeadLink')->appendStylesheet($siteConfig->libUrl.'/front/script/helper/'.$doc->filename);
-				} else {
-					$viewHelper->get('HeadScript')->appendFile($siteConfig->libUrl.'/front/script/helper/'.$doc->filename);
-				}
-			} else {
-				if($doc->type == 'css') {
-					$viewHelper->get('HeadLink')->appendStylesheet($fileUrl.'/'.$doc->filename);
-				} else {
-					$viewHelper->get('HeadScript')->appendFile($fileUrl.'/'.$doc->filename);
-				}
-			}
-		}
+		$layoutFront = $e->getApplication()->getServiceManager()->get('Fucms\Layout\Front');
+		$layoutFront->initLayout($e);
 	}
 	
 	public function onError(MvcEvent $e)
@@ -160,6 +113,7 @@ class Module
 		if($target instanceof Application) {
 			echo "handled in onError Event<br />";
 			echo $e->getError();
+			echo "<br />";
 			die('END');
 		} else {
 			$target->layout('layout/error');

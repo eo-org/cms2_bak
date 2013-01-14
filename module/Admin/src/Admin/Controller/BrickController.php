@@ -25,6 +25,9 @@ class BrickController extends AbstractActionController
     		throw new Exception('url error');
     	}
     	
+    	$config = $this->getServiceLocator()->get('Config');
+    	$brickConfig = $config['brick'];
+    	
 		$centerDbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
 		$tb = new \Zend\Db\TableGateway\TableGateway('extension_group', $centerDbAdapter);
 		$rowset = $tb->select();
@@ -36,7 +39,8 @@ class BrickController extends AbstractActionController
 			'layoutId'		=> $layoutId,
 			'stageId'		=> $stageId,
 			'spriteName'	=> $spriteName,
-			'rowset'		=> $rowset
+			'rowset'		=> $rowset,
+			'brickConfig'	=> $brickConfig
 		);
     }
     
@@ -51,6 +55,13 @@ class BrickController extends AbstractActionController
     		throw new Exception('url error');
     	}
 	    
+    	$config = $this->getServiceLocator()->get('Config');
+    	$brickConfig = $config['brick'];
+    	$groupConfig = array();
+    	if(isset($brickConfig[$groupName])) {
+    		$groupConfig = $brickConfig[$groupName]['ext'];
+    	}
+    	
 	    $centerDbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
 		$tb = new \Zend\Db\TableGateway\TableGateway('extension_v2', $centerDbAdapter);
     	$rowset = $tb->selectWith($tb->getSql()->select()
@@ -64,7 +75,8 @@ class BrickController extends AbstractActionController
 			'layoutId'		=> $layoutId,
 	    	'stageId'		=> $stageId,
 	    	'spriteName'	=> $spriteName,
-	    	'rowset'		=> $rowset
+	    	'rowset'		=> $rowset,
+			'groupConfig'	=> $groupConfig
     	);
     }
     

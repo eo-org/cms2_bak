@@ -10,7 +10,7 @@ class Module
 	public function init()
 	{
 		$sharedEvents = StaticEventManager::getInstance();
-		$sharedEvents->attach(__NAMESPACE__, 'dispatch', array($this, 'returnJson'), -10);
+//		$sharedEvents->attach(__NAMESPACE__, 'dispatch', array($this, 'returnJson'), -10);
 	}
 	
 	public function getAutoloaderConfig()
@@ -31,13 +31,10 @@ class Module
 	
 	public function returnJson(MvcEvent $e)
 	{
-		$jsonArr = $e->getResult();
-		
-		$response = $e->getResponse();
-		$response->getHeaders()->addHeaderLine('Content-Type', 'application/json');
-		$adapter = new Json();
-		$response->setContent($adapter->serialize($jsonArr));
-		return $response;
-		
+		$rm = $e->getRouteMatch();
+		$rName = $rm->getMatchedRouteName();
+		echo $rName.' : ';
+		echo $rm->getParam('format');
+		die();
 	}
 }

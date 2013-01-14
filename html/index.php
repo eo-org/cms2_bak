@@ -48,14 +48,13 @@ $autoLoader = new Zend\Loader\StandardAutoloader(array(
 ));
 $autoLoader->register();
 
-$serverConfig = include 'config/server.config.php';
-$siteConfig = new \Fucms\SiteConfig($serverConfig, $siteArr);
+\Fucms\SiteConfig::setSiteArr($siteArr);
 
 $application = Zend\Mvc\Application::init(include 'config/application.config.php');
-$serviceManager = $application->getServiceManager();
-$serviceManager->setService('Fucms\SiteConfig', $siteConfig);
-
 $application->run();
+
+//$serviceManager = $application->getServiceManager();
+//$serviceManager->setService('Fucms\SiteConfig', $siteConfig);
 
 //$finishTime = microtime();
 //echo $finishTime - $time;

@@ -3,6 +3,7 @@ namespace Rest\Controller;
 
 use Zend\Mvc\Controller\AbstractRestfulController;
 use Zend\Json\Json;
+use Zend\View\Model\JsonModel;
 
 class TreeleafController extends AbstractRestfulController
 {
@@ -10,7 +11,6 @@ class TreeleafController extends AbstractRestfulController
 	{
 		$treeType = $this->getRequest()->getHeader('X-Tree-Type')->getFieldValue();
 		$treeId = $this->getRequest()->getHeader('X-Tree-Id')->getFieldValue();
-		
 		$factory = $this->dbFactory();
 		switch($treeType) {
 			case 'navi':
@@ -33,7 +33,8 @@ class TreeleafController extends AbstractRestfulController
 		$data = $co->addSort('sort', 1)
 			->addSort('_id', -1)
 			->fetchAll(true);
-		return $data;
+		
+		return new JsonModel($data);
 	}
 	
 	public function get($id)
@@ -42,7 +43,7 @@ class TreeleafController extends AbstractRestfulController
 		$data = $co->setFields(array('label', 'link', 'parentId', 'sort'))
 			->sort('sort', 1)
 			->fetchAll(true);
-        return $data;
+        return new JsonModel($data);
 	}
 	
 	public function create($data)
@@ -76,7 +77,7 @@ class TreeleafController extends AbstractRestfulController
 		$doc->save();
 		
 		$this->getResponse()->getHeaders()->addHeaderLine('result', 'sucess');
-		return array('id' => $doc->getId());
+		return new JsonModel(array('id' => $doc->getId()));
 	}
 	
 	public function update($id, $data)

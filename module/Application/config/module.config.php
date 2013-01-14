@@ -2,18 +2,39 @@
 return array(
 	'controllers' => array(
         'invokables' => array(
-            'Application\Index' => 'Application\Controller\IndexController'
+            'Application\Controller\Index' => 'Application\Controller\IndexController',
+        	'Application\Controller\Error' => 'Application\Controller\ErrorController',
         ),
     ),
     'router' => array(
         'routes' => array(
+        	'rest' => array(
+        		'type' => 'Literal',
+        		'options' => array(
+        			'route'    => '/rest',
+        		),
+        		'may_terminate' => true,
+        		'child_routes' => array(
+        			'restchildroutes' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '[/:controller].[:format][/:id]',
+        					'constraints' => array(
+        						'controller' => '[a-z-]*',
+        						'format' => '(json|html)',
+        						'id' => '[a-z0-9]*'
+        					)
+        				),
+        			),
+        		),
+        	),
             'application' => array(
                 'type'    => 'Literal',
                 'options' => array(
                     'route'    => '/',
                     'defaults' => array(
                         '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'Application\Index',
+                        'controller'    => 'Application\Controller\Index',
                         'action'        => 'index',
                     ),
                 ),
@@ -104,7 +125,8 @@ return array(
     		'dbFactory'			=> 'Core\Controller\Plugin\DbFactory',
     		'documentManager'	=> 'Core\Controller\Plugin\DocumentManager',
     		'switchContext'		=> 'Core\Controller\Plugin\SwitchContext',
-    		'siteConfig'		=> 'Core\Controller\Plugin\SiteConfig'
+    		'siteConfig'		=> 'Core\Controller\Plugin\SiteConfig',
+    		'formatData'		=> 'Core\Controller\Plugin\FormatData',
     	)
     ),
     'view_manager' => array(
@@ -116,13 +138,17 @@ return array(
         'template_map' => array(
     		'layout/error'				=> __DIR__ . '/../view/layout/error.phtml',
             'layout/layout'				=> __DIR__ . '/../view/layout/layout.phtml',
-    		'layout/head-client'		=> __DIR__ . '/../view/layout/head-client.phtml',
+        	'layout/body'				=> __DIR__ . '/../view/layout/body.phtml',
+        	'layout/head-client'		=> __DIR__ . '/../view/layout/head-client.phtml',
     		'layout/head-admin'			=> __DIR__ . '/../view/layout/head-admin.phtml',
     		'layout/toolbar'			=> __DIR__ . '/../view/layout/toolbar.phtml',
             'application/index/index'	=> __DIR__ . '/../view/application/index/index.phtml',
             'error/404'					=> __DIR__ . '/../view/error/404.phtml',
             'error/index'				=> __DIR__ . '/../view/error/index.phtml',
         ),
+    	'strategies' => array(
+    		'ViewJsonStrategy'
+    	),
     ),
     'view_helpers' => array(
         'invokables' => array(
@@ -136,4 +162,16 @@ return array(
     		'selectOptions'			=> 'Core\View\Helper\SelectOptions',
         ),
     ),
+	'brick' => array(
+		'other' => array(
+			'path_stack' => __DIR__.'/../view/brick',
+			'label' => '其他',
+			'ext' => array(
+				'Application_Brick_ActionContent_Main' => array(
+					'label' => '控制器内容输出',
+					'desc' => ''
+				)
+			)
+		)
+	)
 );

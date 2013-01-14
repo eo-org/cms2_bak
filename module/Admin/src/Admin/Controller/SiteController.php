@@ -26,7 +26,7 @@ class SiteController extends AbstractActionController
 	        	$doc->setFromArray($form->getData());
 	        	$doc->save();
 	        	$this->flashMessenger()->addMessage('网站基本信息已经成功保存');
-		        return $this->redirect()->toRoute(null, array('action' => 'index', 'controller' => 'site'));
+		        return $this->redirect()->toRoute('admin/actionroutes/wildcard', array('action' => 'index', 'controller' => 'site'));
         	}
         }
         

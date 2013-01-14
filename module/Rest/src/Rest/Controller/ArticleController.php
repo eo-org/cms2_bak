@@ -3,6 +3,7 @@ namespace Rest\Controller;
 
 use MongoRegex;
 use Zend\Mvc\Controller\AbstractRestfulController;
+use Zend\View\Model\JsonModel;
 
 class ArticleController extends AbstractRestfulController
 {

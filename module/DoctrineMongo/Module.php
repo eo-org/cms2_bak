@@ -15,9 +15,14 @@ class Module implements BootstrapListenerInterface
 	{
 		$application = $event->getTarget();
 		$sm = $application->getServiceManager();
+		$siteConfig = $sm->get('Fucms\SiteConfig');
+		$dbName = $siteConfig->dbName;
+		
 		
 		AnnotationDriver::registerAnnotationClasses();
 		$config = new Configuration();
+		$config->setDefaultDB($dbName);
+		
 		$config->setProxyDir(BASE_PATH . '/cms2/doctrineCache');
 		$config->setProxyNamespace('DoctrineMongoProxy');
 		$config->setHydratorDir(BASE_PATH . '/cms2/doctrineCache');

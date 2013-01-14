@@ -19,9 +19,9 @@ saveSort = function() {
 	sortJsonStr += '}';
 	
 	$.ajax({
-		url: '/rest/navi.json/tree-sort',
-		data: {treeId: "<?php echo $this->naviDoc->getId()?>", sortJsonStr: sortJsonStr},
-		type: 'post',
+		url: '/adminrest/adminrest-navi.json/<?php echo $this->naviDoc->getId()?>',
+		data: {sortJsonStr: sortJsonStr},
+		type: 'put',
 		success: function(json) {
 			prompt.hideLoadingBox();
 			$('.changed').removeClass('changed');

@@ -5,7 +5,8 @@ return array(
 		'User',
 		'Admin',
 		'Rest',
-    	'DoctrineMongo'
+    	'Disqus',
+    	'DoctrineMongo',
     ),
     'module_listener_options' => array(
         'config_glob_paths'    => array(
@@ -16,4 +17,10 @@ return array(
         	'./vendor'
         ),
     ),
+	'service_manager' => array(
+		'factories' => array('Fucms\SiteConfig' => function($serviceManager) {
+			$siteConfig = new \Fucms\SiteConfig(include 'config\server.config.php');
+			return $siteConfig;
+		})
+	),
 );

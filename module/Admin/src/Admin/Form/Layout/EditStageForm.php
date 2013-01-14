@@ -14,5 +14,13 @@ class EditStageForm extends Form
     		'attributes' => array('type' => 'text'),
     		'options' => array('label' => 'STAGE ID')
     	));
+		$this->add(array(
+			'name' => 'isViewContentHolder',
+			'type' => 'Zend\Form\Element\Select',
+			'options' => array('label' => 'VIEW CONTENT', 'value_options' => array(
+				'no' => '否',
+				'yes' => '是',
+			))
+		));
 	}
 }

@@ -2,7 +2,8 @@
 namespace Rest\Controller;
 
 use Zend\Mvc\Controller\AbstractRestfulController;
-use Zend\Serializer\Adapter\Json;
+use Zend\Json\Json;
+use Zend\View\Model\JsonModel;
 
 class BookController extends AbstractRestfulController
 {
@@ -64,7 +65,36 @@ class BookController extends AbstractRestfulController
 	
 	public function update($id, $data)
 	{
-	
+		$treeId = $id;
+		$jsonStr = $data['sortJsonStr'];
+		$pageObj = Json::decode($jsonStr);
+		 
+		$factory = $this->dbFactory();
+		$co = $factory->_m('Book_Page');
+		$docs = $co->setFields(array('label', 'parentId', 'sort', 'alias'))
+			->addFilter('bookId', $treeId)
+			->sort('sort', 1)
+			->fetchDoc();
+		foreach($docs as $doc) {
+			$pageId = $doc->getId();
+			$newPageValue = $pageObj->$pageId;
+			$sort = intval($newPageValue->sort);
+			$parentId = $newPageValue->parentId;
+			if($doc->sort != $sort || $doc->parentId != $parentId) {
+				$doc->sort = $sort;
+				$doc->parentId = $parentId;
+				$doc->save();
+			}
+		}
+		 
+		$treeDoc = $factory->_m('Book')->find($treeId);
+		$treeDoc->setLeafs($docs);
+		$treeIndex = $treeDoc->buildIndex();
+		$treeDoc->bookIndex = $treeIndex;
+		$treeDoc->save();
+		 
+		$this->getResponse()->getHeaders()->addHeaderLine('result', 'sucess');
+		return new JsonModel(array('id' => $treeId));
 	}
 	
 	public function delete($id)
@@ -74,38 +104,6 @@ class BookController extends AbstractRestfulController
 	
 	public function treeSortAction()
 	{
-		$postData = $this->getRequest()->getPost();
 		
-		$treeId = $postData['treeId'];
-    	$jsonStr = $postData['sortJsonStr'];
-    	
-    	$adapter = new Json();
-		$pageArr = $adapter->unserialize($jsonStr);
-    	
-		$factory = $this->dbFactory();
-    	$co = $factory->_m('Book_Page');
-    	$docs = $co->setFields(array('label', 'parentId', 'sort', 'alias'))
-    		->addFilter('bookId', $treeId)
-			->sort('sort', 1)
-			->fetchDoc();
-    	foreach($docs as $doc) {
-    		$pageId = $doc->getId();
-    		$newPageValue = $pageArr[$pageId];
-    		$sort = intval($newPageValue['sort']);
-    		$parentId = $newPageValue['parentId'];
-    		if($doc->sort != $sort || $doc->parentId != $parentId) {
-    			$doc->sort = $sort;
-    			$doc->parentId = $parentId;
-    			$doc->save();
-    		}
-    	}
-    	
-    	$treeDoc = $factory->_m('Book')->find($treeId);
-    	$treeDoc->setLeafs($docs);
-    	$treeIndex = $treeDoc->buildIndex();
-    	$treeDoc->bookIndex = $treeIndex;
-    	$treeDoc->save();
-    	
-    	$this->getResponse()->getHeaders()->addHeaderLine('result', 'sucess');
 	}
 }

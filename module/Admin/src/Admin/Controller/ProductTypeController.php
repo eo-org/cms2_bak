@@ -32,7 +32,7 @@ class ProductTypeController extends AbstractActionController
 				$doc->setFromArray($form->getData());
 				$doc->save();
 				$this->flashMessenger()->addMessage('产品类型:'.$doc->label.' 已经成功保存');
-	            return $this->redirect()->toRoute(null, array('action' => 'index', 'controller' => 'product-type'));
+	            return $this->redirect()->toRoute('admin/actionroutes/wildcard', array('action' => 'index', 'controller' => 'product-type'));
         	}
 		}
 		

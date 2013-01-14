@@ -2,54 +2,60 @@
 return array(
 	'controllers' => array(
 		'invokables' => array(
-			'navi.json'			=> 'Rest\Controller\NaviController',
-			'article.json'		=> 'Rest\Controller\ArticleController',
-			'book.json'			=> 'Rest\Controller\BookController',
-			'product-type.json'	=> 'Rest\Controller\ProductTypeController',
-			'product.json'		=> 'Rest\Controller\ProductController',
-			'ad-section.json'	=> 'Rest\Controller\AdSectionController',
-			'ad.json'			=> 'Rest\Controller\AdController',
-			'user.json'			=> 'Rest\Controller\UserController',
-			'brick.json'		=> 'Rest\Controller\BrickController',
-			'treeleaf.json'		=> 'Rest\Controller\TreeleafController',
-			'head-file.json'	=> 'Rest\Controller\HeadFileController',
-			'group.json'		=> 'Rest\Controller\GroupController',
-			'layout.html'		=> 'Rest\Controller\LayoutController',
-			'layout.json'		=> 'Rest\Controller\LayoutController',
-			'domain.json'		=> 'Rest\Controller\DomainController'
+			'adminrest-navi'		=> 'Rest\Controller\NaviController',
+			'adminrest-article'		=> 'Rest\Controller\ArticleController',
+			'adminrest-book'		=> 'Rest\Controller\BookController',
+			'adminrest-product-type'=> 'Rest\Controller\ProductTypeController',
+			'adminrest-product'		=> 'Rest\Controller\ProductController',
+			'adminrest-ad-section'	=> 'Rest\Controller\AdSectionController',
+			'adminrest-ad'			=> 'Rest\Controller\AdController',
+			'adminrest-user'		=> 'Rest\Controller\UserController',
+			'adminrest-brick'		=> 'Rest\Controller\BrickController',
+			'adminrest-treeleaf'	=> 'Rest\Controller\TreeleafController',
+			'adminrest-head-file'	=> 'Rest\Controller\HeadFileController',
+			'adminrest-group'		=> 'Rest\Controller\GroupController',
+//			'adminrest-layout.html'	=> 'Rest\Controller\LayoutController',
+			'adminrest-layout'		=> 'Rest\Controller\LayoutController',
+			'adminrest-domain'		=> 'Rest\Controller\DomainController'
 		)
 	),
 	'router' => array(
 		'routes' => array(
-			'rest' => array(
-				'type' => 'segment',
+			'adminrest' => array(
+				'type' => 'literal',
     			'options' => array(
-    				'route' => '/rest'
+    				'route' => '/adminrest'
     			),
     			'may_terminate' => true,
     			'child_routes' => array(
-    				'restchildroutes' => array(
+    				'adminrest-childroutes' => array(
 						'type' => 'segment',
 						'options' => array(
-							'route' => '[/:controller][/:id]',
+							'route' => '[/:controller].[:format][/:id]',
 							'constraints' => array(
-								'controller' => '[a-z-.]*',
-								'id' => '[a-z0-9.]*'
+								'controller' => '[a-z-]*',
+								'format' => '(json|html)',
+								'id' => '[a-z0-9]*'
 							)
 						),
 					),
-					'actionchildroutes' => array(
-						'type' => 'segment',
-						'options' => array(
-							'route' => '[/:controller][/:action]',
-							'constraints' => array(
-								'controller' => '[a-z-.]*',
-								'action' => '[a-z-.]*',
-							)
-						),
-					),
+// 					'actionchildroutes' => array(
+// 						'type' => 'segment',
+// 						'options' => array(
+// 							'route' => '[/:controller][/:action]',
+// 							'constraints' => array(
+// 								'controller' => '[a-z-.]*',
+// 								'action' => '[a-z-.]*',
+// 							)
+// 						),
+// 					),
 				)
 			),
 		),
 	),
+	'view_manager' => array(
+		'strategies' => array(
+			'ViewJsonStrategy'
+		),
+	)
 );

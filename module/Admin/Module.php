@@ -1,6 +1,6 @@
 <?php
 namespace Admin;
-//use Zend\EventManager\EventInterface as Event;
+
 use Zend\Mvc\MvcEvent;
 use Zend\ModuleManager\ModuleManager;
 use Zend\ModuleManager\ModuleEvent;
@@ -52,15 +52,18 @@ class Module
 	
 	public function setLayout(MvcEvent $e)
 	{
+		$rm = $e->getRouteMatch();
 		$controller = $e->getTarget();
 		$controllerName = $controller->params()->fromRoute('controller');
-		$suffix = substr($controllerName, -5);
-		if($suffix == '.ajax') {
-			$controller->layout('layout/layout.ajax.phtml');
-		} else if($suffix == '.bone') {
-			$controller->layout('layout/layout.bone.phtml');
+		$format = $controller->params()->fromRoute('format');
+// 		echo $format;
+// 		die();
+		if($format == 'ajax') {
+			$controller->layout('layout-admin/ajax');
+		} else if($format == 'bone') {
+			$controller->layout('layout-admin/bone');
 		} else {
-			$controller->layout('layout/layout.phtml');
+			$controller->layout('layout-admin/layout');
 		}
 		
 		$routeMatch = $e->getRouteMatch();

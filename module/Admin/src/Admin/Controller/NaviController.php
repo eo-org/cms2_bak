@@ -2,6 +2,7 @@
 namespace Admin\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Serializer\Adapter\Json;
 use Admin\Form\Navi\EditForm;
 
 class NaviController extends AbstractActionController
@@ -219,4 +220,10 @@ class NaviController extends AbstractActionController
         return $this->_helper->json($result);
     }
     */
+    
+    public function treeSortAction()
+    {
+    	
+    }
+    
 }

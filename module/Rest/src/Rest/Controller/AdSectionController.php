@@ -3,6 +3,7 @@ namespace Rest\Controller;
 
 use Zend\Mvc\Controller\AbstractRestfulController;
 use Zend\Json\Json;
+use Zend\View\Model\JsonModel;
 
 class AdSectionController extends AbstractRestfulController
 {
@@ -11,7 +12,7 @@ class AdSectionController extends AbstractRestfulController
 		$factory = $this->dbFactory();
 		$co = $factory->_m('Ad_Section');
 		$data = $co->fetchAll(true);
-        return $data;
+        return new JsonModel($data);
 	}
 	
 	public function get($id)
@@ -29,7 +30,7 @@ class AdSectionController extends AbstractRestfulController
 		$doc->save();
 		
 		$this->getResponse()->getHeaders()->addHeaderLine('result', 'sucess');
-		return array('id' => $doc->getId());
+		return new JsonModel(array('id' => $doc->getId()));
 	}
 	
 	public function update($id, $data)

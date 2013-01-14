@@ -1,23 +1,18 @@
 <?php
 namespace User;
 
-use Zend\Mvc\MvcEvent;
-use Zend\ModuleManager\ModuleManager;
-use Zend\ModuleManager\ModuleEvent;
-use Zend\EventManager\StaticEventManager;
-use Zend\Session\Container;
-use Core\Session\SsoAuth;
-use Fucms\Session\Admin;
-use Fucms\Brick\Register;
-use Fucms\Brick\Service\RegisterConfig;
+use Zend\Mvc\MvcEvent, Zend\EventManager\StaticEventManager;
+use Zend\View\Helper\Doctype, Zend\View\Helper\HeadTitle, Zend\View\Helper\HeadMeta;
+use Fucms\Brick\Register, Fucms\Brick\Service\RegisterConfig, Fucms\Brick\Service\RegisterConfigAdmin;
 
 class Module
 {
 	public function init($moduleManager)
 	{
 		$sharedEvents = StaticEventManager::getInstance();
-		$sharedEvents->attach(__NAMESPACE__, 'dispatch', array($this, 'userAuth'), 1);
-		$sharedEvents->attach(__NAMESPACE__, 'dispatch', array($this, 'setLayout'), 10);
+		$sharedEvents->attach(__NAMESPACE__, 'dispatch', array($this, 'userAuth'), 100);
+		$sharedEvents->attach(__NAMESPACE__, 'dispatch', array($this, 'initLayout'), -100);
+		$sharedEvents->attach('UserAdmin', 'dispatch', array($this, 'initAdminLayout'), -100);
 	}
 	
     public function getConfig()
@@ -30,46 +25,74 @@ class Module
         return array(
             'Zend\Loader\StandardAutoloader' => array(
 				'namespaces' => array(
-					__NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__
+					'User'		=> __DIR__ . '/src/User',
+					'UserAdmin'	=> __DIR__ . '/src/UserAdmin',
+					'UserRest'	=> __DIR__ . '/src/UserRest'
 				)
             ),
         );
     }
     
-	public function userAuth($e)
+    public function getServiceConfig()
+    {
+    	return array(
+    		'invokables' => array(
+    			'Fucms\Session\User' => 'Fucms\Session\User',
+    		)
+    	);
+    }
+    
+	public function userAuth(MvcEvent $e)
 	{
-		/*
-		$fsa = new Admin();
-		$ssoAuth = new SsoAuth($fsa);
-		$ssoAuth->auth();
-		*/
+		$sm = $e->getApplication()->getServiceManager();
+		$fsu = $sm->get('Fucms\Session\User');
+		if(!$fsu->isLogin()) {
+			$rm = $e->getRouteMatch();
+			$currentAction = $rm->getParam('action');
+			if(!in_array($currentAction, array('login', 'register', 'forgetPassword'))) {
+				$rm->setParam('action', 'login');
+			}
+		} else {
+			$rm = $e->getRouteMatch();
+			$currentAction = $rm->getParam('action');
+			if(in_array($currentAction, array('login', 'register', 'forgetPassword'))) {
+				$rm->setParam('action', 'index');
+			}
+		}
 	}
 	
-	public function setLayout(MvcEvent $e)
+	public function initAdminLayout(MvcEvent $e)
 	{
 		$controller = $e->getTarget();
-		$sm = $controller->getServiceLocator();
-		$factory = $controller->dbFactory();
-		$rm = $e->getRouteMatch();
-		
-		$layoutFront = $sm->get('Fucms\Layout\Front');
-		$layoutFront->setRouteMatch($rm);
-		$layoutDoc = $layoutFront->getLayoutDoc();
-		
-		$brickRegister = new Register($this, new RegisterConfig($layoutDoc, $factory));
-		
+		$controllerName = $controller->params()->fromRoute('controller');
+	
+		$controller->layout('layout-admin/layout');
+	
+		$routeMatch = $e->getRouteMatch();
+		$brickRegister = new Register($controller, new RegisterConfigAdmin());
 		$jsList = $brickRegister->getJsList();
 		$cssList = $brickRegister->getCssList();
-		
-		$sessionAdmin = new Admin();
-		
-		$viewModel = $controller->layout();
+		$brickViewList = $brickRegister->renderAll();
+	
+		$viewModel = $e->getViewModel();
 		$viewModel->setVariables(array(
-			'sessionAdmin' => $sessionAdmin,
-			'factory' => $factory,
-			'layoutFront' => $layoutFront,
-			'jsList' => $jsList,
-			'cssList' => $cssList,
+			'routeMatch'	=> $routeMatch,
+			'brickViewList'	=> $brickViewList,
+			'jsList'		=> $jsList,
+			'cssList'		=> $cssList
 		));
+	}
+	
+	public function initLayout(MvcEvent $e)
+	{
+		$sm = $e->getApplication()->getServiceManager();
+		$layoutFront = $sm->get('Fucms\Layout\Front');
+		$dbFactory = $sm->get('Core\Mongo\Factory');
+		
+		$context = new Context($dbFactory);
+		$context->init();
+		$layoutFront->setContext($context);
+		
+		$layoutFront->initLayout($e);
 	}
 }

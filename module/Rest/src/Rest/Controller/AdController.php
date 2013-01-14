@@ -5,12 +5,13 @@ use MongoId;
 use MongoRegex;
 use Zend\Mvc\Controller\AbstractRestfulController;
 use Zend\Json\Json;
+use Zend\View\Model\JsonModel;
 
 class AdController extends AbstractRestfulController 
 {
 	public function getList()
 	{
-		$sectionId = $this->getRequest()->getHeader('Section_Id')->getFieldValue();
+		$sectionId = $this->getRequest()->getHeader('X-Section-Id')->getFieldValue();
 		if(is_null($sectionId)) {
 			throw new Exception('section id is null');
 		}
@@ -20,8 +21,7 @@ class AdController extends AbstractRestfulController
 		$data = $co->addFilter('sectionId', $sectionId)
 			->addSort('sort', 1)
 			->fetchArr(false);
-			
-		return $data;
+		return new JsonModel($data);
 	}
 	
 	public function get($id)
@@ -31,7 +31,7 @@ class AdController extends AbstractRestfulController
 	
 	public function create($data)
 	{
-		$sectionId = $this->getRequest()->getHeader('Section_Id')->getFieldValue();
+		$sectionId = $this->getRequest()->getHeader('X-Section-Id')->getFieldValue();
 		
 		$factory = $this->dbFactory();
 		$sectionDoc = $factory->_m('Ad_Section')
@@ -50,9 +50,9 @@ class AdController extends AbstractRestfulController
 		$sectionDoc->updatePreview();
 		
 		$this->getResponse()->getHeaders()->addHeaderLine('result', 'sucess');
-		return array(
+		return new JsonModel(array(
 			'id' => $doc->getId()
-		);
+		));
 	}
 	
 	public function update($id, $data)
