@@ -3,6 +3,7 @@ namespace Rest\Controller;
 
 use Zend\Mvc\Controller\AbstractRestfulController;
 use Zend\Json\Json;
+use Zend\View\Model\JsonModel;
 
 class GroupController extends AbstractRestfulController
 {
@@ -23,28 +24,16 @@ class GroupController extends AbstractRestfulController
     
     public function update($id, $data)
     {
-    	
-    }
-    
-    public function delete($id)
-    {
-    	
-    }
-    
-	public function treeSortAction()
-    {
-    	$postData = $this->getRequest()->getPost();
-		
-		$treeId = $postData['treeId'];
-    	$jsonStr = $postData['sortJsonStr'];
-		$childArr = Json::decode($jsonStr, Json::TYPE_ARRAY);
-    	
-		$factory = $this->dbFactory();
+    	$treeId = $id;
+    	$jsonStr = $data['sortJsonStr'];
+    	$childArr = Json::decode($jsonStr, Json::TYPE_ARRAY);
+    	 
+    	$factory = $this->dbFactory();
     	$co = $factory->_m('Group_Item');
     	$docs = $co->setFields(array('label', 'parentId', 'sort', 'alias', 'layoutAlias', 'className', 'iconName', 'bannerName', 'disabled'))
-    		->addFilter('groupType', $treeId)
-			->sort('sort', 1)
-			->fetchDoc();
+	    	->addFilter('groupType', $treeId)
+	    	->sort('sort', 1)
+	    	->fetchDoc();
     	foreach($docs as $doc) {
     		$childId = $doc->getId();
     		if(isset($childArr[$childId])) {
@@ -60,7 +49,7 @@ class GroupController extends AbstractRestfulController
     			$doc->save();
     		}
     	}
-    	
+    	 
     	if($treeId == 'article') {
     		$treeDoc = $factory->_m('Group')->findArticleGroup();
     	} else if($treeId == 'product') {
@@ -70,7 +59,13 @@ class GroupController extends AbstractRestfulController
     	$treeIndex = $treeDoc->buildIndex();
     	$treeDoc->groupIndex = $treeIndex;
     	$treeDoc->save();
+    	 
+    	$this->getResponse()->getHeaders()->addHeaderLine('result', 'sucess');
+		return new JsonModel(array('id' => $treeId));
+    }
+    
+    public function delete($id)
+    {
     	
-    	$this->getResponse()->getHeaders()->addHeaderLine('result', 'success');
     }
 }

@@ -18,9 +18,9 @@ saveSort = function() {
 	sortJsonStr += '}';
 	
 	$.ajax({
-		url: '/adminrest/adminrest-group.json/tree-sort',
+		url: '/adminrest/adminrest-group.json/product',
 		data: {treeId: "<?php echo $this->doc->type?>", sortJsonStr: sortJsonStr},
-		type: 'post',
+		type: 'PUT',
 		success: function(json) {
 			prompt.hideLoadingBox();
 			$('.changed').removeClass('changed');

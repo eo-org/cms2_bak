@@ -14,7 +14,6 @@ return array(
 			'adminrest-treeleaf'	=> 'Rest\Controller\TreeleafController',
 			'adminrest-head-file'	=> 'Rest\Controller\HeadFileController',
 			'adminrest-group'		=> 'Rest\Controller\GroupController',
-//			'adminrest-layout.html'	=> 'Rest\Controller\LayoutController',
 			'adminrest-layout'		=> 'Rest\Controller\LayoutController',
 			'adminrest-domain'		=> 'Rest\Controller\DomainController'
 		)
@@ -39,16 +38,6 @@ return array(
 							)
 						),
 					),
-// 					'actionchildroutes' => array(
-// 						'type' => 'segment',
-// 						'options' => array(
-// 							'route' => '[/:controller][/:action]',
-// 							'constraints' => array(
-// 								'controller' => '[a-z-.]*',
-// 								'action' => '[a-z-.]*',
-// 							)
-// 						),
-// 					),
 				)
 			),
 		),
