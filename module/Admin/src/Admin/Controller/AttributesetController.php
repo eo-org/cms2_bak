@@ -1,18 +1,11 @@
 <?php
-class Admin_AttributesetController extends Zend_Controller_Action
+namespace Admin\Controller;
+
+use Zend\Mvc\Controller\AbstractActionController;
+
+class AttributesetController extends AbstractActionController
 {
 	protected $_type = 'product';
-	
-	public function init()
-	{
-		$this->view->headLink()->appendStylesheet(Class_Server::libUrl().'/admin/style/attributeset-editor.css');
-		$this->view->headScript()->appendFile(Class_Server::libUrl().'/admin/script/attributeset-editor.js');
-		
-		$type = $this->getRequest()->getParam('type');
-		if(!is_null($type)) {
-			$this->_type = $this->getRequest()->getParam('type');
-		}
-	}
 	
     public function indexAction()
     {
@@ -69,16 +62,19 @@ class Admin_AttributesetController extends Zend_Controller_Action
     
     public function editAction()
     {
-        $id = $this->getRequest()->getParam('id');
-        $attributesetCo = App_Factory::_am('Attributeset');
-    	$attributesetDoc = $attributesetCo->find($id);
+        $id = $this->params()->fromRoute('id');
+        $dm = $this->documentManager();
+        
+        $attributesetDoc = $dm->getRepository('Document\Attributeset')->find($id);
+        	
         if(is_null($attributesetDoc)) {
         	throw new Exception('attributeset not found');
         }
         
 		$this->view->id = $id;
-        $this->_helper->template->head('编辑')
-        	->actionMenu(array('save', 'delete'));
+        $this->brickConfig()->setActionTitle('编辑文章: '.$doc->label)
+        	->setActionMenu(array('save', 'delete'));
+        return array('id' => $id);
     }
     
     public function deleteAction()

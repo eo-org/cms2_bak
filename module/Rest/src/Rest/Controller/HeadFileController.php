@@ -3,6 +3,7 @@ namespace Rest\Controller;
 
 use Zend\Mvc\Controller\AbstractRestfulController;
 use Zend\Json\Json;
+use Zend\View\Model\JsonModel;
 
 class HeadFileController extends AbstractRestfulController
 {
@@ -11,7 +12,7 @@ class HeadFileController extends AbstractRestfulController
 		$factory = $this->dbFactory();
 		$co = $factory->_m('HeadFile');
 		$data = $co->fetchAll(true);
-		return $data;
+		return new JsonModel($data);
 	}
 	
 	public function get($id)

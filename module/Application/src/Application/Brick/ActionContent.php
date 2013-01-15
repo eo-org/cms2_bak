@@ -1,9 +1,9 @@
 <?php
-namespace Application\Brick\ActionContent;
+namespace Application\Brick;
 
 use Brick\Module\AbstractBrick;
 
-class Main extends AbstractBrick
+class ActionContent extends AbstractBrick
 {
 	public function prepare()
 	{

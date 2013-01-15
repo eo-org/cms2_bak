@@ -21,7 +21,7 @@ return array(
 			'path_stack' => __DIR__.'/../view/brick',
 			'label' => '留言回复',
 			'ext' => array( 
-				'Disqus_Brick_Thread_Main' => array(
+				'Disqus_Brick_Thread' => array(
 					'label' => '留言回复',
 					'desc' => ''
 				)

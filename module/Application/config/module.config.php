@@ -167,10 +167,14 @@ return array(
 			'path_stack' => __DIR__.'/../view/brick',
 			'label' => '其他',
 			'ext' => array(
-				'Application_Brick_ActionContent_Main' => array(
+				'Application_Brick_Attachment' => array(
+					'label' => '附件下载',
+					'desc' => ''
+				),
+				'Application_Brick_ActionContent' => array(
 					'label' => '控制器内容输出',
 					'desc' => ''
-				)
+				),
 			)
 		)
 	)

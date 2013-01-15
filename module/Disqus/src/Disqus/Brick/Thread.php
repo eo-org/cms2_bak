@@ -1,9 +1,9 @@
 <?php
-namespace Disqus\Brick\Thread;
+namespace Disqus\Brick;
 
 use Brick\Module\AbstractBrick;
 
-class Main extends AbstractBrick
+class Thread extends AbstractBrick
 {
 	protected $_effectFiles = array(
 		'common/underscore.1.3.1.min.js',
