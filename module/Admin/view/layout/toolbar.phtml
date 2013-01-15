@@ -1,8 +1,15 @@
 <?php
 $naviArr = array(
-	array('title' => '目录导航', 	'url' => '/admin/navi/',			'tooltip' => '增加，减少，修改导航栏目，也可进行修改导航栏目链接。例如：主导航，页脚导航等等。'),
-	array('title' => '内容管理', 	'url' => '/admin/article/',		'tooltip' => '编辑新闻类动态增加的文章。例如：行业新闻，新闻资讯等等。'),
-	array('title' => '手册管理', 	'url' => '/admin/book/',			'tooltip' => '编辑网站中常规的静态栏目内容，例如：关于公司，联系我们，公司简介，公司理念，公司团队，各种使用手册等等网站内容的修改。'),
+	array(
+		'title' => '目录导航',
+		'url' => '/admin/navi/',
+		'controller' => '',
+		'children' => array()
+	),
+	array(
+		'title' => '内容管理',
+		'url' => '/admin/article/',		'tooltip' => '编辑新闻类动态增加的文章。例如：行业新闻，新闻资讯等等。'),
+	array('title' => '手册管理', 	'url' => '/admin/book/',		'tooltip' => '编辑网站中常规的静态栏目内容，例如：关于公司，联系我们，公司简介，公司理念，公司团队，各种使用手册等等网站内容的修改。'),
 	array('title' => '产品管理', 	'url' => '/admin/product/',		'tooltip' => '编辑公司产品的详细内容，如产品规格，型号，产品详细描述，产品价格等等。'),
 	array('title' => '广告管理', 	'url' => '/admin/ad-section/',	'tooltip' => '编辑网站内的各种静态或动画效果的广告图片，广告组，例如：首页顶部广告组，内页广告图等等。'),
 	array('title' => '系统管理', 	'url' => '/admin/system/',		'tooltip' => '编辑网站的基本信息如:"keywords, page title"，管理系统文件，CSS&JS文件等等。'),

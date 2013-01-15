@@ -86,4 +86,54 @@ return array(
             ),
         ),
     ),
+	'admin_navi' => array(
+		'navi' => array(
+			'title' => '目录导航',
+			'url' => '/admin/navi/',
+			'children' => array()
+		),
+		'article' => array(
+			'title' => '内容管理',
+			'url' => '/admin/article/',
+			'children' => array(
+				
+			)
+		),
+		'book' => array(
+			'title' => '手册管理',
+			'url' => '/admin/book/',
+		),
+		'product' => array(
+			'title' => '产品管理',
+			'url' => '/admin/product/',
+		),
+		'ad-section' => array(
+			'title' => '广告管理',
+			'url' => '/admin/ad-section/',
+		),
+		'system' => array(
+			'title' => '系统管理',
+			'url' => '/admin/system/',
+		),
+		'brick' => array(
+			'title' => '模块管理',
+			'url' => '/admin/brick/',
+		),
+		'useradmin-user' => array(
+			'title' => '用户管理',
+			'url' => '/admin/useradmin-user/',
+		),
+		'disqusadmin-thread' => array(
+			'title' => 'DISQUS',
+			'url' => '/admin/disqusadmin-thread',
+		),
+		'file' => array(
+			'title' => '文件管理',
+			'url' => 'http://file.enorange.cn/'.$this->siteConfig('remoteSiteId').'/admin/',
+		),
+		'message' => array(
+			'title' => '留言管理',
+			'url' => 'http://form.enorange.cn/'.$this->siteConfig('remoteSiteId').'/admin/',
+		)
+	)
 );
