@@ -18,7 +18,7 @@ saveSort = function() {
 	sortJsonStr += '}';
 	
 	$.ajax({
-		url: '/adminrest/adminrest-group.json/product',
+		url: '/adminrest/adminrest-group.json/<?php echo $this->doc->type?>',
 		data: {treeId: "<?php echo $this->doc->type?>", sortJsonStr: sortJsonStr},
 		type: 'PUT',
 		success: function(json) {
