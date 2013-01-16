@@ -71,6 +71,8 @@ class Module
 		$brickViewList = $brickRegister->renderAll();
 		
 		$config = $e->getApplication()->getServiceManager()->get('Config');
+		$siteConfig = $e->getApplication()->getServiceManager()->get('Fucms\SiteConfig');
+		
 		
 		$viewModel = $e->getViewModel();
 		$viewModel->setVariables(array(
@@ -78,7 +80,8 @@ class Module
 				'brickViewList'	=> $brickViewList,
 				'jsList'		=> $jsList,
 				'cssList'		=> $cssList,
-				'toolbar'		=> $config['admin_toolbar']
+				'toolbar'		=> $config['admin_toolbar'],
+				'remoteSiteId'	=> $siteConfig->remoteSiteId,
 		));
 	}
 }
