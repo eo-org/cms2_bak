@@ -86,7 +86,7 @@ return array(
             ),
         ),
     ),
-	'admin_navi' => array(
+	'admin_toolbar' => array(
 		'navi' => array(
 			'title' => '目录导航',
 			'url' => '/admin/navi/',
@@ -96,7 +96,10 @@ return array(
 			'title' => '内容管理',
 			'url' => '/admin/article/',
 			'children' => array(
-				
+				'product-group' => array(
+					'title' => '产品目录',
+					'url' => '/admin/group/edit/type/article'
+				)
 			)
 		),
 		'book' => array(
@@ -106,6 +109,12 @@ return array(
 		'product' => array(
 			'title' => '产品管理',
 			'url' => '/admin/product/',
+			'children' => array(
+				'product-group' => array(
+					'title' => '产品目录',
+					'url' => '/admin/group/edit/type/product'
+				)
+			)
 		),
 		'ad-section' => array(
 			'title' => '广告管理',
@@ -129,11 +138,11 @@ return array(
 		),
 		'file' => array(
 			'title' => '文件管理',
-			'url' => 'http://file.enorange.cn/'.$this->siteConfig('remoteSiteId').'/admin/',
+			'url' => 'http://file.enorange.cn/{{remoteSiteId}}/admin/',
 		),
 		'message' => array(
 			'title' => '留言管理',
-			'url' => 'http://form.enorange.cn/'.$this->siteConfig('remoteSiteId').'/admin/',
+			'url' => 'http://form.enorange.cn/{{remoteSiteId}}/admin/',
 		)
 	)
 );

@@ -56,8 +56,6 @@ class Module
 		$controller = $e->getTarget();
 		$controllerName = $controller->params()->fromRoute('controller');
 		$format = $controller->params()->fromRoute('format');
-// 		echo $format;
-// 		die();
 		if($format == 'ajax') {
 			$controller->layout('layout-admin/ajax');
 		} else if($format == 'bone') {
@@ -72,12 +70,15 @@ class Module
 		$cssList = $brickRegister->getCssList();
 		$brickViewList = $brickRegister->renderAll();
 		
+		$config = $e->getApplication()->getServiceManager()->get('Config');
+		
 		$viewModel = $e->getViewModel();
 		$viewModel->setVariables(array(
 				'routeMatch'	=> $routeMatch,
 				'brickViewList'	=> $brickViewList,
 				'jsList'		=> $jsList,
-				'cssList'		=> $cssList
+				'cssList'		=> $cssList,
+				'toolbar'		=> $config['admin_toolbar']
 		));
 	}
 }
