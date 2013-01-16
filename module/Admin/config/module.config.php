@@ -90,17 +90,17 @@ return array(
 		'navi' => array(
 			'title' => '目录导航',
 			'url' => '/admin/navi/',
-			'children' => array()
+// 			'children' => array()
 		),
 		'article' => array(
 			'title' => '内容管理',
 			'url' => '/admin/article/',
-			'children' => array(
-				'product-group' => array(
-					'title' => '产品目录',
-					'url' => '/admin/group/edit/type/article'
-				)
-			)
+// 			'children' => array(
+// 				'product-group' => array(
+// 					'title' => '产品目录',
+// 					'url' => '/admin/group/edit/type/article'
+// 				)
+// 			)
 		),
 		'book' => array(
 			'title' => '手册管理',
@@ -109,12 +109,12 @@ return array(
 		'product' => array(
 			'title' => '产品管理',
 			'url' => '/admin/product/',
-			'children' => array(
-				'product-group' => array(
-					'title' => '产品目录',
-					'url' => '/admin/group/edit/type/product'
-				)
-			)
+// 			'children' => array(
+// 				'product-group' => array(
+// 					'title' => '产品目录dededededede',
+// 					'url' => '/admin/group/edit/type/product'
+// 				)
+// 			)
 		),
 		'ad-section' => array(
 			'title' => '广告管理',
