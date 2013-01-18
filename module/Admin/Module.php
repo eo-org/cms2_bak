@@ -32,9 +32,6 @@ class Module
 				'namespaces' => array(
 					__NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__
 				),
-				'prefixes' => array(
-					'Twig' => realpath('include/Twig')
-				)
             ),
         );
     }

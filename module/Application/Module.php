@@ -57,9 +57,6 @@ class Module implements BootstrapListenerInterface
 			'Zend\Loader\StandardAutoloader' => array(
 				'namespaces' => array(
 					__NAMESPACE__ => __DIR__ . '/src/Application',
-				),
-				'prefixes' => array(
-					'Twig' => realpath('include/Twig')
 				)
 			)
 		);

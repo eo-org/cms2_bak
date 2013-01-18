@@ -29,7 +29,6 @@ class Attachment extends AbstractBrick
     	if(count($download) == 0) {
     		$this->_disableRender = true;
     	}
-    	print_r($download);
     	$this->view->download = $download;
     }
     

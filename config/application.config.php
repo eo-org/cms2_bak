@@ -13,8 +13,7 @@ return array(
             'config/autoload/{,*.}{global,local}.php'
         ),
         'module_paths' => array(
-            './module',
-        	'./vendor'
+            './module'
         ),
     ),
 	'service_manager' => array(
