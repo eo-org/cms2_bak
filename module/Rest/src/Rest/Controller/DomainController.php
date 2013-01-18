@@ -3,6 +3,7 @@ namespace Rest\Controller;
 
 use Zend\Mvc\Controller\AbstractRestfulController;
 use Zend\Json\Json;
+use Zend\View\Model\JsonModel;
 use Doctrine;
 use Document\ServerCenter\Site;
 
@@ -24,7 +25,7 @@ class DomainController extends AbstractRestfulController
 			$domain['id'] = $domain['_id']->{'$id'};
 			unset($domain['_id']);
 		}
-		return $domains;
+		return new JsonModel($domains);
 	}
 	
 	public function get($id)
