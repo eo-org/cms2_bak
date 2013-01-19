@@ -123,7 +123,7 @@ class ProductController extends AbstractActionController
 		}
 		$productName = $productDoc->label;
 		$productDoc->delete();
-		$this->_helper->flashMessenger->addMessage('产品 '.$productName.' 已经删除');
+		$this->flashMessenger()->addMessage('产品 '.$productName.' 已经删除');
 		return $this->redirect()->toRoute('admin/actionroutes/wildcard', array('action' => 'index', 'controller' => 'product'));
 	}
 }
