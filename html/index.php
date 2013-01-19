@@ -8,7 +8,7 @@ $time = microtime();
 
 $requestHost = $_SERVER['HTTP_HOST'];
 $m = new MongoClient('127.0.0.1');
-$db = $m->selectDb('server_center');
+$db = $m->selectDb('service_account');
 $siteArr = $db->site->findOne(array('domains.domainName' => $requestHost));
 
 if(is_null($siteArr)) {

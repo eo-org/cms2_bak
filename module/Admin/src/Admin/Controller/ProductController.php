@@ -114,6 +114,7 @@ class ProductController extends AbstractActionController
 	{
 		$id = $this->params()->fromRoute('id');
 		
+		$factory = $this->dbFactory();
 		$productCo = $factory->_m('Product');
 		$productDoc = $productCo->find($id);
 		

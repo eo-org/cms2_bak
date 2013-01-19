@@ -5,7 +5,7 @@ use Zend\Mvc\Controller\AbstractRestfulController;
 use Zend\Json\Json;
 use Zend\View\Model\JsonModel;
 use Doctrine;
-use Document\ServerCenter\Site;
+use Document\ServiceAccount\Site;
 
 class DomainController extends AbstractRestfulController
 {
@@ -14,7 +14,7 @@ class DomainController extends AbstractRestfulController
 		$remoteSiteId = $this->siteConfig('remoteSiteId');
 		$dm = $this->documentManager();
 		
-		$site = $dm->createQueryBuilder('Document\ServerCenter\Site')
+		$site = $dm->createQueryBuilder('Document\ServiceAccount\Site')
 			->field('remoteSiteId')->equals($remoteSiteId)
 			->hydrate(false)
 			->getQuery()
@@ -42,7 +42,7 @@ class DomainController extends AbstractRestfulController
 		$dataArr = Json::decode($dataStr, Json::TYPE_ARRAY);
 		
 		$domainName = $dataArr['domainName'];
-		$site = $dm->createQueryBuilder('Document\ServerCenter\Site')
+		$site = $dm->createQueryBuilder('Document\ServiceAccount\Site')
 			->field('domains.domainName')->equals($domainName)
 			->getQuery()
 			->getSingleResult();
@@ -54,7 +54,7 @@ class DomainController extends AbstractRestfulController
 		
 		
 		
-		$site = $dm->createQueryBuilder('Document\ServerCenter\Site')
+		$site = $dm->createQueryBuilder('Document\ServiceAccount\Site')
 			->field('remoteSiteId')->equals($remoteSiteId)
 			->getQuery()
 			->getSingleResult();
@@ -63,7 +63,7 @@ class DomainController extends AbstractRestfulController
 			$this->getResponse()->getHeaders()->addHeaderLine('result', 'failed');
 			return "单个网站最多绑定3个域名";
 		}
-		$domain = new \Document\ServerCenter\Domain();
+		$domain = new \Document\ServiceAccount\Domain();
 		$domain->setFromArray($dataArr);
 		
 		$site->addDomain($domain);
@@ -84,7 +84,7 @@ class DomainController extends AbstractRestfulController
 		$remoteSiteId = $this->siteConfig('remoteSiteId');
 		$dm = $this->documentManager();
 		
-		$site = $dm->createQueryBuilder('Document\ServerCenter\Site')
+		$site = $dm->createQueryBuilder('Document\ServiceAccount\Site')
 			->field('remoteSiteId')->equals($remoteSiteId)
 			->getQuery()
 			->getSingleResult();
