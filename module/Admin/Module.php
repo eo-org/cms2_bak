@@ -68,7 +68,7 @@ class Module
 		$brickViewList = $brickRegister->renderAll();
 		
 		$config = $e->getApplication()->getServiceManager()->get('Config');
-		$siteConfig = $e->getApplication()->getServiceManager()->get('Fucms\SiteConfig');
+		$siteConfig = $e->getApplication()->getServiceManager()->get('ConfigObject\EnvironmentConfig');
 		
 		
 		$viewModel = $e->getViewModel();

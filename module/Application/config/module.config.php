@@ -177,5 +177,11 @@ return array(
 				),
 			)
 		)
-	)
+	),
+	'service_manager' => array(
+		'factories' => array('ConfigObject\EnvironmentConfig' => function($serviceManager) {
+			$siteConfig = new \Fucms\SiteConfig(include 'config/server.config.php');
+			return $siteConfig;
+		})
+	),
 );

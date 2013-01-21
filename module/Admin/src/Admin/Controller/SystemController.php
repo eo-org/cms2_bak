@@ -30,7 +30,7 @@ class SystemController extends AbstractActionController
 		$this->brickConfig()->setActionMenu(array('save'))
 			->setActionTitle('转移网站所有权');
 		
-		$config = $this->getServiceLocator()->get('Fucms\SiteConfig');
+		$config = $this->getServiceLocator()->get('ConfigObject\EnvironmentConfig');
 		$remoteSiteId = $config->remoteSiteId;
 		$dm = $this->documentManager();
 		$siteDoc = $dm->createQueryBuilder('Document\ServerCenter\Site')

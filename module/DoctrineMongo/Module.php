@@ -15,7 +15,7 @@ class Module implements BootstrapListenerInterface
 	{
 		$application = $event->getTarget();
 		$sm = $application->getServiceManager();
-		$siteConfig = $sm->get('Fucms\SiteConfig');
+		$siteConfig = $sm->get('ConfigObject\EnvironmentConfig');
 		$dbName = $siteConfig->dbName;
 		
 		

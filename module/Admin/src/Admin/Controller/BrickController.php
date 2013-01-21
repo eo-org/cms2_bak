@@ -175,7 +175,7 @@ class BrickController extends AbstractActionController
         	$form->setData($postData);
         	if($form->isValid()) {
 	        	$sm = $this->getServiceLocator();
-	    		$SiteConfig = $sm->get('Fucms\SiteConfig');
+	    		$SiteConfig = $sm->get('ConfigObject\EnvironmentConfig');
 	    		$siteId = $SiteConfig->globalSiteId;
 	    		
 	    		if(!is_dir($fileFolder)) {
