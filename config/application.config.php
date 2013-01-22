@@ -2,9 +2,9 @@
 return array(
     'modules' => array(
         'Application',
-		'User',
 		'Admin',
 		'Rest',
+    	'User',
     	'Disqus',
     	'DoctrineMongo',
     ),
