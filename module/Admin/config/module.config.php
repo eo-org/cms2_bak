@@ -135,7 +135,7 @@ return array(
 		),
 		'file' => array(
 			'title' => '文件管理',
-			'url' => 'http://file.enorange.cn/{{remoteSiteId}}/admin/',
+			'url' => 'http://file.enorange.com/{{remoteSiteId}}/admin/',
 		),
 		'message' => array(
 			'title' => '留言管理',
