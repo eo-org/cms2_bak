@@ -91,12 +91,17 @@ class Module
 		$cssList = $brickRegister->getCssList();
 		$brickViewList = $brickRegister->renderAll();
 	
+		$config = $e->getApplication()->getServiceManager()->get('Config');
+		$siteConfig = $e->getApplication()->getServiceManager()->get('ConfigObject\EnvironmentConfig');
+		
 		$viewModel = $e->getViewModel();
 		$viewModel->setVariables(array(
 			'routeMatch'	=> $routeMatch,
 			'brickViewList'	=> $brickViewList,
 			'jsList'		=> $jsList,
-			'cssList'		=> $cssList
+			'cssList'		=> $cssList,
+			'toolbar'		=> $config['admin_toolbar'],
+			'remoteSiteId'	=> $siteConfig->remoteSiteId,
 		));
 	}
 }

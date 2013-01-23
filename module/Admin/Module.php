@@ -70,7 +70,6 @@ class Module
 		$config = $e->getApplication()->getServiceManager()->get('Config');
 		$siteConfig = $e->getApplication()->getServiceManager()->get('ConfigObject\EnvironmentConfig');
 		
-		
 		$viewModel = $e->getViewModel();
 		$viewModel->setVariables(array(
 				'routeMatch'	=> $routeMatch,
