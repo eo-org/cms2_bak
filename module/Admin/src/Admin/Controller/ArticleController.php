@@ -55,7 +55,7 @@ class ArticleController extends AbstractActionController
 	    		$attaUrl	= $postData->get('attaUrl');
 				$attaName	= $postData->get('attaName');
 				$attaType	= $postData->get('attaType');
-				
+				$doc->attachment = null;
 				if(!is_null($attaUrl)) {
 					$doc->setAttachments($attaUrl, $attaName, $attaType);
 				}

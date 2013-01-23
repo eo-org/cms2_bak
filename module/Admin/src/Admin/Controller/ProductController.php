@@ -82,7 +82,10 @@ class ProductController extends AbstractActionController
 	    		$attaUrl	= $postData->get('attaUrl');
 				$attaName	= $postData->get('attaName');
 				$attaType	= $postData->get('attaType');
-				$doc->setAttachments($attaUrl, $attaName, $attaType);
+				$doc->attachment = null;
+				if(!is_null($attaUrl)) {
+					$doc->setAttachments($attaUrl, $attaName, $attaType);
+				}
 	            $doc->save();
 	            $this->flashMessenger()->addMessage('产品:'.$doc->label.' 已经成功保存');
 	            return $this->redirect()->toRoute('admin/actionroutes/wildcard', array('action' => 'index', 'controller' => 'product'));

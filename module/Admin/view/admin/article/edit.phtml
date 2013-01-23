@@ -1,20 +1,25 @@
-<?php $this->headLink()->appendStylesheet('http://local.host/admin/attachment.css'); ?>
+<?php $this->headLink()->appendStylesheet($this->siteConfig('libUrl').'/admin/style/attachment-editor.css'); ?>
 
 <?php ob_start(); ?>
 <div id='attachment'>
-	<div class=''>您可以为文章添加多张图片，并选择您最满意的一张作为其缩略图</div>
+<h3>管理文章图片</h3>
+<div class='graphic-field'>
+	<button data-callback='appendAttachmentListener' class="icon-selector" type="button" name="graphic">添加图片</button>
+	<ul id='graphic-list'></ul>
 	<div class=''>
-		<div class=''>当前缩略图</div>
+		<h4>当前缩略图</h4>
 		<div class='introicon'>
 			<img class='introicon-img' src='<?php echo $this->outputImage($this->article->introicon)?>' />
 		</div>
+		<div class='clear'></div>
 	</div>
-	<ul id='graphic-list'></ul>
-	<button data-callback='appendAttachmentListener' class="icon-selector" type="button" name="graphic">添加图片</button>
-	<hr />
-	<div class=''>您可以为添加附件提供下载</div>
-	<ul id='download-list'></ul>
+</div>
+<hr />
+<h3>添加下载附件</h3>
+<div class='download-field'>
 	<button data-callback='appendAttachmentListener' class="icon-selector" type="button" name="download">添加附件下载</button>
+	<ul id='download-list'></ul>
+</div>
 </div>
 <?php $content = ob_get_contents(); ob_end_clean(); ?>
 
@@ -30,15 +35,17 @@
 </script>
 <script data-main="<?=$this->siteConfig('libUrl')?>/admin/script/app/attachment" src="<?=$this->siteConfig('extUrl')?>/require-jquery.js"></script>
 <script type='text/template' id='graphic-template'>
-	<div class='article-image'><img src='http://storage.aliyun.com/public-misc/{{ window.SITE_FOLDER }}/_thumb/{{ urlname }}'></div>
-	<div class='article-name'>{{ filename }}</div>
+	<div class='image'><img src='http://storage.aliyun.com/public-misc/{{ window.SITE_FOLDER }}/_thumb/{{ urlname }}'></div>
+	<div class='label'>{{ filename }}</div>
 	<div class='set-introicon' urlname='{{ urlname }}'>设置为缩略图</div>
+	<div class='mini-icon-bg mini-icon-delete remove'></div>
 	<input type='hidden' name='attaUrl[]' value='{{ urlname }}' />
 	<input type='hidden' name='attaName[]' value='{{ filename }}' />
 	<input type='hidden' name='attaType[]' value='graphic' />
 </script>
 <script type='text/template' id='download-template'>
-	<div class='article-name'>{{ filename }}</div>
+	<div class='name'>{{ filename }}</div>
+	<div class='mini-icon-bg mini-icon-delete remove'></div>
 	<input type='hidden' name='attaUrl[]' value='{{ urlname }}' />
 	<input type='hidden' name='attaName[]' value='{{ filename }}' />
 	<input type='hidden' name='attaType[]' value='download' />
