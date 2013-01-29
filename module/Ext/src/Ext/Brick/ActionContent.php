@@ -16,6 +16,6 @@ class ActionContent extends AbstractExt
 	
 	public function getTplList()
 	{
-		return array('view' => 'action-content/view.tpl');
+		return array('view' => 'actioncontent/view.tpl');
 	}
 }
