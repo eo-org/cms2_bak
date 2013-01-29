@@ -18,7 +18,6 @@ return array(
 	),
 	'brick' => array(
 		'disqus' => array(
-			'path_stack' => __DIR__.'/../view/brick',
 			'label' => '留言回复',
 			'ext' => array( 
 				'Disqus_Brick_Thread' => array(
@@ -27,5 +26,8 @@ return array(
 				)
 			)
 		)
+	),
+	'brick_path_stack' => array(
+		__DIR__.'/../view/brick',
 	)
 );

@@ -28,9 +28,9 @@ class BrickController extends AbstractActionController
     	$config = $this->getServiceLocator()->get('Config');
     	$brickConfig = $config['brick'];
     	
-		$centerDbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
-		$tb = new \Zend\Db\TableGateway\TableGateway('extension_group', $centerDbAdapter);
-		$rowset = $tb->select();
+// 		$centerDbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+// 		$tb = new \Zend\Db\TableGateway\TableGateway('extension_group', $centerDbAdapter);
+// 		$rowset = $tb->select();
 	    
 		$this->brickConfig()->setActionMenu(array())
 			->setActionTitle('选择模块类型');
@@ -39,7 +39,7 @@ class BrickController extends AbstractActionController
 			'layoutId'		=> $layoutId,
 			'stageId'		=> $stageId,
 			'spriteName'	=> $spriteName,
-			'rowset'		=> $rowset,
+			'rowset'		=> array(),
 			'brickConfig'	=> $brickConfig
 		);
     }
@@ -62,12 +62,12 @@ class BrickController extends AbstractActionController
     		$groupConfig = $brickConfig[$groupName]['ext'];
     	}
     	
-	    $centerDbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
-		$tb = new \Zend\Db\TableGateway\TableGateway('extension_v2', $centerDbAdapter);
-    	$rowset = $tb->selectWith($tb->getSql()->select()
-    		->where(array('deprecated' => 0))
-    		->where(array('groupName' => $groupName))
-    		->order('sort'));
+// 	    $centerDbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+// 		$tb = new \Zend\Db\TableGateway\TableGateway('extension_v2', $centerDbAdapter);
+//     	$rowset = $tb->selectWith($tb->getSql()->select()
+//     		->where(array('deprecated' => 0))
+//     		->where(array('groupName' => $groupName))
+//     		->order('sort'));
     	
     	$this->brickConfig()->setActionMenu(array())
 			->setActionTitle($groupName);
@@ -75,7 +75,7 @@ class BrickController extends AbstractActionController
 			'layoutId'		=> $layoutId,
 	    	'stageId'		=> $stageId,
 	    	'spriteName'	=> $spriteName,
-	    	'rowset'		=> $rowset,
+	    	'rowset'		=> array(),
 			'groupConfig'	=> $groupConfig
     	);
     }
@@ -83,6 +83,7 @@ class BrickController extends AbstractActionController
     public function editAction()
     {
     	$brickId = $this->params()->fromRoute('id');
+    	$extName = $this->params()->fromRoute('extName');
     	
     	$factory = $this->dbFactory();
     	$co = $factory->_m('Brick');
@@ -91,10 +92,17 @@ class BrickController extends AbstractActionController
     		$brick->extName = $this->params()->fromRoute('extName');
     	} else {
     		$brick = $co->find($brickId);
+    		$extName = $brick->extName;
     	}
     	$solidBrick = $brick->createSolid($this);
     	$tplArr = $solidBrick->getTplArray();
-    	
+    	$dm = $this->documentManager();
+    	$templateDocs = $dm->getRepository('Ext\Document\Template')->findByExtName($extName);
+    	$userTplArr = array();
+    	foreach($templateDocs as $t) {
+    		$userTplArr[$t->getId()] = $t->getScriptName();
+    	}
+    	$tplArr[1]['options'] = $userTplArr;
     	$form = new EditForm();
     	$form = $solidBrick->configParam($form);
     	$form->get('tplName')->setValueOptions($tplArr);
@@ -119,11 +127,16 @@ class BrickController extends AbstractActionController
     		
     	}
     	
-        $this->brickConfig()->setActionTitle('编辑模块:'.$brick->extName)
-        	->setActionMenu(array('save', 'delete', 'edit-tpl' => array(
-        		'callback' => '/admin/brick.ajax/edit-tpl/brick-id/'.$brickId,
-        		'label' => '新建TPL文件'
-        	)));
+    	if(empty($brickId)) {
+	        $this->brickConfig()->setActionTitle('编辑模块:'.$brick->extName)
+	        	->setActionMenu(array('save'));
+    	} else {
+    		$this->brickConfig()->setActionTitle('编辑模块:'.$brick->extName)
+	    		->setActionMenu(array('save', 'delete', 'edit-tpl' => array(
+	    			'callback' => '/admin/extadmin-template.ajax/index/ext-name/'.$brick->extName.'/brick-id/'.$brickId,
+	    			'label' => '管理TPL文件'
+	    		)));
+    	}
         
     	return array(
     		'form' => $form,
@@ -144,129 +157,144 @@ class BrickController extends AbstractActionController
     	return $this->switchContext('brick');
     }
     
-    public function editTplAction()
-    {
-    	$brickId = $this->params()->fromRoute('brick-id');
-    	$tplName = $this->params()->fromRoute('tpl-name');
+//     public function listTplAction()
+//     {
+//     	$extName = $this->params()->fromRoute('ext-name');
     	
-    	$factory = $this->dbFactory();
-    	$brick = $factory->_m('Brick')->find($brickId);
-    	if(is_null($brick)) {
-    		throw new Exception('Brick not found by id :'.$brickId);
-    	}
-    	$solidBrick = $brick->createSolid($this);
-    	$tplArr = $solidBrick->getTplArray();
+//     	$dm = $this->documentManager();
+//     	$tplList = $dm->getRepository('Ext\Document\Template')->findByExtName($extName);
     	
-    	$extName = substr($brick->extName, 6);
-    	$fileFolder = $solidBrick->twigPath();
+//     	$this->actionTitle = "TPL文件管理";
+//     	$this->actionMenu = array('create');
     	
-    	$form = new EditTplForm();
-    	if(!empty($tplName)) {
-    		$filePath = $fileFolder.'/'.$tplName;
-			$fh = fopen($filePath, 'r');
-			$tplFileData = fread($fh, filesize($filePath));
-			fclose($fh);
-			$form->get('tplFileName')->setValue($tplName);
-			$form->get('tplFileContent')->setValue($tplFileData);
-    	}
-    	$form->setData($this->params()->fromRoute());
-    	if($this->getRequest()->isPost()) {
-    		$postData = $this->getRequest()->getPost();
-        	$form->setData($postData);
-        	if($form->isValid()) {
-	        	$sm = $this->getServiceLocator();
-	    		$SiteConfig = $sm->get('ConfigObject\EnvironmentConfig');
-	    		$siteId = $SiteConfig->globalSiteId;
+//     	return array(
+//     		'tplList' => $tplList
+//     	);
+//     }
+    
+//     public function editTplAction()
+//     {
+//     	$brickId = $this->params()->fromRoute('brick-id');
+//     	$tplName = $this->params()->fromRoute('tpl-name');
+    	
+//     	$factory = $this->dbFactory();
+//     	$brick = $factory->_m('Brick')->find($brickId);
+//     	if(is_null($brick)) {
+//     		throw new Exception('Brick not found by id :'.$brickId);
+//     	}
+//     	$solidBrick = $brick->createSolid($this);
+//     	$tplArr = $solidBrick->getTplArray();
+    	
+//     	$extName = substr($brick->extName, 6);
+//     	$fileFolder = $solidBrick->twigPath();
+    	
+//     	$form = new EditTplForm();
+//     	if(!empty($tplName)) {
+//     		$filePath = $fileFolder.'/'.$tplName;
+// 			$fh = fopen($filePath, 'r');
+// 			$tplFileData = fread($fh, filesize($filePath));
+// 			fclose($fh);
+// 			$form->get('tplFileName')->setValue($tplName);
+// 			$form->get('tplFileContent')->setValue($tplFileData);
+//     	}
+//     	$form->setData($this->params()->fromRoute());
+//     	if($this->getRequest()->isPost()) {
+//     		$postData = $this->getRequest()->getPost();
+//         	$form->setData($postData);
+//         	if($form->isValid()) {
+// 	        	$sm = $this->getServiceLocator();
+// 	    		$SiteConfig = $sm->get('ConfigObject\EnvironmentConfig');
+// 	    		$siteId = $SiteConfig->globalSiteId;
 	    		
-	    		if(!is_dir($fileFolder)) {
-	    			try {
-	    				mkdir($fileFolder);
-	    			} catch(Exception $e) {
-	    				die('not able to create folder "'.$fileFolder.'"');
-	    			}
-	    		}
-	    		$filePath = $fileFolder.'/'.$form->getInputFilter()->getValue('tplFileName');
-	    		$fh = fopen($filePath, 'w');
-	    		fwrite($fh, $form->get('tplFileContent')->getValue());
-	    		fclose($fh);
-	    		return $this->switchContext('brick', 'edit', array('id' => $brickId), true);
-        	}
-    	}
+// 	    		if(!is_dir($fileFolder)) {
+// 	    			try {
+// 	    				mkdir($fileFolder);
+// 	    			} catch(Exception $e) {
+// 	    				die('not able to create folder "'.$fileFolder.'"');
+// 	    			}
+// 	    		}
+// 	    		$filePath = $fileFolder.'/'.$form->getInputFilter()->getValue('tplFileName');
+// 	    		$fh = fopen($filePath, 'w');
+// 	    		fwrite($fh, $form->get('tplFileContent')->getValue());
+// 	    		fclose($fh);
+// 	    		return $this->switchContext('brick', 'edit', array('id' => $brickId), true);
+//         	}
+//     	}
     	
-    	$extName = strtolower(str_replace('_', '/', $extName));
-    	$tplFile = BASE_PATH.'/extension/view/front/'.$extName.'/view.tpl';
-		$fh = fopen($tplFile, 'r');
-		$viewFileData = fread($fh, filesize($tplFile));
-		fclose($fh);
+//     	$extName = strtolower(str_replace('_', '/', $extName));
+//     	$tplFile = BASE_PATH.'/extension/view/front/'.$extName.'/view.tpl';
+// 		$fh = fopen($tplFile, 'r');
+// 		$viewFileData = fread($fh, filesize($tplFile));
+// 		fclose($fh);
     	
-		$this->brickConfig()->setActionTitle('编辑TPL文件:'.$brick->extName)
-        	->setActionMenu(array('save'));
+// 		$this->brickConfig()->setActionTitle('编辑TPL文件:'.$brick->extName)
+//         	->setActionMenu(array('save'));
         
-		return array(
-			'brickId'		=> $brickId,
-	    	'extName'		=> $extName,
-			'tplArray'		=> $tplArr,
-	    	'viewFileData'	=> $viewFileData,
-	    	'form'			=> $form,
-	    );
-    }
+// 		return array(
+// 			'brickId'		=> $brickId,
+// 	    	'extName'		=> $extName,
+// 			'tplArray'		=> $tplArr,
+// 	    	'viewFileData'	=> $viewFileData,
+// 	    	'form'			=> $form,
+// 	    );
+//     }
     
-    public function getTplContentAjaxAction()
-    {
-    	$this->brickConfig()->setActionTitle('')
-        	->setActionMenu(array());
+//     public function getTplContentAjaxAction()
+//     {
+//     	$this->brickConfig()->setActionTitle('')
+//         	->setActionMenu(array());
     	
-    	$extName = $this->params()->fromPost('extName');
-    	$tplName = $this->params()->fromPost('tplName');
+//     	$extName = $this->params()->fromPost('extName');
+//     	$tplName = $this->params()->fromPost('tplName');
     	
-    	$tplFile = BASE_PATH.'/extension/view/front/'.$extName.'/'.$tplName;
-		$fh = fopen($tplFile, 'r');
-		$tplFileData = fread($fh, filesize($tplFile));
-		fclose($fh);
-    	return array('tplFileData' => $tplFileData);
-    }
+//     	$tplFile = BASE_PATH.'/extension/view/front/'.$extName.'/'.$tplName;
+// 		$fh = fopen($tplFile, 'r');
+// 		$tplFileData = fread($fh, filesize($tplFile));
+// 		fclose($fh);
+//     	return array('tplFileData' => $tplFileData);
+//     }
     
-    public function editCssAction()
-    {
-    	$brickId = $this->params()->fromRoute('brick-id');
-    	$db = Zend_Registry::get('db');
-    	try {
-    		$db->describeTable('css');
-    	} catch(Exception $e) {
-    		echo "<div style='padding: 25px;'>table not implemented!</div>";
-    		exit(0);
-    	}
-    	$brick = Class_Base::_('Brick')->find($brickId)->current();
-    	if(is_null($brick)) {
-    		throw new Exception('Brick not found');
-    	}
-    	$extName = substr($brick->extName, 6);
-    	$cssSuffix = empty($brick->cssSuffix) ? '' : '-'.$brick->cssSuffix;
-    	$cssName = 'brick-'.strtolower($extName).$cssSuffix;
+//     public function editCssAction()
+//     {
+//     	$brickId = $this->params()->fromRoute('brick-id');
+//     	$db = Zend_Registry::get('db');
+//     	try {
+//     		$db->describeTable('css');
+//     	} catch(Exception $e) {
+//     		echo "<div style='padding: 25px;'>table not implemented!</div>";
+//     		exit(0);
+//     	}
+//     	$brick = Class_Base::_('Brick')->find($brickId)->current();
+//     	if(is_null($brick)) {
+//     		throw new Exception('Brick not found');
+//     	}
+//     	$extName = substr($brick->extName, 6);
+//     	$cssSuffix = empty($brick->cssSuffix) ? '' : '-'.$brick->cssSuffix;
+//     	$cssName = 'brick-'.strtolower($extName).$cssSuffix;
     	
-    	$tb = new Zend_Db_Table('css');
-    	$row = $tb->fetchRow($tb->select()->where('id = ?', $cssName));
+//     	$tb = new Zend_Db_Table('css');
+//     	$row = $tb->fetchRow($tb->select()->where('id = ?', $cssName));
     	
-    	require_once APP_PATH.'/admin/forms/Brick/EditCss.php';
-    	$form = new Form_Brick_EditCss();
-    	if(is_null($row)) {
-	    	$idField = $form->getElement('id');
-	    	$idField->setValue($cssName);
-	    	$row = $tb->createRow();
-	    	$row->type = 'brick';
-    	} else {
-    		$form->populate($row->toArray());
-    	}
-    	if($this->getRequest()->isPost() && $form->isValid($this->params()->fromRoutes())) {
-    		$row->setFromArray($form->getValues());
-    		$row->inFile = false;
-    		$row->save();
-    	}
-    	$this->view->form = $form;
-    	$this->view->controls = array(
-			'ajax-save' => array('callback' => '/admin/brick/edit-css/brick-id/'.$brickId)
-        );
-    }
+//     	require_once APP_PATH.'/admin/forms/Brick/EditCss.php';
+//     	$form = new Form_Brick_EditCss();
+//     	if(is_null($row)) {
+// 	    	$idField = $form->getElement('id');
+// 	    	$idField->setValue($cssName);
+// 	    	$row = $tb->createRow();
+// 	    	$row->type = 'brick';
+//     	} else {
+//     		$form->populate($row->toArray());
+//     	}
+//     	if($this->getRequest()->isPost() && $form->isValid($this->params()->fromRoutes())) {
+//     		$row->setFromArray($form->getValues());
+//     		$row->inFile = false;
+//     		$row->save();
+//     	}
+//     	$this->view->form = $form;
+//     	$this->view->controls = array(
+// 			'ajax-save' => array('callback' => '/admin/brick/edit-css/brick-id/'.$brickId)
+//         );
+//     }
     
     /*
     public function saveLocationJsonAction()

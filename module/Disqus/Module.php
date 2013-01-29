@@ -13,7 +13,7 @@ class Module
 	{
 		$sharedEvents = StaticEventManager::getInstance();
 		//$sharedEvents->attach('Disqus', 'dispatch', array($this, 'setFrontLayout'), -10);
-		$sharedEvents->attach('DisqusAdmin', 'dispatch', array($this, 'setAdminLayout'), -100);
+		//$sharedEvents->attach('DisqusAdmin', 'dispatch', array($this, 'setAdminLayout'), -100);
 	}
 	
 	public function getConfig()
@@ -76,32 +76,5 @@ class Module
 		} else {
 			die('not-available with http request');
 		}
-	}
-	
-	public function setAdminLayout(MvcEvent $e)
-	{
-		$controller = $e->getTarget();
-		$controllerName = $controller->params()->fromRoute('controller');
-	
-		$controller->layout('layout-admin/layout');
-	
-		$routeMatch = $e->getRouteMatch();
-		$brickRegister = new Register($controller, new RegisterConfigAdmin());
-		$jsList = $brickRegister->getJsList();
-		$cssList = $brickRegister->getCssList();
-		$brickViewList = $brickRegister->renderAll();
-	
-		$config = $e->getApplication()->getServiceManager()->get('Config');
-		$siteConfig = $e->getApplication()->getServiceManager()->get('ConfigObject\EnvironmentConfig');
-		
-		$viewModel = $e->getViewModel();
-		$viewModel->setVariables(array(
-			'routeMatch'	=> $routeMatch,
-			'brickViewList'	=> $brickViewList,
-			'jsList'		=> $jsList,
-			'cssList'		=> $cssList,
-			'toolbar'		=> $config['admin_toolbar'],
-			'remoteSiteId'	=> $siteConfig->remoteSiteId,
-		));
 	}
 }

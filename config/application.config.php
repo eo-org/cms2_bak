@@ -1,12 +1,13 @@
 <?php
 return array(
     'modules' => array(
+    	'DoctrineMongo',
+    	'Ext',
         'Application',
 		'Admin',
 		'Rest',
     	'User',
     	'Disqus',
-    	'DoctrineMongo',
     ),
     'module_listener_options' => array(
         'config_glob_paths'    => array(

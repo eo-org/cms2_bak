@@ -1,9 +1,9 @@
 <?php
 namespace Disqus\Brick;
 
-use Brick\Module\AbstractBrick;
+use Ext\AbstractExt;
 
-class Thread extends AbstractBrick
+class Thread extends AbstractExt
 {
 	protected $_effectFiles = array(
 		'common/underscore.1.3.1.min.js',
@@ -21,13 +21,8 @@ class Thread extends AbstractBrick
 		$this->view->resourceId = $context->getResourceId();
 	}
 	
-	public function getClass()
-	{
-		return null;
-	}
-	
 	public function getTplList()
 	{
-		return array('view.tpl' => 'thread/view.tpl');
+		return array('view' => 'thread/view.tpl');
 	}
 }

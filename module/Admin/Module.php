@@ -16,8 +16,8 @@ class Module
 	public function init($moduleManager)
 	{
 		$sharedEvents = StaticEventManager::getInstance();
-		$sharedEvents->attach(__NAMESPACE__, 'dispatch', array($this, 'userAuth'), 10);
-		$sharedEvents->attach(__NAMESPACE__, 'dispatch', array($this, 'setLayout'), -10);
+		$sharedEvents->attach('Zend\Mvc\Application', 'dispatch', array($this, 'userAuth'), 10);
+		$sharedEvents->attach('Zend\Mvc\Application', 'dispatch', array($this, 'setLayout'), -10);
 	}
 	
     public function getConfig()
@@ -38,46 +38,58 @@ class Module
     
 	public function userAuth(MvcEvent $e)
 	{
-		$controller = $e->getTarget();
-		$orgCode = $controller->siteConfig('organizationCode');
-		
-		$sessionAdmin = new SessionAdmin();
-		$sessionAdmin->setOrgCode($orgCode);
-		$ssoAuth = new SsoAuth($sessionAdmin);
-		$ssoAuth->auth();
+		$rm = $e->getRouteMatch();
+		$matchedRouteName = $rm->getMatchedRouteName();
+		if(substr($matchedRouteName, 0, 6) == 'admin/') {
+			$sm = $e->getApplication()->getServiceManager();
+			$siteConfig = $sm->get('ConfigObject\EnvironmentConfig');
+			$orgCode = $siteConfig->organizationCode;
+			
+			$sessionAdmin = new SessionAdmin();
+			$sessionAdmin->setOrgCode($orgCode);
+			$ssoAuth = new SsoAuth($sessionAdmin);
+			$ssoAuth->auth();
+		}
 	}
 	
 	public function setLayout(MvcEvent $e)
 	{
 		$rm = $e->getRouteMatch();
-		$controller = $e->getTarget();
-		$controllerName = $controller->params()->fromRoute('controller');
-		$format = $controller->params()->fromRoute('format');
-		if($format == 'ajax') {
-			$controller->layout('layout-admin/ajax');
-		} else if($format == 'bone') {
-			$controller->layout('layout-admin/bone');
-		} else {
-			$controller->layout('layout-admin/layout');
+		$matchedRouteName = $rm->getMatchedRouteName();
+		if(substr($matchedRouteName, 0, 6) == 'admin/') {
+			$disableLayout = false;
+			$controller = $e->getTarget();
+			$controllerName = $controller->params()->fromRoute('controller');
+			$format = $controller->params()->fromRoute('format');
+			if($format == 'ajax') {
+				$controller->layout('layout-admin/ajax');
+			} else if($format == 'bone') {
+				$controller->layout('layout-admin/bone');
+				$disableLayout = true;
+			} else {
+				$controller->layout('layout-admin/layout');
+			}
+			
+			if(!$disableLayout) {
+				$routeMatch = $e->getRouteMatch();
+				$brickRegister = new Register($controller, new RegisterConfigAdmin());
+				$jsList = $brickRegister->getJsList();
+				$cssList = $brickRegister->getCssList();
+				$brickViewList = $brickRegister->renderAll();
+				
+				$config = $e->getApplication()->getServiceManager()->get('Config');
+				$siteConfig = $e->getApplication()->getServiceManager()->get('ConfigObject\EnvironmentConfig');
+				
+				$viewModel = $e->getViewModel();
+				$viewModel->setVariables(array(
+						'routeMatch'	=> $routeMatch,
+						'brickViewList'	=> $brickViewList,
+						'jsList'		=> $jsList,
+						'cssList'		=> $cssList,
+						'toolbar'		=> $config['admin_toolbar'],
+						'remoteSiteId'	=> $siteConfig->remoteSiteId,
+				));
+			}
 		}
-		
-		$routeMatch = $e->getRouteMatch();
-		$brickRegister = new Register($controller, new RegisterConfigAdmin());
-		$jsList = $brickRegister->getJsList();
-		$cssList = $brickRegister->getCssList();
-		$brickViewList = $brickRegister->renderAll();
-		
-		$config = $e->getApplication()->getServiceManager()->get('Config');
-		$siteConfig = $e->getApplication()->getServiceManager()->get('ConfigObject\EnvironmentConfig');
-		
-		$viewModel = $e->getViewModel();
-		$viewModel->setVariables(array(
-				'routeMatch'	=> $routeMatch,
-				'brickViewList'	=> $brickViewList,
-				'jsList'		=> $jsList,
-				'cssList'		=> $cssList,
-				'toolbar'		=> $config['admin_toolbar'],
-				'remoteSiteId'	=> $siteConfig->remoteSiteId,
-		));
 	}
 }
