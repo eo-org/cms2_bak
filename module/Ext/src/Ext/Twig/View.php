@@ -22,10 +22,10 @@ class View
     protected $_classSuffix = null;
     protected $_brickName = null;
     
-    static public function setTwigEnv($twigEnv)
-    {
-    	self::$twigEnv = $twigEnv;
-    }
+//     static public function setTwigEnv($twigEnv)
+//     {
+//     	self::$twigEnv = $twigEnv;
+//     }
     
     static public function getTwigEnv()
     {

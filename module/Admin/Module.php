@@ -17,7 +17,7 @@ class Module
 	{
 		$sharedEvents = StaticEventManager::getInstance();
 		$sharedEvents->attach('Zend\Mvc\Application', 'dispatch', array($this, 'userAuth'), 10);
-		$sharedEvents->attach('Zend\Mvc\Application', 'dispatch', array($this, 'setLayout'), -10);
+		$sharedEvents->attach('Zend\Mvc\Application', 'dispatch', array($this, 'setLayout'), -100);
 	}
 	
     public function getConfig()
