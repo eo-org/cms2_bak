@@ -40,7 +40,7 @@ class Module
 	{
 		$rm = $e->getRouteMatch();
 		$matchedRouteName = $rm->getMatchedRouteName();
-		if(substr($matchedRouteName, 0, 6) == 'admin/') {
+		if(substr($matchedRouteName, 0, 5) == 'admin') {
 			$sm = $e->getApplication()->getServiceManager();
 			$siteConfig = $sm->get('ConfigObject\EnvironmentConfig');
 			$orgCode = $siteConfig->organizationCode;
@@ -56,7 +56,7 @@ class Module
 	{
 		$rm = $e->getRouteMatch();
 		$matchedRouteName = $rm->getMatchedRouteName();
-		if(substr($matchedRouteName, 0, 6) == 'admin/') {
+		if(substr($matchedRouteName, 0, 5) == 'admin') {
 			$disableLayout = false;
 			$controller = $e->getTarget();
 			$controllerName = $controller->params()->fromRoute('controller');
