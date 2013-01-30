@@ -8,13 +8,12 @@ class ArticleController extends AbstractActionController
 {
     public function indexAction()
     {
-		$this->brickConfig()->setActionMenu(array('create-edit'))
-			->setActionTitle('文章列表');
-
 		$factory = $this->dbFactory();
 		$groupDoc = $factory->_m('Group')->findArticleGroup();
     	$optVal = $groupDoc->toMultioptions('label');
 		
+    	$this->actionMenu = array('create-edit');
+    	$this->actionTitle = '文章列表';
 		return array(
 			'optVal' => $optVal
 		);
@@ -35,12 +34,8 @@ class ArticleController extends AbstractActionController
         $doc = null;
         if(empty($id)) {
             $doc = $co->create();
-            $this->brickConfig()->setActionTitle('新建文章')
-        		->setActionMenu(array('save'));
         } else {
         	$doc = $co->find($id);
-        	$this->brickConfig()->setActionTitle('编辑文章: '.$doc->label)
-        		->setActionMenu(array('save', 'delete'));
         }
         if(is_null($doc)) {
             throw new Class_Exception_AccessDeny('没有权限访问此内容，或者内容id不存在');
@@ -82,6 +77,13 @@ class ArticleController extends AbstractActionController
 		$fileServerKey = 'gioqnfieowhczt7vt87qhitonqfn8eaw9y8s90a6fnvuzioguifeb';
 		$sig = md5($siteId.$time.$fileServerKey);
         
+		if(empty($id)) {
+			$this->actionTitle = '新建文章';
+			$this->actionMenu = array('save');
+		} else {
+			$this->actionTitle = '编辑文章: '.$doc->label;
+			$this->actionMenu = array('save', 'delete');
+		}
 		return array(
 			'form'			=> $form,
 			'article'		=> $doc,

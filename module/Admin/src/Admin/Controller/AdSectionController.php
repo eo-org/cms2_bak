@@ -7,8 +7,9 @@ class AdSectionController extends AbstractActionController
 {
 	public function indexAction()
 	{
-		$this->brickConfig()->setActionMenu(array(
+		$this->actionMenu = array(
 				array('label' => '添加新分组', 'callback' => '/rest/ad-section', 'method' => 'createAdSection')
-			))->setActionTitle('广告分组');
+			);
+		$this->actionTitle = '广告分组';
 	}
 }

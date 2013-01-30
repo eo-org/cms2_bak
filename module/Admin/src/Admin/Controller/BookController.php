@@ -9,8 +9,8 @@ class BookController extends AbstractActionController
 {
     public function indexAction()
     {
-        $this->brickConfig()->setActionMenu(array('create-edit'))
-			->setActionTitle('手册列表');
+        $this->actionMenu = array('create-edit');
+		$this->actionTitle = '手册列表';
     }
     
     public function editAction()
@@ -23,12 +23,8 @@ class BookController extends AbstractActionController
     	
     	if(empty($id)) {
             $doc = $co->create();
-            $this->brickConfig()->setActionTitle('新建手册')
-        		->setActionMenu(array('save'));
         } else {
         	$doc = $co->find($id);
-        	$this->brickConfig()->setActionTitle('编辑手册: '.$doc->label)
-        		->setActionMenu(array('save', 'delete'));
         }
     	if(is_null($doc)) {
             throw new Class_Exception_AccessDeny('没有权限访问此内容，或者内容id不存在');
@@ -44,6 +40,13 @@ class BookController extends AbstractActionController
 		        return $this->redirect()->toRoute('admin/actionroutes/wildcard', array('action' => 'index', 'controller' => 'book'));
 	        }
     	}
+    	if(empty($id)) {
+    		$this->actionTitle = '新建手册';
+    		$this->actionMenu = array('save');
+    	} else {
+    		$this->actionTitle = '编辑手册: '.$doc->label;
+    		$this->actionMenu = array('save', 'delete');
+    	}
     	return array(
     		'form' => $form
     	);
@@ -56,12 +59,12 @@ class BookController extends AbstractActionController
     	$co = $this->dbFactory()->_m('Book');
 		$doc = $co->find($id);
     	
-    	$this->brickConfig()->setActionTitle('整理书页: '.$doc->label)
-        	->setActionMenu(array(
+    	$this->actionTitle = '整理书页: '.$doc->label;
+        $this->actionMenu = array(
         		'create-page' => array('label' => '添加新书页', 'callback' => '/admin/book/edit-page/book-id/'.$id),
         		'save-sort' => array('label' => '保存结构', 'callback' => '', 'method' => 'saveSort'),
         		'delete'
-        	));
+        	);
         return array(
         	'doc' => $doc
         );
@@ -78,14 +81,10 @@ class BookController extends AbstractActionController
     		$pageDoc = $co->find($id);
     		$bookId = $pageDoc->bookId;
     		$op = 'edit';
-    		$this->brickConfig()->setActionTitle('编辑书页')
-        		->setActionMenu(array('save', 'delete'));
     	} else {
     		$pageDoc = $co->create();
     		$bookId = $this->params('book-id');
     		$op = 'create';
-    		$this->brickConfig()->setActionTitle('新增加书页')
-        		->setActionMenu(array('save'));
     	}
     	if(is_null($editor)) {
     		$editor = $pageDoc->editor;
@@ -123,6 +122,13 @@ class BookController extends AbstractActionController
     		}
     	}
     	
+    	if(!is_null($id)) {
+    		$this->actionTitle = '编辑书页';
+    		$this->actionMenu = array('save', 'delete');
+    	} else {
+    		$this->actionTitle = '新增加书页';
+    		$this->actionMenu = array('save');
+    	}
     	return array(
     		'form' => $form,
     		'editor' => $editor

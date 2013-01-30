@@ -56,7 +56,8 @@ class Module
 	{
 		$rm = $e->getRouteMatch();
 		$matchedRouteName = $rm->getMatchedRouteName();
-		if(substr($matchedRouteName, 0, 5) == 'admin') {
+		$matchedRouteNameParts = explode('/', $matchedRouteName);
+		if($matchedRouteNameParts[0] == 'admin') {
 			$disableLayout = false;
 			$controller = $e->getTarget();
 			$controllerName = $controller->params()->fromRoute('controller');
