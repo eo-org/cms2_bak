@@ -136,6 +136,19 @@ return array(
 				)
 			)
 		),
+		'search' => array(
+			'label' => '搜索',
+			'ext' => array(
+				'Ext_Brick_Search_Input' => array(
+					'label' => '搜索输入框',
+					'desc' => ''
+				),
+				'Ext_Brick_Search_Result' => array(
+					'label' => '搜索结果框',
+					'desc' => ''
+				)
+			)
+		),
 		'other' => array(
 			'label' => '其他',
 			'ext' => array(
