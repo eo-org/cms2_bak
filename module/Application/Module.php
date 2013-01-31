@@ -8,13 +8,14 @@ use Zend\EventManager\StaticEventManager;
 
 class Module
 {
-	public $infoDoc = null;
-	
 	public function init($moduleManager)
 	{
 		$sharedEvents = StaticEventManager::getInstance();
 		$sharedEvents->attach('Zend\Mvc\Application', 'dispatch.error', array($this, 'onError'), 100);
-		$sharedEvents->attach(__NAMESPACE__, 'dispatch', array($this, 'getCache'), 100);
+		
+		$listener = new \Cms\Cache\Listener\CacheListener();
+		//$sharedEvents->attach('Zend\Mvc\Application', $listener, null);
+		
 		$sharedEvents->attach(__NAMESPACE__, 'dispatch', array($this, 'setTranslator'), 11);
 		$sharedEvents->attach(__NAMESPACE__, 'dispatch', array($this, 'initLayout'), -100);
 	}
@@ -44,11 +45,6 @@ class Module
 		);
 	}
 	
-	public function getCache(MvcEvent $e)
-	{
-		
-	}
-	
 	public function setTranslator(MvcEvent $e)
 	{
 		$controller = $e->getTarget();
@@ -56,11 +52,11 @@ class Module
 		
 		$factory = $controller->dbFactory();
 		$co = $factory->_m('Info');
-		$this->infoDoc = $co->fetchOne();
+		$infoDoc = $co->fetchOne();
 		
 		$locale = 'zh_CN';
-		if(!is_null($this->infoDoc)) {
-			$locale = $this->infoDoc->language;
+		if(!is_null($infoDoc)) {
+			$locale = $infoDoc->language;
 		}
 		$translator = Translator::factory(array(
 			'locale' => $locale,

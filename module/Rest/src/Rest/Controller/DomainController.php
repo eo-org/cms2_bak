@@ -35,7 +35,7 @@ class DomainController extends AbstractRestfulController
 	
 	public function create($data)
 	{
-		$remoteSiteId = $this->siteConfig('remoteSiteId');
+		$globalSiteId = $this->siteConfig('globalSiteId');
 		$dm = $this->documentManager();
 		
 		$dataStr = $data['model'];
@@ -52,10 +52,8 @@ class DomainController extends AbstractRestfulController
 			return "域名".$domainName."已经绑定其他网站!请联系客服.";
 		}
 		
-		
-		
 		$site = $dm->createQueryBuilder('Document\ServiceAccount\Site')
-			->field('remoteSiteId')->equals($remoteSiteId)
+			->field('globalSiteId')->equals($globalSiteId)
 			->getQuery()
 			->getSingleResult();
 		$domains = $site->getDomains();

@@ -18,7 +18,6 @@ class Module implements BootstrapListenerInterface
 		$siteConfig = $sm->get('ConfigObject\EnvironmentConfig');
 		$dbName = $siteConfig->dbName;
 		
-		
 		AnnotationDriver::registerAnnotationClasses();
 		$config = new Configuration();
 		$config->setDefaultDB($dbName);

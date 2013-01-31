@@ -1,5 +1,10 @@
 <?php
-$time = microtime();
+   $mtime = microtime();
+   $mtime = explode(" ",$mtime);
+   $mtime = $mtime[1] + $mtime[0];
+   $starttime = $mtime;
+
+
 
 /**
  * Validate Site Domains!
@@ -54,8 +59,10 @@ $autoLoader->register();
 $application = Zend\Mvc\Application::init(include 'config/application.config.php');
 $application->run();
 
-//$serviceManager = $application->getServiceManager();
-//$serviceManager->setService('Fucms\SiteConfig', $siteConfig);
 
-//$finishTime = microtime();
-//echo $finishTime - $time;
+$mtime = microtime();
+$mtime = explode(" ",$mtime);
+$mtime = $mtime[1] + $mtime[0];
+$endtime = $mtime;
+$totaltime = ($endtime - $starttime);
+//echo $totaltime;

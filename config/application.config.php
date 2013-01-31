@@ -3,7 +3,7 @@ return array(
     'modules' => array(
     	'DoctrineMongo',
     	'Ext',
-        'Application',
+		'Application',
 		'Admin',
 		'Rest',
     	'User',
