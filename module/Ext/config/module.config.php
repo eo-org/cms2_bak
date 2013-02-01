@@ -87,10 +87,6 @@ return array(
 					'label' => '导航',
 					'desc' => ''
 				),
-				'Ext_Brick_Position_Navi_Draw' => array(
-					'label' => '导航',
-					'desc' => ''
-				),
 				'Ext_Brick_Position_Breadcrumb' => array(
 					'label' => '当前位置',
 					'desc' => ''
