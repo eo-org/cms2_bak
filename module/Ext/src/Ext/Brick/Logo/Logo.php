@@ -7,7 +7,7 @@ class Logo extends AbstractExt
 {
 	public function prepare()
     {
-    	$dbFactory = $this->_controller->dbFactory();
+    	$dbFactory = $this->dbFactory();
     	
     	$siteDoc = $dbFactory->_m('Info')->fetchOne();
     	$logo = 'none';

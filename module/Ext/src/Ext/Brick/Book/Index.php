@@ -7,7 +7,7 @@ class Index extends AbstractExt
 {
     public function prepare()
     {
-    	$sm = $this->_controller->getServiceLocator();
+    	$sm = $this->sm;
 		$layoutFront = $sm->get('Fucms\Layout\Front');
 		
 		$context = $layoutFront->getContext();

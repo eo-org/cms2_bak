@@ -10,15 +10,14 @@ class Module
 {
 	public function init($moduleManager)
 	{
+		$listener = new \Cms\Cache\Listener\CacheListener();
 		$sharedEvents = StaticEventManager::getInstance();
+		$sharedEvents->attach('Zend\Mvc\Application', $listener, null);
 		$sharedEvents->attach('Zend\Mvc\Application', 'dispatch.error', array($this, 'onError'), 100);
-		
-//		$listener = new \Cms\Cache\Listener\CacheListener();
-		//$sharedEvents->attach('Zend\Mvc\Application', $listener, null);
-		
 		$sharedEvents->attach(__NAMESPACE__, 'dispatch', array($this, 'setTranslator'), 11);
 		$sharedEvents->attach(__NAMESPACE__, 'dispatch', array($this, 'initLayout'), -100);
 	}
+	
 	public function getConfig()
 	{
 		return include __DIR__ . '/config/module.config.php';
@@ -31,16 +30,6 @@ class Module
 				'namespaces' => array(
 					__NAMESPACE__ => __DIR__ . '/src/Application',
 				)
-			)
-		);
-	}
-	
-	public function getServiceConfig()
-	{
-		return array(
-			'invokables' => array(
-				'Fucms\Layout\Front' => 'Fucms\Layout\Front',
-				'Fucms\Session\Admin' => 'Fucms\Session\Admin',
 			)
 		);
 	}

@@ -164,8 +164,12 @@ return array(
     ),
 	'service_manager' => array(
 		'factories' => array('ConfigObject\EnvironmentConfig' => function($serviceManager) {
-			$siteConfig = new \Fucms\SiteConfig(include 'config/server.config.php');
+			$siteConfig = new \Fucms\SiteConfig(include 'config/server.config.php.dist');
 			return $siteConfig;
-		})
+		}),
+		'invokables' => array(
+			'Fucms\Layout\Front' => 'Fucms\Layout\Front',
+			'Fucms\Session\Admin' => 'Fucms\Session\Admin',
+		)
 	),
 );

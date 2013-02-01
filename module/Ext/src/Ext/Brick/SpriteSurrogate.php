@@ -11,7 +11,7 @@ class SpriteSurrogate extends AbstractExt
 	
     public function prepare()
     {
-    	$sm = $this->_controller->getServiceLocator();
+    	$sm = $this->sm;
     	$layoutFront = $sm->get('Fucms\Layout\Front');
     	$br = $layoutFront->getBrickRegister();
     	$surrogateId = 'surrogate-'.$this->_brick->getId();

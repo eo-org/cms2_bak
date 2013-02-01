@@ -1,6 +1,8 @@
 <?php
 namespace Cms\Cache\Storage\Adapter;
 
+use Zend\Form\Element\Time;
+
 use Doctrine\ODM\MongoDB\Mapping\Annotations\Date;
 
 use stdClass;
@@ -32,20 +34,8 @@ class Mongo extends AbstractAdapter
 
     protected $pageCacheDoc;
     
-//     /**
-//      * Constructor
-//      *
-//      * @param  null|array|Traversable|DbaOptions $options
-//      * @throws Exception\ExceptionInterface
-//      */
     public function __construct($options = null)
     {
-//         if (!extension_loaded('dba')) {
-//             throw new Exception\ExtensionNotLoadedException('Missing ext/dba');
-//         }
-
-    	
-    	
         parent::__construct($options);
     }
 
@@ -308,31 +298,13 @@ class Mongo extends AbstractAdapter
      */
     protected function internalGetItem(& $normalizedKey, & $success = null, & $casToken = null)
     {
-    	echo "trying to get ".$normalizedKey;
-    	
-    	
     	$this->pageCacheDoc = $this->dm->getRepository('Cms\Document\Cache')->findOneByKey($normalizedKey);
     	if(is_null($this->pageCacheDoc)) {
     		$success = false;
     		return null;
     	}
     	$success = true;
-    	return $this->pageCacheDoc->getContent();
-//         $options     = $this->getOptions();
-//         $prefix      = $options->getNamespace() . $options->getNamespaceSeparator();
-//         $internalKey = $prefix . $normalizedKey;
-
-//         $this->_open();
-//         $value = dba_fetch($internalKey, $this->handle);
-
-//         if ($value === false) {
-//             $success = false;
-//             return null;
-//         }
-
-//         $success = true;
-//         $casToken = $value;
-//         return $value;
+    	return $this->pageCacheDoc;
     }
 
     /**
@@ -364,28 +336,16 @@ class Mongo extends AbstractAdapter
      */
     protected function internalSetItem(& $normalizedKey, & $value)
     {
-    	echo "trying to set ".$normalizedKey.'<br />';
     	$pageCacheDoc = $this->pageCacheDoc;
     	if(is_null($pageCacheDoc)) {
     		$pageCacheDoc = new \Cms\Document\Cache();
     		$pageCacheDoc->setKey($normalizedKey);
     		$pageCacheDoc->setType('pageCache');
     	}
-    	
+    	$pageCacheDoc->setUpdated(new \MongoDate());
     	$pageCacheDoc->setContent($value);
-    	
     	$this->dm->persist($pageCacheDoc);
     	$this->dm->flush();
-    	
-//         $options     = $this->getOptions();
-//         $prefix      = $options->getNamespace() . $options->getNamespaceSeparator();
-//         $internalKey = $prefix . $normalizedKey;
-
-//         $this->_open();
-//         if (!dba_replace($internalKey, $value, $this->handle)) {
-//             throw new Exception\RuntimeException("dba_replace('{$internalKey}', ...) failed");
-//         }
-
         return true;
     }
 

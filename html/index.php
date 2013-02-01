@@ -1,16 +1,13 @@
 <?php
-   $mtime = microtime();
-   $mtime = explode(" ",$mtime);
-   $mtime = $mtime[1] + $mtime[0];
-   $starttime = $mtime;
-
-
+$mtime = microtime();
+$mtime = explode(" ",$mtime);
+$mtime = $mtime[1] + $mtime[0];
+$starttime = $mtime;
 
 /**
  * Validate Site Domains!
  * 
  */
-
 $requestHost = $_SERVER['HTTP_HOST'];
 $m = new MongoClient('127.0.0.1');
 $db = $m->selectDb('service_account');
@@ -65,4 +62,8 @@ $mtime = explode(" ",$mtime);
 $mtime = $mtime[1] + $mtime[0];
 $endtime = $mtime;
 $totaltime = ($endtime - $starttime);
-//echo $totaltime;
+
+//echo $_SERVER['X-Requested-With'];
+if(!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest') {
+	echo $totaltime;
+}

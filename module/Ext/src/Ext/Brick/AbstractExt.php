@@ -6,8 +6,10 @@ use Ext\Twig\View;
 
 abstract class AbstractExt
 {
+	protected $sm = null;
+	
     protected $_brick = null;
-    protected $_controller = null;
+    
     protected $_params = null;
 //     protected $_scriptName = 'view.phtml';
     protected $_disableRender = false;
@@ -16,10 +18,10 @@ abstract class AbstractExt
     
     protected $view = null;
     
-    public function initParam($brick, $controller)
+    public function initParam($brick, $sm)
     {
+    	$this->sm = $sm;
     	$this->_brick = $brick;
-    	$this->_controller = $controller;
     	$this->_params = (object)$brick->params;
     }
     
@@ -37,7 +39,7 @@ abstract class AbstractExt
     
     public function dbFactory()
     {
-    	return $this->_controller->dbFactory();
+    	return $this->sm->get('Core\Mongo\Factory');
     }
     
 	public function configParam($form)
@@ -125,7 +127,7 @@ abstract class AbstractExt
     
     public function twigPath()
     {
-    	$sm = $this->_controller->getServiceLocator();
+    	$sm = $this->sm;
     	$siteConfig = $sm->get('ConfigObject\EnvironmentConfig');
     	$globalSiteId = $siteConfig->globalSiteId;
     	$twigPath = BASE_PATH.'/tpl/'.$globalSiteId.'/'.$this->_brick->extName;

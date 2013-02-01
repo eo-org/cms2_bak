@@ -2,32 +2,25 @@
 namespace Cms\Cache\Listener;
 
 use Zend\EventManager\ListenerAggregateInterface;
-//use Zend\Http\PhpEnvironment\Request as HttpRequest;
 use Zend\EventManager\EventManagerInterface;
 use Zend\Mvc\MvcEvent;
 
 use Zend\Cache\StorageFactory;
-
 use Fucms\Session\Admin as SessionAdmin;
+use Cms\Cache\Manager as CacheManager;
 
 class CacheListener implements ListenerAggregateInterface
 {
-    /**
-     * @var array
-     */
     protected $listeners = array();
+    protected $cacheManager;
 
-    /**
-     * @var CacheService
-     */
-    protected $cacheService;
-
-    public function __construct()
+    public function init($sm, $rm)
     {
-    	$this->cacheService = StorageFactory::factory(array(
+    	$storage = StorageFactory::factory(array(
     		'adapter' => 'Cms\Cache\Storage\Adapter\Mongo',
-    		
     	));
+    	 
+    	$this->cacheManager = new CacheManager($storage, $sm, $rm);
     }
     
     /**
@@ -42,7 +35,7 @@ class CacheListener implements ListenerAggregateInterface
     {
     	$sessionAdmin = new SessionAdmin();
     	if(!$sessionAdmin->isLogin()) {
-	        $this->listeners[] = $events->attach('route', array($this, 'onRoute'), 100);
+	        $this->listeners[] = $events->attach('route', array($this, 'onRoute'), -1);
 	        $this->listeners[] = $events->attach('finish', array($this, 'onFinish'), -100);
     	}
     }
@@ -69,21 +62,19 @@ class CacheListener implements ListenerAggregateInterface
      */
     public function onRoute(MvcEvent $e)
     {
-    	echo 'on route event triggered<br />';
-    	$key = 'index';
+    	$sm = $e->getApplication()->getServiceManager();
+    	$rm = $e->getRouteMatch();
+    	$this->init($sm, $rm);
     	
-    	$dm = $e->getApplication()->getServiceManager()->get('DocumentManager');
+    	$cacheManager = $this->getCacheManager();
     	
-    	$this->cacheService->setDocumentManager($dm);
     	
-    	$cacheContent = $this->cacheService->getItem($key, $success);
     	
-    	if(!$success) {
-    		echo "load key failed<br />";
+    	$cacheContent = $cacheManager->load();
+    	
+    	if(is_null($cacheContent)) {
     		return;
     	} else {
-    		$this->skipUpdate = true;
-    		
 	    	$response = $e->getResponse();
 	    	$response->setContent($cacheContent);
 	    	
@@ -98,23 +89,12 @@ class CacheListener implements ListenerAggregateInterface
      */
     public function onFinish(MvcEvent $e)
     {
-    	if($this->skipUpdate) {
-    		return;
-    	}
-    	echo 'on finish event triggered<br />';
-    	$key = 'index';
     	$response = $e->getResponse();
-    	$cacheContent = $response->getContent();
-    	
-    	//$values = "<html><body>This is a pig!</body></html>";
-    	$this->cacheService->setItem($key, $cacheContent);
+    	$this->cacheManager->save($response);
     }
 
-    /**
-     * @return \StrokerCache\Service\CacheService
-     */
-    public function getCacheService()
+    public function getCacheManager()
     {
-        return $this->cacheService;
+    	return $this->cacheManager;
     }
 }

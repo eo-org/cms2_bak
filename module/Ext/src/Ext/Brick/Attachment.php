@@ -7,7 +7,7 @@ class Attachment extends AbstractExt
 {
 	public function prepare()
     {
-    	$layoutFront = $this->_controller->getServiceLocator()->get('Fucms\Layout\Front');
+    	$layoutFront = $this->sm->get('Fucms\Layout\Front');
     	$resDoc = $layoutFront->getContext()->getResourceDoc();
     	if(is_null($resDoc) || !is_object($resDoc)) {
     		$attachment = null;

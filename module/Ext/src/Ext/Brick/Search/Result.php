@@ -10,7 +10,7 @@ class Result extends AbstractExt
 {
     public function prepare()
     {    	
-    	$sm = $this->_controller->getServiceLocator();
+    	$sm = $this->sm;
 		
 		$matches = $this->_controller->getEvent()->getRouteMatch();
 		$routeMatchParams = $matches->getParams();

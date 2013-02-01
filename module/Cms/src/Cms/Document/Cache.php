@@ -6,7 +6,7 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 
 /** 
  * @ODM\Document(
- * 		collection="cache_page"
+ * 		collection="cache"
  * )
  * @ODM\UniqueIndex(keys={"key"="asc"})
  * */
@@ -21,9 +21,13 @@ class Cache extends AbstractDocument
 	/** @ODM\Field(type="string") */
 	protected $type;
 	
-	/** @ODM\Field(type="string")  */
+	/** @ODM\Field(type="date")  */
+	protected $updated;
+	
 	protected $content;
 	
-	/** @ODM\Field(type="timestamp")  */
-	protected $updated;
+	public function setContent($content)
+	{
+		$this->content = $content;
+	}
 }
