@@ -1,4 +1,4 @@
-{% import "_loopitem.tpl" as item %}
+{% import "position\\navi\\draw\\_loopitem.tpl" as item %}
 
 {% block header %}{% endblock %}
 {% if displayBrickName %}
