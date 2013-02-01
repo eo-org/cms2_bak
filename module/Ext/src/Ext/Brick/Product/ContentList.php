@@ -73,6 +73,9 @@ class ContentList extends AbstractExt
 	
 	public function getTplList()
 	{
-		return array('view' => 'product\contentlist\view.tpl');
+		return array(
+			'view' => 'product\contentlist\view.tpl',
+			'gallery' => 'product\contentlist\gallery.tpl'
+		);
 	}
 }
