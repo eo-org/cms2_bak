@@ -66,6 +66,10 @@ return array(
 					'label' => '产品-简表',
 					'desc' => ''
 				),
+				'Ext_Brick_Product_News_Carousel' => array(
+					'label' => '产品-简表-滚动',
+					'desc' => ''
+				),
 				'Ext_Brick_Product_GroupIndex' => array(
 					'label' => '产品-分组',
 					'desc' => ''
