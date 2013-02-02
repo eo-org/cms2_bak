@@ -1,7 +1,7 @@
 <?php
 namespace User;
 
-use Fucms\Layout\ContextAbstract;
+use Cms\Layout\ContextAbstract;
 
 class Context extends ContextAbstract
 {

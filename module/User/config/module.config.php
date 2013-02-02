@@ -1,5 +1,10 @@
 <?php
 return array(
+	'service_manager' => array(
+		'invokables' => array(
+			'User\SessionUser' => 'User\SessionUser',
+		)
+	),
     'controllers' => array(
         'invokables' => array(
             'user-index'			=> 'User\Controller\IndexController',
@@ -53,4 +58,15 @@ return array(
             ),
         ),
     ),
+	'brick' => array(
+		'user' => array(
+			'label' => '其他',
+			'ext' => array(
+				'Ext_Brick_ActionContent' => array(
+					'label' => '用户界面内容输出',
+					'desc' => ''
+				),
+			)
+		)
+	),
 );

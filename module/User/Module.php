@@ -30,20 +30,11 @@ class Module
             ),
         );
     }
-    
-    public function getServiceConfig()
-    {
-    	return array(
-    		'invokables' => array(
-    			'Fucms\Session\User' => 'Fucms\Session\User',
-    		)
-    	);
-    }
 	
 	public function initLayout(MvcEvent $e)
 	{
 		$sm = $e->getApplication()->getServiceManager();
-		$layoutFront = $sm->get('Fucms\Layout\Front');
+		$layoutFront = $sm->get('Cms\Layout\Front');
 		$dbFactory = $sm->get('Core\Mongo\Factory');
 		
 		$context = new Context($dbFactory);

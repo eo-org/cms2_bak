@@ -2,7 +2,8 @@
 return array(
 	'controllers' => array(
         'invokables' => array(
-            'Application\Controller\Index' => 'Application\Controller\IndexController',
+            'Application\Controller' => 'Cms\ApplicationController',
+//        	'Application\Controller' => 'Application\Controller\IndexController',
         	'Application\Controller\Error' => 'Application\Controller\ErrorController',
         ),
     ),
@@ -33,8 +34,7 @@ return array(
                 'options' => array(
                     'route'    => '/',
                     'defaults' => array(
-                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'Application\Controller\Index',
+                        'controller'    => 'Application\Controller',
                         'action'        => 'index',
                     ),
                 ),
@@ -168,7 +168,7 @@ return array(
 			return $siteConfig;
 		}),
 		'invokables' => array(
-			'Fucms\Layout\Front' => 'Fucms\Layout\Front',
+			'Cms\Layout\Front' => 'Cms\Layout\Front',
 			'Fucms\Session\Admin' => 'Fucms\Session\Admin',
 		)
 	),

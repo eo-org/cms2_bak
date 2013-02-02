@@ -6,23 +6,26 @@ use Ext\Twig\View;
 
 abstract class AbstractExt
 {
-	protected $sm = null;
+	protected $_brick = null;
 	
-    protected $_brick = null;
-    
-    protected $_params = null;
-//     protected $_scriptName = 'view.phtml';
+	protected $_params = null;
+	
+	protected $controller;
+	
+	protected $sm;
+	
     protected $_disableRender = false;
     
     protected $_effectFiles = null;
     
     protected $view = null;
     
-    public function initParam($brick, $sm)
+    public function initParam($brick, $controller)
     {
-    	$this->sm = $sm;
     	$this->_brick = $brick;
     	$this->_params = (object)$brick->params;
+    	$this->controller = $controller;
+    	$this->sm = $controller->getServiceLocator();
     }
     
     abstract public function getTplList();
@@ -40,6 +43,11 @@ abstract class AbstractExt
     public function dbFactory()
     {
     	return $this->sm->get('Core\Mongo\Factory');
+    }
+    
+    public function getController()
+    {
+    	return $this->controller;
     }
     
 	public function configParam($form)
@@ -118,21 +126,21 @@ abstract class AbstractExt
 //     	$this->_scriptName = $filename;
 //     }
     
-    public function path()
-    {
-    	$extName = strtolower($this->_brick->extName);
-        $path = str_replace('_', '/', $extName);
-        return '/'.$path;
-    }
+//     public function path()
+//     {
+//     	$extName = strtolower($this->_brick->extName);
+//         $path = str_replace('_', '/', $extName);
+//         return '/'.$path;
+//     }
     
-    public function twigPath()
-    {
-    	$sm = $this->sm;
-    	$siteConfig = $sm->get('ConfigObject\EnvironmentConfig');
-    	$globalSiteId = $siteConfig->globalSiteId;
-    	$twigPath = BASE_PATH.'/tpl/'.$globalSiteId.'/'.$this->_brick->extName;
-        return $twigPath;
-    }
+//     public function twigPath()
+//     {
+//     	$sm = $this->sm;
+//     	$siteConfig = $sm->get('ConfigObject\EnvironmentConfig');
+//     	$globalSiteId = $siteConfig->globalSiteId;
+//     	$twigPath = BASE_PATH.'/tpl/'.$globalSiteId.'/'.$this->_brick->extName;
+//         return $twigPath;
+//     }
     
     public function render($type = null)
     {
@@ -199,25 +207,11 @@ abstract class AbstractExt
     
     public function getTplArray()
     {
-    	$sysTplArray = array();
-    	$userTplArray = array();
-    	
     	$sysTplArray = $this->getTplList();
-    	$userFolder = $this->twigPath();
-    	if(is_dir($userFolder)) {
-			$handle = opendir($userFolder);
-	    	while($file = readdir($handle)) {
-	    		if(strpos($file, '.tpl')) {
-	    			$userTplArray[$file] = $file;
-	    		}
-	    	}
-		} else {
-			$userTplArray = array();
-		}
 		
 		$tplArray = array(
 			array('label' => 'system', 'options' => $sysTplArray,),
-			array('label' => 'user', 'options' => $userTplArray)
+			array('label' => 'user', 'options' => array())
 		);
     	return $tplArray;
     }

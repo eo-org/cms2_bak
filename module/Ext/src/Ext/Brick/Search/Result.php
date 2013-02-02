@@ -16,9 +16,11 @@ class Result extends AbstractExt
 		$routeMatchParams = $matches->getParams();
 		$routeType = $matches->getMatchedRouteName();
 
-		$type = $this->_controller->params()->fromQuery('type');
-    	$keywords = $this->_controller->params()->fromQuery('keywords');
-    	$page = $this->_controller->params()->fromQuery('page');
+		return $this->getController()->getRequest()->getQuery($param, $default);
+		
+		$type = $this->getController()->getRequest()->getQuery('type');
+    	$keywords = $this->getController()->getRequest()->getQuery('kyewords');
+    	$page = $this->getController()->getRequest()->getQuery('page');
     	
     	if(empty($page)) {
     		$page = 1;

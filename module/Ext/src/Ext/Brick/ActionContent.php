@@ -7,7 +7,7 @@ class ActionContent extends AbstractExt
 {
 	public function prepare()
 	{
-		$controller = $this->_controller;
+		$controller = $this->getController();
 		
 		$content = $controller->layout()->content;
 		

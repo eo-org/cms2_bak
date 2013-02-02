@@ -9,7 +9,7 @@ class IndexController extends AbstractActionController
 {
     public function indexAction()
     {
-    	$sessionUser = $this->getServiceLocator()->get('Fucms\Session\User');
+    	$sessionUser = $this->getServiceLocator()->get('User\SessionUser');
     	
     	return array(
     		'userEmail' => $sessionUser->getUserEmail()
