@@ -168,6 +168,10 @@ return array(
 					'label' => '控制器内容输出',
 					'desc' => ''
 				),
+				'Ext_Brick_SpriteSurrogate' => array(
+					'label' => '选项卡',
+					'desc' => ''
+				)
 			)
 		)
 	),
