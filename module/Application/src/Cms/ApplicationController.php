@@ -30,7 +30,6 @@ class ApplicationController implements
 		$layoutFront = $this->serviceManager->get('Cms\Layout\Front');
 		$layoutFront->initLayout($this->getEvent());
 		
-		
 		$sm = $this->getServiceLocator();
 	
 		$factory = $sm->get('Core\Mongo\Factory');

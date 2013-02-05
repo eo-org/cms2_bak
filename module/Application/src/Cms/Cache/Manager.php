@@ -1,6 +1,8 @@
 <?php
 namespace Cms\Cache;
 
+use Fucms\Session\Admin as SessionAdmin;
+
 class Manager
 {
 	public $storage;
@@ -22,27 +24,25 @@ class Manager
 		$this->rm = $rm;
 	}
 	
-	public function save($response)
-	{
-		if($this->skipUpdate) {
-			return;
-		}
-		
-		$key = $this->getKey();
-		$cacheContent = $response->getContent();
-		$this->storage->setItem($key, $cacheContent);
-	}
-	
 	public function load()
 	{
+		$dm = $this->sm->get('DocumentManager');
+		$this->storage->setDocumentManager($dm);
+		
+		//////////////////////////////////////
+		$sessionAdmin = new SessionAdmin();
+		if($sessionAdmin->isLogin()) {
+			$this->skipUpdate = false;
+			return null;
+		}
+		//////////////////////////////////////
+		
 		if(!$this->shouldCache()) {
 			$this->skipUpdate = true;
 			return null;
 		}
 		
 		$key = $this->getKey();
-		$dm = $this->sm->get('DocumentManager');
-		$this->storage->setDocumentManager($dm);
 		$success = false;
 		$cacheDoc = $this->storage->getItem($key, $success);
 		if($success) {
@@ -62,6 +62,17 @@ class Manager
 		return null;
 	}
 	
+	public function save($response)
+	{
+		if($this->skipUpdate) {
+			return;
+		}
+	
+		$key = $this->getKey();
+		$cacheContent = $response->getContent();
+		$this->storage->setItem($key, $cacheContent);
+	}
+	
 	public function getKey()
 	{
 		if(!$this->key) {
@@ -72,7 +83,12 @@ class Manager
 			unset($params['controller']);
 			unset($params['action']);
 			
-			$this->key = $routeName.'-'.implode('-', $params);
+			if(count($params) == 0) {
+				$this->key = $routeName;
+			} else {
+				$this->key = $routeName.'-'.implode('-', $params);
+			}
+			
 		}
 		return $this->key;
 	}

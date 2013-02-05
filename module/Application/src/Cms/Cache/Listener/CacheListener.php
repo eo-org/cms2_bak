@@ -6,8 +6,8 @@ use Zend\EventManager\EventManagerInterface;
 use Zend\Mvc\MvcEvent;
 
 use Zend\Cache\StorageFactory;
-use Fucms\Session\Admin as SessionAdmin;
 use Cms\Cache\Manager as CacheManager;
+use Cms\Cache\Storage\Adapter\MongoOptions;
 
 class CacheListener implements ListenerAggregateInterface
 {
@@ -18,6 +18,7 @@ class CacheListener implements ListenerAggregateInterface
     {
     	$storage = StorageFactory::factory(array(
     		'adapter' => 'Cms\Cache\Storage\Adapter\Mongo',
+    		'options' => new MongoOptions()
     	));
     	 
     	$this->cacheManager = new CacheManager($storage, $sm, $rm);
@@ -33,11 +34,8 @@ class CacheListener implements ListenerAggregateInterface
      */
     public function attach(EventManagerInterface $events)
     {
-    	$sessionAdmin = new SessionAdmin();
-    	if(!$sessionAdmin->isLogin()) {
-	        $this->listeners[] = $events->attach('route', array($this, 'onRoute'), -1);
-	        $this->listeners[] = $events->attach('finish', array($this, 'onFinish'), -100);
-    	}
+        $this->listeners[] = $events->attach('route', array($this, 'onRoute'), -1);
+        $this->listeners[] = $events->attach('finish', array($this, 'onFinish'), -100);
     }
 
     /**

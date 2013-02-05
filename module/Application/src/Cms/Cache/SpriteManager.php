@@ -9,7 +9,7 @@ class SpriteManager
 	
 	protected $key;
 	
-	public function __construct($storage)
+	public function __construct($storage, $sm)
 	{
 		$this->storage = $storage;
 	}

@@ -10,28 +10,12 @@ use Traversable;
 use Zend\Cache\Exception;
 use Zend\Stdlib\ErrorHandler;
 use Zend\Cache\Storage\Adapter\AbstractAdapter, Zend\Cache\Storage\ClearExpiredInterface;
-// class Mongo extends AbstractAdapter implements
-//     ClearByNamespaceInterface,
-//     FlushableInterface,
+
 class Mongo extends AbstractAdapter
 // implements ClearExpiredInterface
 {
 	protected $dm;
 	
-    /**
-     * The DBA resource handle
-     *
-     * @var null|resource
-     */
-    protected $handle;
-
-    /**
-     * Buffered total space in bytes
-     *
-     * @var null|int|float
-     */
-    protected $totalSpace;
-
     protected $pageCacheDoc;
     
     public function __construct($options = null)
@@ -42,21 +26,6 @@ class Mongo extends AbstractAdapter
     public function setDocumentManager($dm)
     {
     	$this->dm = $dm;
-    }
-    
-    /**
-     * Destructor
-     *
-     * Closes an open dba resource
-     *
-     * @see AbstractAdapter::__destruct()
-     * @return void
-     */
-    public function __destruct()
-    {
-        $this->_close();
-
-        parent::__destruct();
     }
 
     /* options */
@@ -298,13 +267,13 @@ class Mongo extends AbstractAdapter
      */
     protected function internalGetItem(& $normalizedKey, & $success = null, & $casToken = null)
     {
-    	$this->pageCacheDoc = $this->dm->getRepository('Cms\Document\Cache')->findOneByKey($normalizedKey);
-    	if(is_null($this->pageCacheDoc)) {
+    	if($this->internalHasItem($normalizedKey)) {
+    		$success = true;
+    		return $this->pageCacheDoc;
+    	} else {
     		$success = false;
     		return null;
     	}
-    	$success = true;
-    	return $this->pageCacheDoc;
     }
 
     /**
@@ -316,12 +285,20 @@ class Mongo extends AbstractAdapter
      */
     protected function internalHasItem(& $normalizedKey)
     {
-        $options     = $this->getOptions();
-        $prefix      = $options->getNamespace() . $options->getNamespaceSeparator();
-        $internalKey = $prefix . $normalizedKey;
-
-        $this->_open();
-        return dba_exists($internalKey, $this->handle);
+    	if(is_null($this->pageCacheDoc)) {
+    		$repositoryName = $this->getOptions()->getRepositoryName();
+    		$this->pageCacheDoc = $this->dm->getRepository($repositoryName)->findOneByKey($normalizedKey);
+    		if(is_null($this->pageCacheDoc)) {
+    			$this->pageCacheDoc = false;
+    			return false;
+    		}
+    		return true;
+    	}
+    	if($this->pageCacheDoc !== false) {
+    		return true;
+    	} else {
+	        return false;
+    	}
     }
 
     /* writing */
@@ -336,9 +313,11 @@ class Mongo extends AbstractAdapter
      */
     protected function internalSetItem(& $normalizedKey, & $value)
     {
-    	$pageCacheDoc = $this->pageCacheDoc;
-    	if(is_null($pageCacheDoc)) {
-    		$pageCacheDoc = new \Cms\Document\Cache();
+    	if($this->internalHasItem($normalizedKey)) {
+    		$pageCacheDoc = $this->pageCacheDoc;
+    	} else {
+    		$repositoryName = $this->getOptions()->getRepositoryName();
+    		$pageCacheDoc = new $repositoryName;
     		$pageCacheDoc->setKey($normalizedKey);
     		$pageCacheDoc->setType('pageCache');
     	}
@@ -346,6 +325,7 @@ class Mongo extends AbstractAdapter
     	$pageCacheDoc->setContent($value);
     	$this->dm->persist($pageCacheDoc);
     	$this->dm->flush();
+    	$this->pageCacheDoc = $pageCacheDoc;
         return true;
     }
 
@@ -463,26 +443,8 @@ class Mongo extends AbstractAdapter
      */
     protected function _open()
     {
-        if (!$this->handle) {
-            $options = $this->getOptions();
-            $pathname = $options->getPathname();
-            $mode     = $options->getMode();
-            $handler  = $options->getHandler();
-
-            if ($pathname === '') {
-                throw new Exception\LogicException('No pathname to database file');
-            }
-
-            ErrorHandler::start();
-            $dba =  dba_open($pathname, $mode, $handler);
-            $err = ErrorHandler::stop();
-            if (!$dba) {
-                throw new Exception\RuntimeException(
-                    "dba_open('{$pathname}', '{$mode}', '{$handler}') failed", 0, $err
-                );
-            }
-            $this->handle = $dba;
-        }
+    	echo 'OPENED';
+    	die();
     }
 
     /**
@@ -492,11 +454,7 @@ class Mongo extends AbstractAdapter
      */
     protected function _close()
     {
-        if ($this->handle) {
-            ErrorHandler::start(E_NOTICE);
-            dba_close($this->handle);
-            ErrorHandler::stop();
-            $this->handle = null;
-        }
+    	echo 'Closed';
+    	die();
     }
 }
