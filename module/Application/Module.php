@@ -13,8 +13,8 @@ class Module
 		$sharedEvents = StaticEventManager::getInstance();
 		$sharedEvents->attach('Zend\Mvc\Application', 'dispatch.error', array($this, 'onError'), 100);
 		
-//		$listener = new \Cms\Cache\Listener\CacheListener();
-		//$sharedEvents->attach('Zend\Mvc\Application', $listener, null);
+		$listener = new \Cms\Cache\Listener\CacheListener();
+		$sharedEvents->attach('Zend\Mvc\Application', $listener, null);
 		
 // 		$sharedEvents->attach(__NAMESPACE__, 'dispatch', array($this, 'setTranslator'), 11);
 // 		$sharedEvents->attach(__NAMESPACE__, 'dispatch', array($this, 'initLayout'), -100);

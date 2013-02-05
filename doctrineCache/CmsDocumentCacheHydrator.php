@@ -51,20 +51,20 @@ class CmsDocumentCacheHydrator implements HydratorInterface
             $hydratedData['type'] = $return;
         }
 
-        /** @Field(type="string") */
-        if (isset($data['content'])) {
-            $value = $data['content'];
-            $return = (string) $value;
-            $this->class->reflFields['content']->setValue($document, $return);
-            $hydratedData['content'] = $return;
-        }
-
         /** @Field(type="date") */
         if (isset($data['updated'])) {
             $value = $data['updated'];
             if ($value instanceof \MongoDate) { $date = new \DateTime(); $date->setTimestamp($value->sec); $return = $date; } else { $return = new \DateTime($value); }
             $this->class->reflFields['updated']->setValue($document, clone $return);
             $hydratedData['updated'] = $return;
+        }
+
+        /** @Field(type="string") */
+        if (isset($data['content'])) {
+            $value = $data['content'];
+            $return = (string) $value;
+            $this->class->reflFields['content']->setValue($document, $return);
+            $hydratedData['content'] = $return;
         }
         return $hydratedData;
     }

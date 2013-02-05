@@ -41,7 +41,7 @@ $autoLoader = new Zend\Loader\StandardAutoloader(array(
 		'Brick'		=> BASE_PATH.'/extension/Brick',
     	'Doctrine'	=> BASE_PATH.'/inc/Doctrine',
     	'Document'	=> BASE_PATH.'/library-cms/Document',
-    	'Cms'		=> BASE_PATH.'/cms2/module/Cms/src/Cms'
+    	'Cms'		=> BASE_PATH.'/cms2/module/Application/src/Cms'
     ),
     'prefixes' => array(
     	'Twig'	=> BASE_PATH.'/inc/Twig',

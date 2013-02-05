@@ -67,9 +67,6 @@ class CacheListener implements ListenerAggregateInterface
     	$this->init($sm, $rm);
     	
     	$cacheManager = $this->getCacheManager();
-    	
-    	
-    	
     	$cacheContent = $cacheManager->load();
     	
     	if(is_null($cacheContent)) {

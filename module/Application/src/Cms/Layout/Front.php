@@ -38,7 +38,7 @@ class Front implements ServiceLocatorAwareInterface
 		$layoutDoc = $this->getLayoutDoc();
 		
  		$factory = $sm->get('Core\Mongo\Factory');
- 		$brickRegister = new Register($controller, new RegisterConfig($layoutDoc, $controller));
+ 		$brickRegister = new Register($controller, $this, new RegisterConfig($layoutDoc, $controller));
 		$this->brickRegister = $brickRegister;
 //		$sm->setService('Brick\Register', $brickRegister);
 		//$controller->setBrickRegister($brickRegister);

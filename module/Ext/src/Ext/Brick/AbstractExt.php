@@ -12,6 +12,8 @@ abstract class AbstractExt
 	
 	protected $controller;
 	
+	protected $layoutFront;
+	
 	protected $sm;
 	
     protected $_disableRender = false;
@@ -26,6 +28,16 @@ abstract class AbstractExt
     	$this->_params = (object)$brick->params;
     	$this->controller = $controller;
     	$this->sm = $controller->getServiceLocator();
+    }
+    
+    public function setLayoutFront($lf)
+    {
+    	$this->layoutFront = $lf;
+    }
+    
+    public function getLayoutFront()
+    {
+    	return $this->layoutFront;
     }
     
     abstract public function getTplList();

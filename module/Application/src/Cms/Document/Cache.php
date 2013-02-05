@@ -21,9 +21,10 @@ class Cache extends AbstractDocument
 	/** @ODM\Field(type="string") */
 	protected $type;
 	
-	/** @ODM\Field(type="date")  */
+	/** @ODM\Field(type="date") */
 	protected $updated;
 	
+	/** @ODM\Field(type="string") */
 	protected $content;
 	
 	public function setContent($content)

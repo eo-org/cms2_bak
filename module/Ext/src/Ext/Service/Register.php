@@ -12,15 +12,17 @@ class Register
 	protected $_cssList = array();
 	protected $_cache = null;
 
-	protected $controller = null;
+	protected $controller;
 
-	public function __construct($controller, $config = null)
+	protected $layoutFront;
+	
+	public function __construct($controller, $layoutFront, $config = null)
 	{
 		$sm = $controller->getServiceLocator();
 		TwigFilter::setServiceManager($sm);
-		 
-		$this->controller = $controller;
 		
+		$this->controller = $controller;
+		$this->layoutFront = $layoutFront;
 		if($config) {
 			$config->configRegister($this);
 		}
@@ -31,13 +33,16 @@ class Register
 		if(is_object($brickDoc)) {
 			$solidBrick = $brickDoc->createSolid($this->controller);
 			$this->_solidBrickList[] = $solidBrick;
+			$solidBrick->setLayoutFront($this->layoutFront);
 		} else if(is_string($brickDoc)) {
 			$solidBrick = $this->createSolidBrickFromString($brickDoc);
 			$this->_solidBrickList[] = $solidBrick;
+			$solidBrick->setLayoutFront($this->layoutFront);
 		} else if(is_array($brickDoc)) {
 			foreach($brickDoc as $brickName) {
 				$solidBrick = $this->createSolidBrickFromString($brickName);
 				$this->_solidBrickList[] = $solidBrick;
+				$solidBrick->setLayoutFront($this->layoutFront);
 			}
 		}
 

@@ -8,7 +8,7 @@ class Index extends AbstractExt
     public function prepare()
     {
     	$sm = $this->sm;
-		$layoutFront = $sm->get('Fucms\Layout\Front');
+		$layoutFront = $this->getLayoutFront();
 		
 		$context = $layoutFront->getContext();
     	if($context->getType() != 'book') {
