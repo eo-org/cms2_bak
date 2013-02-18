@@ -21,12 +21,12 @@ class Module
 		$config = $sm->get('Config');
 		
 		$twigEnv = Twig\View::getTwigEnv();
-		$twigEnv->addFilter('outputImage',		new \Twig_Filter_Function('Brick\Helper\Twig\Filter::outputImage'));
-		$twigEnv->addFilter('graphicDataJson',	new \Twig_Filter_Function('Brick\Helper\Twig\Filter::graphicDataJson'));
-		$twigEnv->addFilter('substr',			new \Twig_Filter_Function('Brick\Helper\Twig\Filter::substr'));
-		$twigEnv->addFilter('url',				new \Twig_Filter_Function('Brick\Helper\Twig\Filter::url'));
-		$twigEnv->addFilter('pageLink',			new \Twig_Filter_Function('Brick\Helper\Twig\Filter::pageLink'));
-		$twigEnv->addFilter('translate',		new \Twig_Filter_Function('Brick\Helper\Twig\Filter::translate'));
+		$twigEnv->addFilter('outputImage',		new \Twig_Filter_Function('Ext\Twig\Filter::outputImage'));
+		$twigEnv->addFilter('graphicDataJson',	new \Twig_Filter_Function('Ext\Twig\Filter::graphicDataJson'));
+		$twigEnv->addFilter('substr',			new \Twig_Filter_Function('Ext\Twig\Filter::substr'));
+		$twigEnv->addFilter('url',				new \Twig_Filter_Function('Ext\Twig\Filter::url'));
+		$twigEnv->addFilter('pageLink',			new \Twig_Filter_Function('Ext\Twig\Filter::pageLink'));
+		$twigEnv->addFilter('translate',		new \Twig_Filter_Function('Ext\Twig\Filter::translate'));
 		
 		$templateDir = array();
 		$brickPathStackConfig = $config['brick_path_stack'];

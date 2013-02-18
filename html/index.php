@@ -39,9 +39,9 @@ $autoLoader = new Zend\Loader\StandardAutoloader(array(
     'namespaces' => array(
         'Zend'		=> BASE_PATH.'/inc/Zend',
 		'Core'		=> BASE_PATH.'/inc/Core',
-		'Fucms'		=> BASE_PATH.'/library-cms/Fucms',
-		'Brick'		=> BASE_PATH.'/extension/Brick',
     	'Doctrine'	=> BASE_PATH.'/inc/Doctrine',
+		'Fucms'		=> BASE_PATH.'/library-cms/Fucms',
+//		'Brick'		=> BASE_PATH.'/extension/Brick',
     	'Document'	=> BASE_PATH.'/library-cms/Document',
     	'Cms'		=> BASE_PATH.'/cms2/module/Application/src/Cms'
     ),
