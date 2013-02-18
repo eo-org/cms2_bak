@@ -5,6 +5,7 @@ use Zend\I18n\Translator\Translator;
 use Zend\Mvc\MvcEvent;
 use Zend\Mvc\Application;
 use Zend\EventManager\StaticEventManager;
+use Fucms\Session\Admin as SessionAdmin;
 
 class Module
 {
@@ -13,8 +14,11 @@ class Module
 		$sharedEvents = StaticEventManager::getInstance();
 		$sharedEvents->attach('Zend\Mvc\Application', 'dispatch.error', array($this, 'onError'), 100);
 		
-		$listener = new \Cms\Cache\Listener\CacheListener();
-		$sharedEvents->attach('Zend\Mvc\Application', $listener, null);
+		$sessionAdmin = new SessionAdmin();
+		if(!$sessionAdmin->isLogin()) {
+			$listener = new \Cms\Cache\Listener\CacheListener();
+			$sharedEvents->attach('Zend\Mvc\Application', $listener, null);
+		}
 	}
 	
 	public function getConfig()
