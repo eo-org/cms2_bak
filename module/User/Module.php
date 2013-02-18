@@ -11,6 +11,7 @@ class Module
 	{
 		$sharedEvents = StaticEventManager::getInstance();
 		$sharedEvents->attach(__NAMESPACE__, 'dispatch', array($this, 'initLayout'), -100);
+		$sharedEvents->attach(__NAMESPACE__, 'dispatch', array($this, 'userAuth'), 100);
 	}
 	
     public function getConfig()
@@ -31,6 +32,17 @@ class Module
         );
     }
 	
+    public function userAuth(MvcEvent $e)
+    {
+    	$sm = $e->getApplication()->getServiceManager();
+    	$rm = $e->getRouteMatch();
+    	$action = $rm->getParam('action');
+    	$sessionUser = $sm->get('User\SessionUser');
+    	if(!$sessionUser->hasPrivilege($action)) {
+    		$rm->setParam('action', $sessionUser->getHomeLocation());
+    	}
+    }
+    
 	public function initLayout(MvcEvent $e)
 	{
 		$sm = $e->getApplication()->getServiceManager();

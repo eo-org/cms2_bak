@@ -8,8 +8,11 @@ $starttime = $mtime;
  * Validate Site Domains!
  * 
  */
+define("BASE_PATH", getenv('BASE_PATH'));
+define("CENTER_DB", getenv('CENTER_DB'));
+
 $requestHost = $_SERVER['HTTP_HOST'];
-$m = new MongoClient('127.0.0.1');
+$m = new MongoClient(CENTER_DB);
 $db = $m->selectDb('service_account');
 $siteArr = $db->site->findOne(array('domains.domainName' => $requestHost));
 
@@ -28,7 +31,6 @@ if(!$siteArr['active']) {
  */
 chdir(dirname(__DIR__));
 
-define("BASE_PATH", getenv('BASE_PATH'));
 //define("CACHE_PATH", BASE_PATH.'/cms-misc/cache');
 
 include BASE_PATH.'/inc/Zend/Loader/StandardAutoloader.php';

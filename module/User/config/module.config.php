@@ -10,9 +10,10 @@ return array(
             'user-index'			=> 'User\Controller\IndexController',
 			'user-order'			=> 'User\Controller\OrderController',
 			'user-address'			=> 'User\Controller\AddressController',
+        	/*admin panel controllers*/
         	'useradmin-user'		=> 'UserAdmin\Controller\UserController',
-        	'useradmin-user-group'	=> 'UserAdmin\Controller\UserGroupController',
         	'useradmin-address'		=> 'UserAdmin\Controller\AddressController',
+        	'useradmin-user-group'	=> 'UserAdmin\Controller\UserGroupController',
         	'userrest-user'			=> 'UserRest\Controller\UserController',
         	'userrest-user-group'	=> 'UserRest\Controller\UserGroupController',
         ),
@@ -27,6 +28,7 @@ return array(
 			'user-admin/index/index'	=> __DIR__ . '/../view/user-admin/index/index.phtml',
 			'user-admin/user/index'		=> __DIR__ . '/../view/user-admin/user/index.phtml',
 			'user-admin/user/edit'		=> __DIR__ . '/../view/user-admin/user/edit.phtml',
+			'user-admin/user-group/index'	=> __DIR__ . '/../view/user-admin/user-group/index.phtml',
 		)
     ),
     'router' => array(

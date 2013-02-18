@@ -128,25 +128,27 @@ class SessionUser implements ServiceManagerAwareInterface
 		return $this->sessionContainer;
 	}
 
-	public function hasPrivilege()
+	public function hasPrivilege($action)
 	{
-		if(!$this->isLogin()) {
-			return false;
+		if($this->isLogin()) {
+			if(in_array($action, array('index', 'edit'))) {
+				return true;
+			}
+		} else {
+			if(in_array($action, array('login', 'register', 'forget-passwork'))) {
+				return true;
+			}
 		}
-
-		if(
-				$this->getUserData('userType') != 'designer' &&
-				$this->getUserData('userType') != 'enorange-admin' &&
-				($this->getUserData('orgCode') != $this->orgCode)
-		) {
-			return false;
-		}
-		return true;
+		return false;
 	}
 	
 	public function getHomeLocation()
 	{
-		return '/user';
+		if($this->isLogin()) {
+			return 'index';
+		} else {
+			return 'login';
+		}
 	}
 	
 	public function getUserGroup()

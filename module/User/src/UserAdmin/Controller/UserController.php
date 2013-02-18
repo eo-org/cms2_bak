@@ -7,8 +7,8 @@ class UserController extends AbstractActionController
 {
 	public function indexAction()
 	{
-		$this->brickConfig()->setActionMenu(array())
-			->setActionTitle('用户管理');
+		$this->actionMenu = array();
+		$this->actionTitle = '用户管理';
 	}
 	
 	public function createAction()
@@ -58,31 +58,13 @@ class UserController extends AbstractActionController
 		
 	public function editAction()
 	{
-		$orgCode = Class_Server::getOrgCode();
-		$forumCo = App_Factory::_m('Forum');
-		$forumDoc = $forumCo->addFilter("forumid", $orgCode)->fetchOne();
-		$this->view->setrow = empty($forumDoc)?$forumDoc:$forumDoc->toArray();
-		$id = $this->getRequest()->getParam('id');
-		$title = $this->getRequest()->getParam('title');
-		$content = $this->getRequest()->getParam('content');
-		$isshow = $this->getRequest()->getParam('isshow');
-		$status = $this->getRequest()->getParam('status');
-		$postCo = App_Factory::_m('Post');
-		$postDoc = $postCo->find($id);
-		if(!empty($title)){
-			$arrup = array(
-					'title' => $title,
-					'content' => $content,
-					'isShow' => $isshow,
-					'status' => $status
-				);
-			$postDoc->setFromArray($arrup);
-			$postDoc->save();
-		}
-		$postDoc = $postCo->find($id);
-		$this->view->row= $postDoc->toArray();
-		$post = $this->view->render('edit/editpost.phtml');
-		echo $post;
-		exit;
+		$id = $this->params('id');
+		
+		$dm = $this->documentManager();
+		$user = $dm->getRepository('User\Document\User')->findOneById($id);
+		print_r($user->toArray());
+		
+		$this->actionMenu = array('save');
+		$this->actionTitle = '保存用户信息';
 	}
 }

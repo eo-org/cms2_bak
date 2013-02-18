@@ -10,7 +10,6 @@ class IndexController extends AbstractActionController
     public function indexAction()
     {
     	$sessionUser = $this->getServiceLocator()->get('User\SessionUser');
-    	
     	return array(
     		'userEmail' => $sessionUser->getUserEmail()
     	);
@@ -37,7 +36,7 @@ class IndexController extends AbstractActionController
     			$validateResult = false;
     		}
     		if($validateResult) {
-	    		$sessionUser = $this->getServiceLocator()->get('Fucms\Session\User');
+	    		$sessionUser = $this->getServiceLocator()->get('User\SessionUser');
 	    		$validateResult = $sessionUser->register($user);
 	    		if(!$validateResult) {
 	    			$formError = "注册的用户已经存在";
@@ -60,7 +59,7 @@ class IndexController extends AbstractActionController
     	$form = new LoginForm();
     	if($this->getRequest()->isPost()) {
     		$postData = $this->getRequest()->getPost();
-    		$sessionUser = $this->getServiceLocator()->get('Fucms\Session\User');
+    		$sessionUser = $this->getServiceLocator()->get('User\SessionUser');
     		if($sessionUser->login($postData['email'], $postData['password'])) {
     			return $this->redirect()->toUrl('/user');
     		}
@@ -72,7 +71,7 @@ class IndexController extends AbstractActionController
     
     public function logoutAction()
     {
-    	$sessionUser = $this->getServiceLocator()->get('Fucms\Session\User');
+    	$sessionUser = $this->getServiceLocator()->get('User\SessionUser');
     	$sessionUser->logout();
     	
     	return $this->redirect()->toUrl('/user/login');

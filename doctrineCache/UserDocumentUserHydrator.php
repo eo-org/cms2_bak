@@ -51,6 +51,14 @@ class UserDocumentUserHydrator implements HydratorInterface
             $hydratedData['password'] = $return;
         }
 
+        /** @Field(type="string") */
+        if (isset($data['userGroup'])) {
+            $value = $data['userGroup'];
+            $return = (string) $value;
+            $this->class->reflFields['userGroup']->setValue($document, $return);
+            $hydratedData['userGroup'] = $return;
+        }
+
         /** @Field(type="hash") */
         if (isset($data['attributeList'])) {
             $value = $data['attributeList'];
