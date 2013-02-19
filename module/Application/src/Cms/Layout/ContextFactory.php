@@ -50,7 +50,8 @@ class ContextFactory
 			$id = 0;
 			$presetLayoutDoc = $layoutDoc;
 		}
-			
+		
+		$context = null;
 		switch ($routeName) {
 			case 'application':
 				$context = new Context\FrontPage($factory);

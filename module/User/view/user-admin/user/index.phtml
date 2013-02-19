@@ -5,10 +5,12 @@
 		</tr>
 		<tr class='title-row'>
 			<th class='s-index' s-index='email'>注册邮箱</th>
+			<th class='s-index' s-index='userGroup'>用户权限分组</th>
 			<th></th>
 		</tr>
 		<tr class='search-row'>
-			<th><input class='q-index' q-index='topic' type='text' name='' value='' /></th>
+			<th><input class='q-index' q-index='email' type='text' name='' value='' /></th>
+			<th><input class='q-index' q-index='userGroup' type='text' name='' value='' /></th>
 			<th><div class='query-invoker' class='button'>Search</div></th>
 		</tr>
 	</thead>
@@ -27,6 +29,9 @@
 <script type='text/template' id='data-row'>
 <td>
 	{{data.email}}
+</td>
+<td>
+	{{data.userGroup}}
 </td>
 <td>
 	<a href='/admin/useradmin-user/edit/id/{{data.id}}'>编辑</a>

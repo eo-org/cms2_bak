@@ -1,5 +1,5 @@
 <?php
 return array(
-	'libVersion' => 'v3',
+	'libVersion' => 'v4',
 	'fileServer' => 'lib.eo.test'
 );

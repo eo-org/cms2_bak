@@ -137,7 +137,7 @@ class View
     
     protected function _renderClass()
     {
-    	return 'brick-'.strtolower(substr($this->_extName, 6)).$this->_classSuffix;
+    	return strtolower(substr($this->_extName, 4)).$this->_classSuffix;
     }
     
     /**

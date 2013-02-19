@@ -7,7 +7,7 @@ class Context extends ContextAbstract
 {
 	protected $type;
 	
-	public function init($id = 'user')
+	public function init()
 	{
 		$layoutCo = $this->dbFactory->_m('Layout');
 		

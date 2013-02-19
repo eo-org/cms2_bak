@@ -131,7 +131,7 @@ class SessionUser implements ServiceManagerAwareInterface
 	public function hasPrivilege($action)
 	{
 		if($this->isLogin()) {
-			if(in_array($action, array('index', 'edit'))) {
+			if(in_array($action, array('index', 'persional-info', 'change-password', 'logout'))) {
 				return true;
 			}
 		} else {

@@ -34,7 +34,7 @@ class CacheListener implements ListenerAggregateInterface
      */
     public function attach(EventManagerInterface $events)
     {
-        $this->listeners[] = $events->attach('route', array($this, 'onRoute'), -1);
+        $this->listeners[] = $events->attach('route', array($this, 'onRoute'), -100);
         $this->listeners[] = $events->attach('finish', array($this, 'onFinish'), -100);
     }
 

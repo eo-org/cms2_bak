@@ -2,7 +2,7 @@
 namespace User\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
-use User\Form\LoginForm, User\Form\RegisterForm;
+use User\Form\LoginForm, User\Form\RegisterForm, User\Form\ChangePasswordForm;
 use User\Document\User as UserDocument;
 
 class IndexController extends AbstractActionController
@@ -77,8 +77,14 @@ class IndexController extends AbstractActionController
     	return $this->redirect()->toUrl('/user/login');
     }
     
-    public function passwordAction()
+    public function changePasswordAction()
     {
-    	
+    	$form = new ChangePasswordForm();
+    	if($this->getRequest()->isPost()) {
+    		
+    	}
+    	return array(
+    		'form' => $form
+    	);
     }
 }

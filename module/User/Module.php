@@ -12,6 +12,9 @@ class Module
 		$sharedEvents = StaticEventManager::getInstance();
 		$sharedEvents->attach(__NAMESPACE__, 'dispatch', array($this, 'initLayout'), -100);
 		$sharedEvents->attach(__NAMESPACE__, 'dispatch', array($this, 'userAuth'), 100);
+		
+		$listener = new \User\Acl\Listener\AclListener();
+		$sharedEvents->attach('Zend\Mvc\Application', $listener, 10);
 	}
 	
     public function getConfig()

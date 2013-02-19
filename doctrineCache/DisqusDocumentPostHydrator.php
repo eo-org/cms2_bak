@@ -60,6 +60,14 @@ class DisqusDocumentPostHydrator implements HydratorInterface
         }
 
         /** @Field(type="string") */
+        if (isset($data['topic'])) {
+            $value = $data['topic'];
+            $return = (string) $value;
+            $this->class->reflFields['topic']->setValue($document, $return);
+            $hydratedData['topic'] = $return;
+        }
+
+        /** @Field(type="string") */
         if (isset($data['content'])) {
             $value = $data['content'];
             $return = (string) $value;

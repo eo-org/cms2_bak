@@ -25,6 +25,9 @@ class User extends AbstractDocument
 	/** @ODM\Field(type="string")  */
 	protected $userGroup = 'online';
 	
+	/** @ODM\Field(type="string")  */
+	protected $status = 'active';
+	
 	/** @ODM\Field(type="hash")  */
 	protected $attributeList;
 	
@@ -79,6 +82,8 @@ class User extends AbstractDocument
     {
         $this->email = $data['email'];
         $this->password  = $data['password'];
+        $this->userGroup = $data['userGroup'];
+        $this->status = $data['status'];
     }
     
     public function getArrayCopy()
@@ -86,7 +91,9 @@ class User extends AbstractDocument
     	return array(
     		'id' => $this->id,
     		'email'	=> $this->email,
-    		'password' => $this->password
+    		'password' => $this->password,
+    		'userGroup' => $this->userGroup,
+    		'status' => $this->status
     	);
     }
 }

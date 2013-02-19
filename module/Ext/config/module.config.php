@@ -160,6 +160,10 @@ return array(
 		'other' => array(
 			'label' => '其他',
 			'ext' => array(
+				'Ext_Brick_SpriteSurrogate' => array(
+					'label' => 'TAB',
+					'desc' => ''
+				),
 				'Ext_Brick_Attachment' => array(
 					'label' => '附件下载',
 					'desc' => ''
