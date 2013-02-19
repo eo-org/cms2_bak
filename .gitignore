@@ -13,3 +13,4 @@ Thumbs.db
 # htaccess file #
 ######################
 .htaccess
+*.dist
