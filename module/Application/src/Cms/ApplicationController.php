@@ -5,6 +5,7 @@ use Zend\Stdlib\DispatchableInterface, Zend\Stdlib\RequestInterface as Request, 
 use Zend\Mvc\InjectApplicationEventInterface, Zend\EventManager\EventInterface as Event;
 use Zend\ServiceManager\ServiceLocatorAwareInterface, Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\I18n\Translator\Translator;
+use Fucms\Session\Admin as SessionAdmin;
 
 class ApplicationController implements
 	DispatchableInterface,
@@ -25,6 +26,15 @@ class ApplicationController implements
 	
 	public function dispatch(Request $request, Response $response = null)
 	{
+		$lcm = $request->getQuery('local-css-mode');
+		if($lcm == 'activate') {
+			$sessionAdmin = new SessionAdmin();
+			$sessionAdmin->setUserData('localCssMode', true);
+		} else if($lcm == 'deactivate') {
+			$sessionAdmin = new SessionAdmin();
+			$sessionAdmin->setUserData('localCssMode', false);
+		}
+		
 		$this->getEvent()->setTarget($this);
 		
 		$layoutFront = $this->serviceManager->get('Cms\Layout\Front');
