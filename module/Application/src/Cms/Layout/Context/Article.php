@@ -5,6 +5,8 @@ use Cms\Layout\ContextAbstract;
 
 class Article extends ContextAbstract
 {
+	protected $shouldCache = true;
+	
 	protected $groupItemId;
 	protected $groupAlias;
 	protected $groupDoc;

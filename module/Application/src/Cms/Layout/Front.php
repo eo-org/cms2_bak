@@ -1,30 +1,39 @@
 <?php
 namespace Cms\Layout;
 
-use Zend\ServiceManager\ServiceLocatorAwareInterface, Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\View\Helper\Doctype, Zend\View\Helper\HeadTitle, Zend\View\Helper\HeadMeta;
 use Ext\Service\Register, Ext\Service\RegisterConfig;
 use Fucms\Session\Admin as SessionAdmin;
 
-class Front implements ServiceLocatorAwareInterface
+class Front
 {
 	protected $sm				= null;
-	protected $mvcEvent			= null;
 	
-	protected $routeMatch		= null;
 	protected $context			= null;
 	protected $generalSiteInfo	= null;
 	protected $stageList		= null;
 	protected $brickRegister	= null;
 	protected $brickViewList	= null;
 	
-	public function initLayout($mvcEvent)
+	public function __construct($sm)
 	{
-		$this->mvcEvent = $mvcEvent;
-		$this->routeMatch = $this->mvcEvent->getRouteMatch();
-		$sm = $this->getServiceLocator();
+		$this->sm = $sm;
+	}
+	
+	public function getGeneralSiteInfo()
+	{
+		if($this->generalSiteInfo == null) {
+			$factory = $this->sm->get('Core\Mongo\Factory');
+			$co = $factory->_m('Info');
+			$this->generalSiteInfo = $co->fetchOne();
+		}
+		return $this->generalSiteInfo;
+	}
+	
+	public function initPageController($controller)
+	{
+		$sm = $this->sm;
 		$infoDoc = $this->getGeneralSiteInfo();
-		$controller = $this->mvcEvent->getTarget();
 		
 		$doctypeHelper = new Doctype();
 		$doctypeHelper->setDoctype('HTML5');
@@ -40,8 +49,6 @@ class Front implements ServiceLocatorAwareInterface
  		$factory = $sm->get('Core\Mongo\Factory');
  		$brickRegister = new Register($controller, $this, new RegisterConfig($layoutDoc, $controller));
 		$this->brickRegister = $brickRegister;
-//		$sm->setService('Brick\Register', $brickRegister);
-		//$controller->setBrickRegister($brickRegister);
 	
 		$sessionAdmin	= new SessionAdmin();
 		$viewModel		= $controller->layout();
@@ -83,16 +90,6 @@ class Front implements ServiceLocatorAwareInterface
 		}
 	}
 	
-	public function getGeneralSiteInfo()
-	{
-		if($this->generalSiteInfo == null) {
-			$factory = $this->sm->get('Core\Mongo\Factory');
-			$co = $factory->_m('Info');
-			$this->generalSiteInfo = $co->fetchOne();
-		}
-		return $this->generalSiteInfo;
-	}
-	
 	public function getStageList()
 	{
 		if($this->stageList == null) {
@@ -115,41 +112,25 @@ class Front implements ServiceLocatorAwareInterface
 		return $this->brickRegister;
 	}
 	
-	public function setRouteMatch($routeMatch)
+	public function setContext(ContextAbstract $context)
 	{
-		$this->routeMatch = $routeMatch;
-	}
-	
-	public function getRouteMatch()
-	{
-		return $this->routeMatch;
+		$this->context = $context;
 	}
 	
 	public function getContext()
 	{
-		if(is_null($this->context)) {
-			$contextFactory = new ContextFactory();
-			$contextFactory->setServiceManager($this->sm);
-			$this->context = $contextFactory->getContext($this->routeMatch);
-		}
-		
 		return $this->context;
 	}
 	
-	public function setContext(ContextAbstract $context)
+	public function getContextId()
 	{
-		$this->context = $context;
+		return $this->context->getId();
 	}
 	
 	public function getLayoutDoc()
 	{
 		$context = $this->getContext();
 		return $context->getLayoutDoc();
-	}
-	
-	public function getContextId()
-	{
-		return $this->context->getId();
 	}
 	
 	public function getLayoutId()
@@ -172,15 +153,5 @@ class Front implements ServiceLocatorAwareInterface
 		} else {
 			return $layoutDoc->alias;
 		}
-	}
-	
-	public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
-	{
-		$this->sm = $serviceLocator;
-	}
-	
-	public function getServiceLocator()
-	{
-		return $this->sm;
 	}
 }

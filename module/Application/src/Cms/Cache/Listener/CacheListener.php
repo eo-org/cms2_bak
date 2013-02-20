@@ -14,16 +14,6 @@ class CacheListener implements ListenerAggregateInterface
     protected $listeners = array();
     protected $cacheManager;
 
-    public function init($sm, $rm)
-    {
-    	$storage = StorageFactory::factory(array(
-    		'adapter' => 'Cms\Cache\Storage\Adapter\Mongo',
-    		'options' => new MongoOptions()
-    	));
-    	 
-    	$this->cacheManager = new CacheManager($storage, $sm, $rm);
-    }
-    
     /**
      * Attach one or more listeners
      *
@@ -61,12 +51,17 @@ class CacheListener implements ListenerAggregateInterface
     public function onRoute(MvcEvent $e)
     {
     	$sm = $e->getApplication()->getServiceManager();
-    	$rm = $e->getRouteMatch();
-    	$this->init($sm, $rm);
+    	$context = $sm->get('Cms\Layout\Front')->getContext();
+    	$storage = StorageFactory::factory(array(
+    		'adapter' => 'Cms\Cache\Storage\Adapter\Mongo',
+    		'options' => new MongoOptions()
+    	));
+    	$dm = $sm->get('DocumentManager');
+    	$storage->setDocumentManager($dm);
     	
-    	$cacheManager = $this->getCacheManager();
-    	$cacheContent = $cacheManager->load();
+    	$this->cacheManager = new CacheManager($storage, $context);
     	
+    	$cacheContent = $this->cacheManager->load();
     	if(is_null($cacheContent)) {
     		return;
     	} else {
@@ -86,10 +81,5 @@ class CacheListener implements ListenerAggregateInterface
     {
     	$response = $e->getResponse();
     	$this->cacheManager->save($response);
-    }
-
-    public function getCacheManager()
-    {
-    	return $this->cacheManager;
     }
 }

@@ -23,8 +23,7 @@ class ContentList extends AbstractExt
 		if(empty($pageSize)) {
 			$pageSize = 20;
 		}
-		$rm = $layoutFront->getRouteMatch();
-		$page = $rm->getParam('page');
+		$page = $context->getParam('page');
 		
 		$groupItemDoc = $context->getGroupItemDoc();
 		if($groupItemDoc == 'not-found' || $groupItemDoc == null) {

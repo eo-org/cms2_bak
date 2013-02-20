@@ -49,23 +49,25 @@ class AclListener implements ListenerAggregateInterface
 		}
 		$aclSetting = $configDoc->getAcl();
 		if($aclSetting == 'enable') {
+			$sessionUser = new \User\SessionUser();
+			if($sessionUser->getUserGroup() == 'verified') {
+				return;
+			}
 			$layoutFront = $sm->get('Cms\Layout\Front');
-			$rm = $e->getRouteMatch();
-			$layoutFront->setRouteMatch($rm);
 			$context = $layoutFront->getContext();
 			if(is_null($context)) {
 				return;
 			}
 			if($context->getType() == 'article' || $context->getType() == 'article-list') {
 				$groupItemId = $context->getGroupItemId();
-// 				$groupItemResourceDoc = $dm->getRepository('User\Document\Resource')->findOneByResourceId($groupItemId);
-				
-// 				if(is_null($groupItemResourceDoc)) {
-// 					return;
-// 				}
 				$protectedResourceId = $configDoc->getProtectedResourceId();
 				if(in_array($groupItemId, $protectedResourceId)) {
-					die('not allowed!');
+					$factory = $sm->get('Core\Mongo\Factory');
+					$context = new \Cms\Layout\Context\Error($factory);
+					$context->init('401');
+					$context->setParams(array('code' => 401));
+					$layoutFront->setContext($context);
+					return;
 				}
 			}
 		}

@@ -10,8 +10,7 @@ class Detail extends AbstractExt
     	$sm = $this->sm;
     	$layoutFront = $this->getLayoutFront();
 		$context = $layoutFront->getContext();
-    	$rm = $layoutFront->getRouteMatch();
-    	$articleId = $rm->getParam('id');
+    	$articleId = $context->getParam('id');
     	
     	$factory = $this->dbFactory();
     	$articleDoc = $factory->_m('Article')->find($articleId);

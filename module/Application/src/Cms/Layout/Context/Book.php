@@ -6,6 +6,8 @@ use Cms\Layout\ContextAbstract;
 
 class Book extends ContextAbstract
 {
+	protected $shouldCache = true;
+	
 	protected $bookId;
 	protected $bookDoc;
 	protected $trail = array();

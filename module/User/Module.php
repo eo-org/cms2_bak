@@ -14,7 +14,7 @@ class Module
 		$sharedEvents->attach(__NAMESPACE__, 'dispatch', array($this, 'userAuth'), 100);
 		
 		$listener = new \User\Acl\Listener\AclListener();
-		$sharedEvents->attach('Zend\Mvc\Application', $listener, 10);
+		$sharedEvents->attach('Zend\Mvc\Application', $listener, null);
 	}
 	
     public function getConfig()
@@ -56,6 +56,7 @@ class Module
 		$context->init();
 		$layoutFront->setContext($context);
 		
-		$layoutFront->initLayout($e);
+		$controller = $e->getTarget();
+		$layoutFront->initPageController($controller);
 	}
 }

@@ -6,6 +6,8 @@ use Cms\Layout\ContextAbstract;
 
 class ArticleList extends ContextAbstract
 {
+	protected $shouldCache = true;
+	
 	protected $groupItemId;
 	protected $routeParams = array();
 	protected $groupItemDoc;

@@ -38,7 +38,7 @@ class ApplicationController implements
 		$this->getEvent()->setTarget($this);
 		
 		$layoutFront = $this->serviceManager->get('Cms\Layout\Front');
-		$layoutFront->initLayout($this->getEvent());
+		$layoutFront->initPageController($this);
 		
 		$sm = $this->getServiceLocator();
 	
@@ -67,7 +67,7 @@ class ApplicationController implements
 	{
 		$viewModel = $this->getEvent()->getViewModel();
 		if(null !== $template) {
-			;$viewModel->setTemplate((string) $template);
+			$viewModel->setTemplate((string) $template);
 		}
 		return $viewModel;
 	}

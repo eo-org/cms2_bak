@@ -16,8 +16,7 @@ class PageDetail extends AbstractExt
 			throw new Exception('this extension is only suitable for a book typed layout!');
 		}
 		
-		$rm = $layoutFront->getRouteMatch();
-    	$pageId = $rm->getParam('pageId');
+    	$pageId = $context->getParam('pageId');
     	
     	if(is_null($pageId)) {
     		$pageId = 'index';

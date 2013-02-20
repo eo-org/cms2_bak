@@ -6,10 +6,7 @@ use Fucms\Session\Admin as SessionAdmin;
 class Manager
 {
 	public $storage;
-	
-	public $sm;
-	
-	public $rm;
+	public $context;
 	
 	public $skipUpdate = false;
 	
@@ -17,32 +14,21 @@ class Manager
 	//3600 * 3 = 10800
 	protected $ttl = 10800;
 	
-	public function __construct($storage, $sm, $rm)
+	public function __construct($storage, $context)
 	{
 		$this->storage = $storage;
-		$this->sm = $sm;
-		$this->rm = $rm;
+		$this->context = $context;
 	}
 	
 	public function load()
 	{
-		$dm = $this->sm->get('DocumentManager');
-		$this->storage->setDocumentManager($dm);
-		
-		//////////////////////////////////////
-		$sessionAdmin = new SessionAdmin();
-		if($sessionAdmin->isLogin()) {
-			$this->skipUpdate = false;
-			return null;
-		}
-		//////////////////////////////////////
-		
 		if(!$this->shouldCache()) {
 			$this->skipUpdate = true;
 			return null;
 		}
 		
 		$key = $this->getKey();
+		
 		$success = false;
 		$cacheDoc = $this->storage->getItem($key, $success);
 		if($success) {
@@ -76,17 +62,16 @@ class Manager
 	public function getKey()
 	{
 		if(!$this->key) {
-			$routeName = $this->rm->getMatchedRouteName();
+			$contextType = $this->context->getType();
 			
-			$params = $this->rm->getParams();
+			$params = $this->context->getParams();
 			unset($params['__NAMESPACE__']);
 			unset($params['controller']);
 			unset($params['action']);
-			
 			if(count($params) == 0) {
-				$this->key = $routeName;
+				$this->key = $contextType;
 			} else {
-				$this->key = $routeName.'-'.implode('-', $params);
+				$this->key = $contextType.'-'.implode('-', $params);
 			}
 			
 		}
@@ -95,11 +80,14 @@ class Manager
 	
 	public function shouldCache()
 	{
-		$routeName = $this->rm->getMatchedRouteName();
-		if(substr($routeName, 0, 11) == 'application') {
-			return true;
+		if(is_null($this->context)) {
+			return false;
+		}
+		$sessionAdmin = new SessionAdmin();
+		if($sessionAdmin->isLogin()) {
+			return false;
 		}
 		
-		return false;
+		return $this->context->shouldCache();
 	}
 }

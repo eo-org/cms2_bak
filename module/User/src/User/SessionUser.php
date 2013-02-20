@@ -18,6 +18,7 @@ class SessionUser implements ServiceManagerAwareInterface
 	
 	protected $userId = null;
 	protected $userEmail = null;
+	protected $userGroup = null;
 	
 	public function __construct()
 	{
@@ -34,6 +35,11 @@ class SessionUser implements ServiceManagerAwareInterface
 		return $this->userEmail;
 	}
 	
+	public function getUserGroup()
+	{
+		return $this->userGroup;
+	}
+	
 	public function isLogin()
 	{
 		if(is_null($this->userId)) {
@@ -47,6 +53,7 @@ class SessionUser implements ServiceManagerAwareInterface
 		if(is_object($email)) {
 			$this->userId = $email->getId();
 			$this->userEmail = $email->getEmail();
+			$this->userGroup = $email->getUserGroup();
 			$this->setToSession();
 			return true;
 		} else {
@@ -62,6 +69,7 @@ class SessionUser implements ServiceManagerAwareInterface
 				$user = $users->getSingleResult();
 				$this->userId = $user->getId();
 				$this->userEmail = $user->getEmail();
+				$this->userGroup = $user->getUserGroup();
 				$this->setToSession();
 				return true;
 			}
@@ -76,8 +84,8 @@ class SessionUser implements ServiceManagerAwareInterface
 		$existingUser = $dm->getRepository('User\Document\User')->findOneByEmail($email);
 		
 		if($existingUser) {
-			print_r($existingUser);
-			die();
+// 			print_r($existingUser);
+// 			die();
 			return false;
 		} else {
 			$password = $user->getPassword();
@@ -93,6 +101,7 @@ class SessionUser implements ServiceManagerAwareInterface
 	{
 		$this->userId = null;
 		$this->userEmail = null;
+		$this->userGroup = null;
 		$this->setToSession();
 	}
 	
@@ -102,6 +111,7 @@ class SessionUser implements ServiceManagerAwareInterface
 		
 		$this->userId = $sc->offsetGet('userId');
 		$this->userEmail = $sc->offsetGet('userEmail');
+		$this->userGroup = $sc->offsetGet('userGroup');
 	}
 	
 	public function setToSession()
@@ -109,6 +119,7 @@ class SessionUser implements ServiceManagerAwareInterface
 		$sc = $this->getSessionContainer();
 		$sc->offsetSet('userId', $this->userId);
 		$sc->offsetSet('userEmail', $this->userEmail);
+		$sc->offsetSet('userGroup', $this->userGroup);
 	}
 	
 	public function getMd5Password($password)
@@ -149,11 +160,6 @@ class SessionUser implements ServiceManagerAwareInterface
 		} else {
 			return 'login';
 		}
-	}
-	
-	public function getUserGroup()
-	{
-		return 'online';
 	}
 	
 	public function setServiceManager(ServiceManager $serviceManager)

@@ -11,6 +11,8 @@ abstract class ContextAbstract
 	protected $trail;
 	protected $breadcrumb;
 	protected $contextId = null;
+	protected $params = array();
+	protected $shouldCache = false;
 	
 	public function __construct($dbFactory)
 	{
@@ -47,6 +49,30 @@ abstract class ContextAbstract
 	public function getResourceDoc()
 	{
 		return null;
+	}
+	
+	public function setParams($params)
+	{
+		$this->params = $params;
+		return $this;
+	}
+	
+	public function getParams()
+	{
+		return $this->params;
+	}
+	
+	public function getParam($key, $default = null)
+	{
+		if(array_key_exists($key, $this->params)) {
+			return $this->params[$key];
+		}
+		return $default;
+	}
+	
+	public function shouldCache()
+	{
+		return $this->shouldCache;
 	}
 	
 	abstract public function getResourceId();

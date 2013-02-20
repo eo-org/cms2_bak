@@ -45,8 +45,8 @@ return array(
                         'options' => array(
                             'route'    => '[:id][/:pageId].shtml',
                 			'constraints' => array(
-		            			'resourceAlias' => '[a-z0-9]*',
-                				'query' => '[a-z0-9]*'
+		            			'id' => '[a-z0-9]*',
+                				'pageId' => '[a-z0-9]*'
 		            		)
                         ),
                     ),
@@ -92,9 +92,6 @@ return array(
 		            	'type'    => 'Literal',
 		            	'options' => array(
 		            		'route' => 'search.shtml',
-		            		'constraints' => array(
-		            			
-		            		)
 		            	)
 		            ),
                 	'frontpage' => array(
@@ -117,6 +114,20 @@ return array(
                 	)
                 ),
             ),
+        	'error' => array(
+        		'type'    => 'Segment',
+        		'options' => array(
+        			'route'    => '/error-[:id].shtml',
+        			'defaults' => array(
+        				'controller'    => 'Application\Controller',
+        				'action'        => 'index',
+        			),
+        			'constraints' => array(
+        				'id' => '(401|404)'
+        			)
+        		),
+        		'may_terminate' => true,
+        	),
         ),
     ),
     'controller_plugins' => array(
@@ -163,13 +174,15 @@ return array(
         ),
     ),
 	'service_manager' => array(
-		'factories' => array('ConfigObject\EnvironmentConfig' => function($serviceManager) {
-			$siteConfig = new \Fucms\SiteConfig(include 'config/server.config.php.dist');
-			return $siteConfig;
-		}),
-		'invokables' => array(
-			'Cms\Layout\Front' => 'Cms\Layout\Front',
-			'Fucms\Session\Admin' => 'Fucms\Session\Admin',
-		)
+		'factories' => array(
+			'ConfigObject\EnvironmentConfig' => function($serviceManager) {
+				$siteConfig = new \Fucms\SiteConfig(include 'config/server.config.php.dist');
+				return $siteConfig;
+			},
+			'Cms\Layout\Front' => 'Cms\Layout\FrontFactory',
+		),
+// 		'invokables' => array(
+// 			'Fucms\Session\Admin' => 'Fucms\Session\Admin',
+// 		)
 	),
 );

@@ -5,6 +5,8 @@ use Cms\Layout\ContextAbstract;
 
 class FrontPage extends ContextAbstract
 {
+	protected $shouldCache = true;
+	
 	protected $type;
 	
 	public function init($id, $presetLayoutDoc = null)
@@ -19,7 +21,13 @@ class FrontPage extends ContextAbstract
 				if($layoutDoc == null) {
 					$layoutDoc = $this->createDefaultLayout($id);
 				}
-				
+			} else if($id == 'error-page') {
+				$layoutDoc = $layoutCo->addFilter('type', 'error-page')
+					->addFilter('default', 1)
+					->fetchOne();
+				if($layoutDoc == null) {
+					$layoutDoc = $this->createDefaultLayout($id);
+				}
 			} else {
 				//load by alias
 				$layoutDoc = $layoutCo->addFilter('type', 'index')

@@ -5,7 +5,7 @@ class ContextFactory
 {
 	protected $sm;
 	
-	public function setServiceManager($sm)
+	public function __construct($sm)
 	{
 		$this->sm = $sm;
 	}
@@ -24,11 +24,11 @@ class ContextFactory
 		$id = $routeMatch->getParam('id');
 		$presetLayoutDoc = null;
 		$factory = $this->sm->get('Core\Mongo\Factory');
-			
+		
 		if($routeName == 'application/layout') {
 			$layoutCo = $factory->_m('Layout');
 			$layoutDoc = $layoutCo->addFilter('alias', $id)
-			->fetchOne();
+				->fetchOne();
 			if($layoutDoc == null) {
 				throw new Exception('layout not found with layout alias '.$id);
 			}
@@ -65,6 +65,10 @@ class ContextFactory
 				$context = new Context\FrontPage($factory);
 				$context->init('search');
 				break;
+			case 'application/error-page':
+				$context = new Context\FrontPage($factory);
+				$context->init('error-page');
+				break;
 			case 'application/book':
 				$bookId = $id;
 				$pageId = $routeMatch->getParam('pageId');
@@ -87,7 +91,15 @@ class ContextFactory
 				$context = new Context\ProductList($factory);
 				$context->init($id, $presetLayoutDoc);
 				break;
+			case 'error':
+				$context = new Context\Error($factory);
+				$context->init($id);
+				break;
 		}
+		if(is_null($context)) {
+			return null;
+		}
+		$context->setParams($routeMatch->getParams());
 		return $context;
 	}
 }
