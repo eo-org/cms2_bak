@@ -5,7 +5,7 @@ return array(
 			'adminrest-navi'		=> 'Rest\Controller\NaviController',
 			'adminrest-article'		=> 'Rest\Controller\ArticleController',
 			'adminrest-book'		=> 'Rest\Controller\BookController',
-			'adminrest-product-type'=> 'Rest\Controller\ProductTypeController',
+			//'adminrest-product-type'=> 'Rest\Controller\ProductTypeController',
 			'adminrest-product'		=> 'Rest\Controller\ProductController',
 			'adminrest-ad-section'	=> 'Rest\Controller\AdSectionController',
 			'adminrest-ad'			=> 'Rest\Controller\AdController',
@@ -15,7 +15,9 @@ return array(
 			'adminrest-head-file'	=> 'Rest\Controller\HeadFileController',
 			'adminrest-group'		=> 'Rest\Controller\GroupController',
 			'adminrest-layout'		=> 'Rest\Controller\LayoutController',
-			'adminrest-domain'		=> 'Rest\Controller\DomainController'
+			'adminrest-domain'		=> 'Rest\Controller\DomainController',
+			'adminrest-attribute'	=> 'Rest\Controller\AttributeController',
+			'adminrest-attributeset'=> 'Rest\Controller\AttributesetController',
 		)
 	),
 	'router' => array(

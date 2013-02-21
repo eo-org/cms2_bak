@@ -9,8 +9,6 @@ class Carousel extends Fieldset
 	{
 		parent::__construct('params');
 		
-		//$factory = $this->dbFactory();
-    	
     	$co = $factory->_m('Ad_Section');
     	$options = $co->fetchArr('label');
     	

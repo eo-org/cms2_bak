@@ -65,6 +65,7 @@ class ArticleController extends AbstractRestfulController
 		$result['groupCount'] = $dataGroupCount;
 		
 		return $result;
+		//return new JsonModel($result);
 	}
 	
 	public function get($id)

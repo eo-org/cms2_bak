@@ -1,5 +1,5 @@
 <?php
-namespace Document;
+namespace Cms\Document;
 
 use Core\AbstractDocument;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
@@ -21,11 +21,26 @@ class Attributeset extends AbstractDocument
 	/** @ODM\Field(type="string")  */
 	protected $type;
 	
-	/** @ODM\EmbedMany(targetDocument="Document\Attribute")  */
+	/** @ODM\EmbedMany(targetDocument="Cms\Document\Attribute")  */
 	protected $attributeList = array();
 	
 	/** @ODM\Field(type="boolean")  */
 	protected $isActive;
+	
+	public function getAttributeById($id)
+	{
+		foreach($this->attributeList as $attr) {
+			if($attr->getId() == $id) {
+				return $attr;
+			}
+		}
+		return null;
+	}
+	
+	public function createAttribute()
+	{
+		return new Attribute();
+	}
 	
 	public function addAttribute($attributeDocument)
 	{
@@ -43,7 +58,7 @@ class Attributeset extends AbstractDocument
 	{
 		foreach($this->attributeList as $key => $attribute) {
 			if($attribute->getId() == $id) {
-					unset($this->domains[$key]);
+				unset($this->attributeList[$key]);
 			}
 		}
 		return false;

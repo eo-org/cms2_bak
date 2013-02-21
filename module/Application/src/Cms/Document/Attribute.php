@@ -1,5 +1,5 @@
 <?php
-namespace Document;
+namespace Cms\Document;
 
 use Core\AbstractDocument;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
@@ -32,4 +32,34 @@ class Attribute extends AbstractDocument
 	
 	/** @ODM\Field(type="int")  */
 	protected $sort;
+	
+	public function exchangeArray($data)
+	{
+		$this->type = $data['type'];
+		$this->code = $data['code'];
+		$this->label = $data['label'];
+		$this->description = $data['description'];
+		$this->required = $data['required'];
+		$this->sort = $data['sort'];
+		
+		$options = array();
+		foreach($data['optionsCode'] as $key => $code) {
+			$options[$code] = $data['optionsLabel'][$key];
+		}
+		$this->options = $options;
+	}
+	
+	public function getArrayCopy()
+	{
+		return array(
+			'id' => $this->id,
+			'type' => $this->type,
+			'code' => $this->code,
+			'label' => $this->label,
+			'description' => $this->description,
+			'options' => $this->options,
+			'required' => $this->required,
+			'sort' => $this->sort
+		);
+	}
 }

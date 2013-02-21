@@ -9,31 +9,7 @@ class AttributesetController extends AbstractActionController
 	
     public function indexAction()
     {
-    	$this->_helper->template->head('属性组管理');
     	
-        $hashParam = $this->getRequest()->getParam('hashParam');
-        $labels = array(
-			'label' => '标题',
-			'~contextMenu' => ''
-		);
-		$partialHTML = $this->view->partial('select-search-header-front.phtml', array(
-			'labels' => $labels,
-			'selectFields' => array(),
-			'url' => '/admin/attributeset/get-attributeset-json/type/'.$this->_type.'/',
-			'actionId' => 'id',
-			'click' => array(
-				'action' => 'contextMenu',
-				'menuItems' => array(
-					array('编辑', '/admin/attributeset/edit/type/'.$this->_type.'/id/'),
-					array('删除', '/admin/attributeset/delete/type/.'.$this->_type.'/id/')
-				)
-			),
-			'initSelectRun' => 'true',
-			'hashParam' => $hashParam
-		));
-
-        $this->view->partialHTML = $partialHTML;
-        $this->_helper->template->actionMenu(array('create'));
     }
     
     public function createAction()
@@ -65,16 +41,18 @@ class AttributesetController extends AbstractActionController
         $id = $this->params()->fromRoute('id');
         $dm = $this->documentManager();
         
-        $attributesetDoc = $dm->getRepository('Document\Attributeset')->find($id);
+        $attributesetDoc = $dm->getRepository('Cms\Document\Attributeset')->find($id);
         	
         if(is_null($attributesetDoc)) {
         	throw new Exception('attributeset not found');
         }
         
-		$this->view->id = $id;
-        $this->brickConfig()->setActionTitle('编辑文章: '.$doc->label)
-        	->setActionMenu(array('save', 'delete'));
-        return array('id' => $id);
+        $this->actionTitle = '编辑:';
+//         $this->actionMenu = array();
+		//$this->actionMenu = array('delete');
+        return array(
+        	'id' => $id
+        );
     }
     
     public function deleteAction()

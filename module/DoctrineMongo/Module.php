@@ -47,9 +47,4 @@ class Module implements BootstrapListenerInterface
 			),
 		);
 	}
-
-	public function getConfig()
-	{
-		return include __DIR__ . '/configs/module.config.php';
-	}
 }

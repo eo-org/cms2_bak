@@ -100,6 +100,10 @@ return array(
 		'adgroup' => array(
 			'lable' => '广告图',
 			'ext' => array(
+				'Ext_Brick_AdGroup_Plain' => array(
+					'label' => '广告图切换',
+					'desc' => ''
+				),
 				'Ext_Brick_AdGroup_Accordion' => array(
 					'label' => '广告图切换',
 					'desc' => ''
