@@ -82,7 +82,7 @@ class ProductController extends AbstractActionController
 	    		$attaUrl	= $postData->get('attaUrl');
 				$attaName	= $postData->get('attaName');
 				$attaType	= $postData->get('attaType');
-				$doc->getAttachment() = null;
+				$doc->setAttachment(null);
 				if(!is_null($attaUrl)) {
 					$doc->setAttachment($attaUrl, $attaName, $attaType);
 				}
