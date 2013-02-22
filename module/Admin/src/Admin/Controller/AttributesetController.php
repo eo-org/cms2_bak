@@ -79,56 +79,44 @@ class AttributesetController extends AbstractActionController
     		$attributeDoc->save();
     	}
     	
-//    	$mongoIdArr = array();
-//    	foreach($attrIdArr as $aId) {
-//    		$mongoIdArr[] = new MongoId($aId);
-//    	}
-//    	
-//    	$attributeCo = App_Factory::_am('Attribute');
-//    	$attributeDocs = $attributeCo->addFilter('_id', array('$in' => $mongoIdArr))->fetchDoc();
-////    	Zend_Debug::dump($attributeDocs);
-//    	foreach($attributeDocs as $doc) {
-//    		echo $doc->getId().',';
-//    	}
-    	
     	$this->_helper->json('ok');
     }
     
-    public function getElementTemplateAction()
-    {
-    	$type = $this->getRequest()->getParam('element-type');
-		$id = $this->getRequest()->getParam('id');
-		$attributeCo = App_Factory::_am('Attribute');
-		$formDoc = $formCo->create();
-		if($type == 'text' || $type == 'textarea') {
-			$formDoc->setFromArray(array('formId' => $formid,'elementType'=>$type,'label'=>'标题','required'=>0,'desc'=>'标题描述'));
-		} else if($type == 'button') {
-			$formDoc->setFromArray(array('formId' => $formid,'elementType'=>$type,'label'=>'提交','type'=>'submit'));
-		} else {
-			$formDoc->setFromArray(array('formId' => $formid,'elementType'=>$type,'label'=>'标题','required'=>0,'desc'=>'标题描述','option'=>array('第一选项','第二选项','第三选项')));
-		}
-		$formDoc->save();
-		$this->view->testid = $formDoc->getId();
-		switch($type) {
-			case 'text':
-				$this->render('element/text');
-				break;
-			case 'textarea':
-				$this->render('element/textarea');
-				break;
-			case 'select':
-				$this->render('element/select');
-				break;
-			case 'multi-checkbox':
-				$this->render('element/multi-checkbox');
-				break;
-			case 'menu':
-				$this->render('element/menu');
-				break;
-			case 'button':
-				$this->render('element/button');
-				break;
-		}
-		$this->getResponse()->setHeader('result', 'success');
-    }
+//     public function getElementTemplateAction()
+//     {
+//     	$type = $this->getRequest()->getParam('element-type');
+// 		$id = $this->getRequest()->getParam('id');
+// 		$attributeCo = App_Factory::_am('Attribute');
+// 		$formDoc = $formCo->create();
+// 		if($type == 'text' || $type == 'textarea') {
+// 			$formDoc->setFromArray(array('formId' => $formid,'elementType'=>$type,'label'=>'标题','required'=>0,'desc'=>'标题描述'));
+// 		} else if($type == 'button') {
+// 			$formDoc->setFromArray(array('formId' => $formid,'elementType'=>$type,'label'=>'提交','type'=>'submit'));
+// 		} else {
+// 			$formDoc->setFromArray(array('formId' => $formid,'elementType'=>$type,'label'=>'标题','required'=>0,'desc'=>'标题描述','option'=>array('第一选项','第二选项','第三选项')));
+// 		}
+// 		$formDoc->save();
+// 		$this->view->testid = $formDoc->getId();
+// 		switch($type) {
+// 			case 'text':
+// 				$this->render('element/text');
+// 				break;
+// 			case 'textarea':
+// 				$this->render('element/textarea');
+// 				break;
+// 			case 'select':
+// 				$this->render('element/select');
+// 				break;
+// 			case 'multi-checkbox':
+// 				$this->render('element/multi-checkbox');
+// 				break;
+// 			case 'menu':
+// 				$this->render('element/menu');
+// 				break;
+// 			case 'button':
+// 				$this->render('element/button');
+// 				break;
+// 		}
+// 		$this->getResponse()->setHeader('result', 'success');
+//     }
 }

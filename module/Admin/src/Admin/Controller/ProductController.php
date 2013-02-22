@@ -72,7 +72,13 @@ class ProductController extends AbstractActionController
 		}
 		
 		foreach($attrList as $key => $attr) {
-			echo $attr->getLabel().'<br />';
+// 			$el = $attr->getFormElement();
+// 			echo $el->getLabel().' <br />';
+// 			$form->add($el);
+			
+// 			echo get_class($form->get($attr->getCode())).' <br />';
+			
+// 			$form->addTabElement(0, $attr->getCode());
 		}
 		
 		$form->setData($doc->toArray());
@@ -89,7 +95,8 @@ class ProductController extends AbstractActionController
 				if(!is_null($attaUrl)) {
 					$doc->setAttachment($attaUrl, $attaName, $attaType);
 				}
-	            $doc->save();
+				$dm->persist($doc);
+				$dm->flush();
 	            $this->flashMessenger()->addMessage('产品:'.$doc->label.' 已经成功保存');
 	            return $this->redirect()->toRoute('admin/actionroutes/wildcard', array('action' => 'index', 'controller' => 'product'));
         	}

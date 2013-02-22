@@ -3,6 +3,7 @@ namespace Cms\Document;
 
 use Core\AbstractDocument;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
+use Zend\Form\Element;
 
 /**
  * @ODM\EmbeddedDocument
@@ -33,15 +34,19 @@ class Attribute extends AbstractDocument
 	/** @ODM\Field(type="int")  */
 	protected $sort;
 	
-	public function getElement()
+	public function getFormElement()
 	{
 		$element = null;
 		switch($this->type) {
 			case 'select':
+				$element = new Element\Select("attribute[$this->code]");
 				break;
 			case 'input':
+				$element = new Element\Text("attribute[$this->code]");
 				break;
 		}
+		$element->setLabel($this->label);
+// 			->setAttributes());
 		return $element;
 	}
 	

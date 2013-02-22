@@ -5,6 +5,11 @@ use Zend\Form\Form;
 
 class EditForm extends Form
 {
+	public $tabSettings = array(
+		array('label', 'name', 'groupId', 'sku', 'fulltext', 'appendImage', 'price', 'status'),
+		array('introtext', 'metakey', 'sort', 'introicon')
+	);
+	
     public function __construct()
     {
     	parent::__construct('product-edit');
@@ -86,11 +91,16 @@ class EditForm extends Form
         ));
     }
     
+    public function addTabElement($tabIdx, $elementName)
+    {
+    	array_push($this->tabSettings[$tabIdx], $elementName);
+    }
+    
     public function getTabSettings()
     {
     	return array(
-    		array('handleLabel' => '基本信息', 'content' => array('label', 'name', 'groupId', 'sku', 'fulltext', 'appendImage', 'price', 'status')),
-    		array('handleLabel' => '选填信息', 'content' => array('introtext', 'metakey', 'sort', 'introicon'))
+    		array('handleLabel' => '基本信息', 'content' => $this->tabSettings[0]),
+    		array('handleLabel' => '选填信息', 'content' => $this->tabSettings[1])
     	);
     }
 }
