@@ -71,7 +71,10 @@ class ProductController extends AbstractActionController
 			$attrList = array();
 		}
 		
-		//$form->addElements($attrElements);
+		foreach($attrList as $key => $attr) {
+			echo $attr->getLabel().'<br />';
+		}
+		
 		$form->setData($doc->toArray());
 		
 		if($this->getRequest()->isPost()) {

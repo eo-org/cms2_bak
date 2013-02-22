@@ -33,6 +33,18 @@ class Attribute extends AbstractDocument
 	/** @ODM\Field(type="int")  */
 	protected $sort;
 	
+	public function getElement()
+	{
+		$element = null;
+		switch($this->type) {
+			case 'select':
+				break;
+			case 'input':
+				break;
+		}
+		return $element;
+	}
+	
 	public function exchangeArray($data)
 	{
 		$this->type = $data['type'];

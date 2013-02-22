@@ -2,6 +2,7 @@
 namespace Admin\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
+use Admin\Form\Attributeset\EditForm;
 
 class AttributesetController extends AbstractActionController
 {
@@ -14,26 +15,33 @@ class AttributesetController extends AbstractActionController
     
     public function createAction()
     {
-//        $this->_forward('edit');
-		require APP_PATH."/admin/forms/Attributeset/Create.php";
-    	$form = new Form_Attributeset_Create();
+    	$type = $this->params('type');
     	
-    	if($this->getRequest()->isPost() && $form->isValid($this->getRequest()->getParams())) {
-    		$attributesetCo = App_Factory::_am('Attributeset');
-    		$attributesetDoc = $attributesetCo->create();
-    		$attributesetDoc->label = $form->getValue('label');
-    		$attributesetDoc->type = $this->_type;
-    		$attributesetDoc->save();
-    		$attributesetId = $attributesetDoc->getId();
-    		
-    		$this->_helper->redirector->gotoSimple('edit', 'attributeset', 'admin', array(
-    			'type' => $this->_type,
-    			'id' => $attributesetId
-    		));
+    	if(!in_array($type, array('product'))) {
+    		throw new \Exception('attribute type '.$type.' not supported!');
     	}
-    	$this->view->form = $form;
-        $this->_helper->template->head('输入新表名')
-        	->actionMenu(array('save'));
+    	
+    	$attributesetDoc = new \Cms\Document\Attributeset();
+    	$dm = $this->documentManager();
+    	
+    	$form = new EditForm();
+    	if($this->getRequest()->isPost()) {
+    		$postData = $this->getRequest()->getPost();
+        	$form->setData($postData);
+        	if($form->isValid()) {
+	        	$attributesetDoc->exchangeArray($form->getData());
+	        	$attributesetDoc->setType($type);
+	        	$dm->persist($attributesetDoc);
+	        	$dm->flush();
+	        	$this->flashMessenger()->addMessage('属性组:'.$attributesetDoc->getLabel().'['.$type.'] 已经成功保存');
+	        	return $this->redirect()->toRoute('admin/actionroutes/wildcard', array('action' => 'index', 'controller' => $type.'-type'));
+        	}
+    	}
+    	$this->actionTitle = '新属性组';
+    	$this->actionMenu = array('save');
+    	return array(
+    		'form' => $form
+    	);
     }
     
     public function editAction()
@@ -47,9 +55,8 @@ class AttributesetController extends AbstractActionController
         	throw new Exception('attributeset not found');
         }
         
-        $this->actionTitle = '编辑:';
-//         $this->actionMenu = array();
-		//$this->actionMenu = array('delete');
+		$this->actionTitle = '属性组';
+		$this->actionMenu = array('delete');
         return array(
         	'id' => $id
         );
@@ -58,45 +65,6 @@ class AttributesetController extends AbstractActionController
     public function deleteAction()
     {
     	
-    }
-    
-	public function getAttributesetJsonAction()
-    {
-    	$pageSize = 20;
-		$currentPage = 1;
-		
-		$attributesetCo = App_Factory::_am('Attributeset');
-		$attributesetCo->addFilter('type', $this->_type);
-		$attributesetCo->setFields(array('label'));
-		$queryArray = array();
-		
-        $result = array();
-        foreach($this->getRequest()->getParams() as $key => $value) {
-            if(substr($key, 0 , 7) == 'filter_') {
-                $field = substr($key, 7);
-                switch($field) {
-                	case 'label':
-                		$attributesetCo->addFilter('label', new MongoRegex("/^".$value."/"));
-                		break;
-                    case 'page':
-            			if(intval($value) != 0) {
-            				$currentPage = $value;
-            			}
-                        $result['currentPage'] = intval($value);
-            		    break;
-                }
-            }
-        }
-		$attributesetCo->setPage($currentPage)->setPageSize($pageSize);
-		$data = $attributesetCo->fetchAll(true);
-		$dataSize = $attributesetCo->count();
-		
-		$result['data'] = $data;
-        $result['dataSize'] = $dataSize;
-        $result['pageSize'] = $pageSize;
-        $result['currentPage'] = $currentPage;
-        
-        return $this->_helper->json($result);
     }
     
     public function resortAttributesAction()

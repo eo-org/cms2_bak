@@ -7,7 +7,7 @@ class EditForm extends Form
 {
     public function __construct()
     {
-    	parent::__construct('attributeset-edit');
+    	parent::__construct('attributeset-create');
     	
     	$this->add(array(
     		'name' => 'label',

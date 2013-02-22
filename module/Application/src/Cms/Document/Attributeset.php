@@ -16,16 +16,16 @@ class Attributeset extends AbstractDocument
 	protected $id;
 
 	/** @ODM\Field(type="string")  */
-	protected $label;
-
-	/** @ODM\Field(type="string")  */
 	protected $type;
+	
+	/** @ODM\Field(type="string")  */
+	protected $label;
 	
 	/** @ODM\EmbedMany(targetDocument="Cms\Document\Attribute")  */
 	protected $attributeList = array();
 	
 	/** @ODM\Field(type="boolean")  */
-	protected $isActive;
+	protected $isActive = true;
 	
 	public function getAttributeById($id)
 	{
@@ -56,5 +56,10 @@ class Attributeset extends AbstractDocument
 			}
 		}
 		return false;
+	}
+	
+	public function exchangeArray($data)
+	{
+		$this->label = $data['label'];
 	}
 }

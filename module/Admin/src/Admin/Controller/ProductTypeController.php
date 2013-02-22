@@ -8,7 +8,7 @@ class ProductTypeController extends AbstractActionController
 {
 	public function indexAction()
 	{
-		$this->brickConfig()->setActionMenu(array('create-edit'))
-			->setActionTitle('产品类型');
+		$this->actionMenu = array(array('label' => '创建新属性', 'callback' => '/admin/attributeset/create/type/product'));
+		$this->actionTitle = '产品类型';
 	}
 }

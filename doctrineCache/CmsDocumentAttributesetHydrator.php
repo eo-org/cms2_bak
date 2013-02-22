@@ -36,19 +36,19 @@ class CmsDocumentAttributesetHydrator implements HydratorInterface
         }
 
         /** @Field(type="string") */
-        if (isset($data['label'])) {
-            $value = $data['label'];
-            $return = (string) $value;
-            $this->class->reflFields['label']->setValue($document, $return);
-            $hydratedData['label'] = $return;
-        }
-
-        /** @Field(type="string") */
         if (isset($data['type'])) {
             $value = $data['type'];
             $return = (string) $value;
             $this->class->reflFields['type']->setValue($document, $return);
             $hydratedData['type'] = $return;
+        }
+
+        /** @Field(type="string") */
+        if (isset($data['label'])) {
+            $value = $data['label'];
+            $return = (string) $value;
+            $this->class->reflFields['label']->setValue($document, $return);
+            $hydratedData['label'] = $return;
         }
 
         /** @Many */
