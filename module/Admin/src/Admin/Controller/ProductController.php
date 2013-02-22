@@ -117,7 +117,7 @@ class ProductController extends AbstractActionController
 			$this->actionTitle = '新建产品['.$attributesetDoc->getLabel().']';
 			$this->actionMenu = array('save');
 		} else {
-			$this->actionTitle('编辑产品['.$attributesetDoc->getLabel().']: '.$doc->label);
+			$this->actionTitle = '编辑产品['.$attributesetDoc->getLabel().']: '.$doc->getLabel();
 			$this->actionMenu = array('save', 'delete');
 		}
 		
