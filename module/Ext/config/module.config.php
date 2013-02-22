@@ -144,6 +144,15 @@ return array(
 				)
 			)
 		),
+		'im' => array(
+			'label' => 'IM',
+			'ext' => array(
+				'Ext_Brick_Im_Im' => array(
+					'label' => 'IM',
+					'desc' => ''
+				)
+			)
+		),
 		'search' => array(
 			'label' => '搜索',
 			'ext' => array(
