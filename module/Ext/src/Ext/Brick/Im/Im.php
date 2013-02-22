@@ -1,5 +1,5 @@
 <?php
-namespace Ext\Brick\Logo;
+namespace Ext\Brick\Im;
 
 use Ext\Brick\AbstractExt;
 
