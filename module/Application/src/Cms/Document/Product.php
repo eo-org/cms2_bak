@@ -54,6 +54,11 @@ class Product extends AbstractDocument
 	/** @ODM\Field(type="string")  */
 	protected $status;
 
+	public function clearAttachment()
+	{
+		$this->attachment = null;
+	}
+	
 	public function setAttachment($urlArr, $nameArr, $typeArr)
 	{
 		if(count($urlArr) == 0) {
