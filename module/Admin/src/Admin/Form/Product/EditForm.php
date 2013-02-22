@@ -76,7 +76,7 @@ class EditForm extends Form
     		'options' => array('label' => '产品关键词')
         ));
         $this->add(array(
-        	'name' => 'weight',
+        	'name' => 'sort',
         	'attributes' => array('type' => 'text', 'value' => 1),
         	'options' => array('label' => '权重', 'description' => '-10000 ~ 10000, 数字越小排序越靠前'),
         ));
@@ -90,7 +90,7 @@ class EditForm extends Form
     {
     	return array(
     		array('handleLabel' => '基本信息', 'content' => array('label', 'name', 'groupId', 'sku', 'fulltext', 'appendImage', 'price', 'status')),
-    		array('handleLabel' => '选填信息', 'content' => array('introtext', 'metakey', 'weight', 'introicon'))
+    		array('handleLabel' => '选填信息', 'content' => array('introtext', 'metakey', 'sort', 'introicon'))
     	);
     }
 }

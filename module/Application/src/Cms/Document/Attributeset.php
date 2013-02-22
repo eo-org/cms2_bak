@@ -48,12 +48,6 @@ class Attributeset extends AbstractDocument
 		return $this;
 	}
 	
-	public function setAttributeList($attributeList)
-	{
-		$this->attributeList = $attributeList;
-		return $this;
-	}
-	
 	public function removeAttribute($id)
 	{
 		foreach($this->attributeList as $key => $attribute) {

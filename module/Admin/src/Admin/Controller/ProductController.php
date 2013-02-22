@@ -1,6 +1,8 @@
 <?php
 namespace Admin\Controller;
 
+use Cms\Document\Product;
+
 use Zend\Mvc\Controller\AbstractActionController;
 use Admin\Form\Product\EditForm;
 
@@ -49,26 +51,24 @@ class ProductController extends AbstractActionController
     	$items = $groupDoc->toMultioptions('label');
     	$form->get('groupId')->setValueOptions($items);
     	
-		$co = $factory->_m('Product');
+    	$dm = $this->documentManager();
         $doc = null;
         if(empty($id)) {
-            $doc = $co->create();
-            $this->brickConfig()->setActionTitle('新建产品')
-        		->setActionMenu(array('save'));
+            $doc = new Product();
+            $doc->setAttributesetId($attributesetId);
         } else {
-        	$doc = $co->find($id);
-        	$this->brickConfig()->setActionTitle('编辑产品: '.$doc->label)
-        		->setActionMenu(array('save', 'delete'));
+        	$doc = $dm->getRepository('Cms\Document\Product')->findOneById($id);
+        	$attributesetId = $doc->getAttributesetId();
         }
         if(is_null($doc)) {
             throw new Class_Exception_AccessDeny('没有权限访问此内容，或者产品id不存在');
         }
 		
-		$attributesetDoc = $doc->getAttributesetDoc();
+		$attributesetDoc = $dm->getRepository('Cms\Document\Attributeset')->findOneById($attributesetId);
 		if(!is_null($attributesetDoc)) {
-			$attrElements = $attributesetDoc->getZfElements();
+			$attrList = $attributesetDoc->getAttributeList();
 		} else {
-			$attrElements = array();
+			$attrList = array();
 		}
 		
 		//$form->addElements($attrElements);
@@ -82,9 +82,9 @@ class ProductController extends AbstractActionController
 	    		$attaUrl	= $postData->get('attaUrl');
 				$attaName	= $postData->get('attaName');
 				$attaType	= $postData->get('attaType');
-				$doc->attachment = null;
+				$doc->getAttachment() = null;
 				if(!is_null($attaUrl)) {
-					$doc->setAttachments($attaUrl, $attaName, $attaType);
+					$doc->setAttachment($attaUrl, $attaName, $attaType);
 				}
 	            $doc->save();
 	            $this->flashMessenger()->addMessage('产品:'.$doc->label.' 已经成功保存');
@@ -103,6 +103,14 @@ class ProductController extends AbstractActionController
 		$fileServerKey = 'gioqnfieowhczt7vt87qhitonqfn8eaw9y8s90a6fnvuzioguifeb';
 		$sig = md5($siteId.$time.$fileServerKey);
         
+		if(empty($id)) {
+			$this->actionTitle = '新建产品['.$attributesetDoc->getLabel().']';
+			$this->actionMenu = array('save');
+		} else {
+			$this->actionTitle('编辑产品['.$attributesetDoc->getLabel().']: '.$doc->label);
+			$this->actionMenu = array('save', 'delete');
+		}
+		
 		return array(
 			'form'			=> $form,
 			'product'		=> $doc,
