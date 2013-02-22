@@ -161,6 +161,15 @@ return array(
 				)
 			)
 		),
+		'im' => array(
+			'label' => 'IM',
+			'ext' => array(
+				'Ext_Brick_Im_Im' => array(
+					'label' => '搜索输入框',
+					'desc' => ''
+				),
+			)
+		),
 		'other' => array(
 			'label' => '其他',
 			'ext' => array(
