@@ -1,5 +1,5 @@
 <?php
-namespace Ext\Form\Book;
+namespace Ext\Form\Im;
 
 use Zend\Form\Fieldset;
 
