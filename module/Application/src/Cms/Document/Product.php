@@ -58,7 +58,7 @@ class Product extends AbstractDocument
 	protected $attributesLabel;
 	
 	/** @ODM\Field(type="string")  */
-	protected $status;
+	protected $status = 'publish';
 	
 	protected $attributesetDoc;
 	
@@ -66,14 +66,6 @@ class Product extends AbstractDocument
 	{
 		$this->attributesetDoc = $attributesetDoc;
 		return $this;
-	}
-	
-	public function setAttributesLabel()
-	{
-		$this->attributesLabel = array(
-			array('field' => '腐败', 'value' => '严重'),
-			array('field' => '问题', 'value' => '得不到解决')
-		);
 	}
 	
 	public function clearAttachment()
@@ -105,5 +97,52 @@ class Product extends AbstractDocument
 			$this->status = 'trash';
 		}
 		$this->save();
+	}
+	
+	public function exchangeArray($data)
+	{
+		$this->groupId = $data['groupId'];
+		
+		$this->label = $data['label'];
+		
+		$this->name = $data['name'];
+		
+		$this->sku = $data['sku'];
+		
+		$this->price = $data['price'];
+		
+		$this->fulltext = $data['fulltext'];
+		
+		$this->introicon = $data['introicon'];
+		
+		$this->introtext = $data['introtext'];
+		
+		$this->metakey = $data['metakey'];
+		
+		$this->sort = $data['sort'];
+		
+		$this->attributes = $data['attributes'];
+		
+		$this->status = $data['status'];
+		
+		$this->attributesLabel = $this->setAttributesLabel($data);
+	}
+	
+	private function setAttributesLabel($data)
+	{
+		if(is_null($this->attributesetDoc)) {
+			return;
+		}
+		$labels = array();
+		foreach($this->attributes as $attrCode => $optKey) {
+			$attribute = $this->attributesetDoc->getAttributeByCode($attrCode);
+			$fieldLabel = $attribute->getLabel();
+			$valueLabel = $attribute->getOptionLabel($optKey);
+			$labels[$attrCode] = array(
+				'field' => $fieldLabel,
+				'value' => $valueLabel
+			);
+		}
+		return $labels;
 	}
 }
