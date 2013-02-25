@@ -37,6 +37,16 @@ class Attributeset extends AbstractDocument
 		return null;
 	}
 	
+	public function getAttributeByCode($code)
+	{
+		foreach($this->attributeList as $attr) {
+			if($attr->getCode() == $code) {
+				return $attr;
+			}
+		}
+		return null;
+	}
+	
 	public function createAttribute()
 	{
 		return new Attribute();

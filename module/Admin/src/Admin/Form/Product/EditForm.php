@@ -66,7 +66,7 @@ class EditForm extends Form
     	));
     	$this->add(array(
     		'name' => 'status',
-    		'attributes' => array('type' => 'hidden', 'value' => 'publish')
+    		'attributes' => array('type' => 'hidden')
     	));
     	$this->add($this->attributesFieldset);
     	
