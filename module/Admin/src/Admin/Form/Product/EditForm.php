@@ -6,13 +6,17 @@ use Zend\Form\Form;
 class EditForm extends Form
 {
 	public $tabSettings = array(
-		array('label', 'name', 'groupId', 'sku', 'fulltext', 'appendImage', 'price', 'status'),
+		array('label', 'name', 'groupId', 'sku', 'fulltext', 'appendImage', 'price', 'status', 'attributes'),
 		array('introtext', 'metakey', 'sort', 'introicon')
 	);
+	
+	public $attributesFieldset;
 	
     public function __construct()
     {
     	parent::__construct('product-edit');
+    	
+    	$this->attributesFieldset = new \Zend\Form\Fieldset('attributes');
     	
     	$this->add(array(
     		'name' => 'label',
@@ -64,6 +68,9 @@ class EditForm extends Form
     		'name' => 'status',
     		'attributes' => array('type' => 'hidden', 'value' => 'publish')
     	));
+    	$this->add($this->attributesFieldset);
+    	
+    	/*page two*/
     	$this->add(array(
     		'name' => 'price',
     		'attributes' => array('type' => 'text'),

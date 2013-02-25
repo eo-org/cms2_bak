@@ -51,6 +51,12 @@ class ProductController extends AbstractActionController
     	$items = $groupDoc->toMultioptions('label');
     	$form->get('groupId')->setValueOptions($items);
     	
+    	
+//     	$fs = new \Zend\Form\Fieldset();
+    	
+    	$fs = $form->attributesFieldset;
+    	
+    	
     	$dm = $this->documentManager();
         $doc = null;
         if(empty($id)) {
@@ -70,22 +76,28 @@ class ProductController extends AbstractActionController
 		} else {
 			$attrList = array();
 		}
+		$doc->setAttributesetDoc($attributesetDoc);
 		
 		foreach($attrList as $key => $attr) {
-// 			$el = $attr->getFormElement();
-// 			echo $el->getLabel().' <br />';
-// 			$form->add($el);
+// 			$attrCode = $attr->getCode();
+			$el = $attr->getFormElement();
+// // 			echo get_class($el).'<br />';
+// // 			echo $el->getLabel().' <br />';
+			$fs->add($el);
 			
-// 			echo get_class($form->get($attr->getCode())).' <br />';
+// // 			$newEl = $form->get('attribute[color]');
 			
-// 			$form->addTabElement(0, $attr->getCode());
+// // 			echo get_class($newEl).'<br />';
+// // 			echo get_class()).' <br />';
+			
+// 			$form->addTabElement(0, "attribute[$attrCode]");
 		}
-		
 		$form->setData($doc->toArray());
 		
 		if($this->getRequest()->isPost()) {
 			$postData = $this->getRequest()->getPost();
         	$form->setData($postData);
+        	
         	if($form->isValid()) {
 	        	$doc->setFromArray($form->getData());
 	    		$attaUrl	= $postData->get('attaUrl');

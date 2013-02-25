@@ -39,13 +39,15 @@ class Attribute extends AbstractDocument
 		$element = null;
 		switch($this->type) {
 			case 'select':
-				$element = new Element\Select("attribute[$this->code]");
+				$element = new Element\Select($this->code);
+				$element->setOptions(array('value_options' => $this->options));
 				break;
 			case 'input':
-				$element = new Element\Text("attribute[$this->code]");
+				$element = new Element\Text($this->code);
 				break;
 		}
 		$element->setLabel($this->label);
+		
 // 			->setAttributes());
 		return $element;
 	}

@@ -51,9 +51,31 @@ class Product extends AbstractDocument
 	/** @ODM\Field(type="hash")  */
 	protected $attachment;
 	
+	/** @ODM\Field(type="hash")  */
+	protected $attributes;
+	
+	/** @ODM\Field(type="hash")  */
+	protected $attributesLabel;
+	
 	/** @ODM\Field(type="string")  */
 	protected $status;
-
+	
+	protected $attributesetDoc;
+	
+	public function setAttributesetDoc($attributesetDoc)
+	{
+		$this->attributesetDoc = $attributesetDoc;
+		return $this;
+	}
+	
+	public function setAttributesLabel()
+	{
+		$this->attributesLabel = array(
+			array('field' => '腐败', 'value' => '严重'),
+			array('field' => '问题', 'value' => '得不到解决')
+		);
+	}
+	
 	public function clearAttachment()
 	{
 		$this->attachment = null;

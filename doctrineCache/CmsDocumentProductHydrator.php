@@ -131,6 +131,22 @@ class CmsDocumentProductHydrator implements HydratorInterface
             $hydratedData['attachment'] = $return;
         }
 
+        /** @Field(type="hash") */
+        if (isset($data['attributes'])) {
+            $value = $data['attributes'];
+            $return = $value;
+            $this->class->reflFields['attributes']->setValue($document, $return);
+            $hydratedData['attributes'] = $return;
+        }
+
+        /** @Field(type="hash") */
+        if (isset($data['attributesLabel'])) {
+            $value = $data['attributesLabel'];
+            $return = $value;
+            $this->class->reflFields['attributesLabel']->setValue($document, $return);
+            $hydratedData['attributesLabel'] = $return;
+        }
+
         /** @Field(type="string") */
         if (isset($data['status'])) {
             $value = $data['status'];
