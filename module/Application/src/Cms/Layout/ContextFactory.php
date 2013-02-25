@@ -18,8 +18,9 @@ class ContextFactory
 	 * for book pages, it refers to the book indexes
 	 */
 	
-	public function getContext($routeMatch)
+	public function getContext($mvcEvent)
 	{
+		$routeMatch = $mvcEvent->getRouteMatch();
 		$routeName = $routeMatch->getMatchedRouteName();
 		$id = $routeMatch->getParam('id');
 		$presetLayoutDoc = null;
@@ -100,6 +101,9 @@ class ContextFactory
 			return null;
 		}
 		$context->setParams($routeMatch->getParams());
+		
+		$query = $mvcEvent->getRequest()->getQuery();
+		$context->setQuery($query);
 		return $context;
 	}
 }

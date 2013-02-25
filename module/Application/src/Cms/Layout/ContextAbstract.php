@@ -12,6 +12,7 @@ abstract class ContextAbstract
 	protected $breadcrumb;
 	protected $contextId = null;
 	protected $params = array();
+	protected $query = array();
 	protected $shouldCache = false;
 	
 	public function __construct($dbFactory)
@@ -49,6 +50,17 @@ abstract class ContextAbstract
 	public function getResourceDoc()
 	{
 		return null;
+	}
+	
+	public function setQuery($query)
+	{
+		$this->query = $query;
+		return $this;
+	}
+	
+	public function getQuery()
+	{
+		return $this->query;
 	}
 	
 	public function setParams($params)

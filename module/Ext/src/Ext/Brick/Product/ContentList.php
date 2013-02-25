@@ -48,6 +48,14 @@ class ContentList extends AbstractExt
 					$co->sort('name', 1);
 					break;
 			}
+			
+			$query = $context->getQuery();
+			foreach($query as $code => $optVal) {
+				if($optVal != 'all') {
+					$fieldName = 'attributes.'.$code;
+					$co->addFilter($fieldName, $optVal);
+				}
+			}
 			$dataSize = $co->count();
 			$data = $co->fetchDoc();
 			 

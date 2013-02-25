@@ -94,4 +94,20 @@ class Filter
 			return "";
 		}
 	}
+	
+	static function query($attrCode, $optVal, $currentQuery = array(), $format = null)
+	{
+		$currentQuery[$attrCode] = $optVal;
+		$hrefArr = array();
+		foreach($currentQuery as $key => $value) {
+			$hrefArr[] = "$key=$value";
+		}
+		
+		$hrefStr = implode("&", $hrefArr);
+		if($hrefStr == "") {
+			return "";
+		} else {
+			return '?'.$hrefStr;
+		}
+	}
 }

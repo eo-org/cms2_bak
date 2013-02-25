@@ -78,6 +78,10 @@ return array(
 					'label' => '产品-子分组',
 					'desc' => ''
 				),
+				'Ext_Brick_Product_Selector' => array(
+					'label' => '产品-筛选框',
+					'desc' => ''
+				),
 			)
 		),
 		'position' => array(

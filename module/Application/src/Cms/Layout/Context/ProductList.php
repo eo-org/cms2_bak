@@ -125,4 +125,13 @@ class ProductList extends ContextAbstract
 	{
 		return "product-list";
 	}
+	
+	public function shouldCache()
+	{
+		if(count($this->query) == 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }

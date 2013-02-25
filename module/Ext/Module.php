@@ -27,6 +27,14 @@ class Module
 		$twigEnv->addFilter('url',				new \Twig_Filter_Function('Ext\Twig\Filter::url'));
 		$twigEnv->addFilter('pageLink',			new \Twig_Filter_Function('Ext\Twig\Filter::pageLink'));
 		$twigEnv->addFilter('translate',		new \Twig_Filter_Function('Ext\Twig\Filter::translate'));
+		$twigEnv->addFilter('query',			new \Twig_Filter_Function('Ext\Twig\Filter::query'));
+		
+		$twigEnv->addFunction(new \Twig_SimpleFunction('getArrayValue', function($arr, $key, $default = null) {
+			if(isset($arr[$key])) {
+				return $arr[$key];
+			}
+			return $default;
+		}));
 		
 		$templateDir = array();
 		$brickPathStackConfig = $config['brick_path_stack'];
