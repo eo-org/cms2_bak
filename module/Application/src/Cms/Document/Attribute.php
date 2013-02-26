@@ -42,9 +42,11 @@ class Attribute extends AbstractDocument
 				$element = new Element\Select($this->code);
 				$element->setOptions(array('value_options' => $this->options));
 				break;
-			case 'input':
+			case 'text':
 				$element = new Element\Text($this->code);
 				break;
+			default:
+				throw new \Exception($this->type.' is not defined');
 		}
 		$element->setLabel($this->label);
 		

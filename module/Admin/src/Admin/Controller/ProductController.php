@@ -60,6 +60,7 @@ class ProductController extends AbstractActionController
         	$doc = $dm->getRepository('Cms\Document\Product')->findOneById($id);
         	$attributesetId = $doc->getAttributesetId();
         }
+        
         if(is_null($doc)) {
             throw new Class_Exception_AccessDeny('没有权限访问此内容，或者产品id不存在');
         }
