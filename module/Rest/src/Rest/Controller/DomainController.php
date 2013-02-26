@@ -36,7 +36,7 @@ class DomainController extends AbstractRestfulController
 		$remoteSiteId = $this->siteConfig('remoteSiteId');
 		
 		$site = $dm->createQueryBuilder('Document\ServiceAccount\Site')
-			->field('remoteSiteId')->equals($remoteSiteId)
+			->field('_id')->equals($remoteSiteId)
 			->hydrate(false)
 			->getQuery()
 			->getSingleResult();
