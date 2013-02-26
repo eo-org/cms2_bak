@@ -1,5 +1,6 @@
 <?php
 return array(
+	'env' => 'localhost',
 	'libVersion' => 'v4',
 	'fileServer' => 'lib.eo.test',
 	'accountServer' => array(

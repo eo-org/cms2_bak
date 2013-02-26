@@ -27,9 +27,10 @@ class Module implements BootstrapListenerInterface
 		$config->setHydratorDir(BASE_PATH . '/cms2/doctrineCache');
 		$config->setHydratorNamespace('DoctrineMongoHydrator');
 		$config->setMetadataDriverImpl(AnnotationDriver::create(BASE_PATH.'/class'));
-		
-		$config->setAutoGenerateHydratorClasses(true);
-		$config->setAutoGenerateProxyClasses(true);
+		if($siteConfig->env == 'localhost') {
+			$config->setAutoGenerateHydratorClasses(true);
+			$config->setAutoGenerateProxyClasses(true);
+		}
 		
 		$dm = DocumentManager::create(new Connection(), $config);
 		PersistentObject::setObjectManager($dm);
