@@ -138,7 +138,7 @@ class DomainController extends AbstractRestfulController
 		//$dm = $this->documentManager();
 		
 		$site = $dm->createQueryBuilder('Document\ServiceAccount\Site')
-			->field('remoteSiteId')->equals($remoteSiteId)
+			->field('_id')->equals($remoteSiteId)
 			->getQuery()
 			->getSingleResult();
 		
