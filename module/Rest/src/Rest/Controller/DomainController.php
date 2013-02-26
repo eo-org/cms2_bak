@@ -4,15 +4,36 @@ namespace Rest\Controller;
 use Zend\Mvc\Controller\AbstractRestfulController;
 use Zend\Json\Json;
 use Zend\View\Model\JsonModel;
-use Doctrine;
+use Doctrine\Common\Persistence\PersistentObject,
+Doctrine\ODM\MongoDB\DocumentManager,
+Doctrine\ODM\MongoDB\Configuration,
+Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver,
+Doctrine\MongoDB\Connection;
+
 use Document\ServiceAccount\Site;
 
 class DomainController extends AbstractRestfulController
 {
 	public function getList()
 	{
+		/** new connection create **/
+		$config = new Configuration();
+		
+		$config->setProxyDir(BASE_PATH . '/cms2/doctrineCache');
+		$config->setProxyNamespace('DoctrineMongoProxy');
+		$config->setHydratorDir(BASE_PATH . '/cms2/doctrineCache');
+		$config->setHydratorNamespace('DoctrineMongoHydrator');
+		$config->setMetadataDriverImpl(AnnotationDriver::create(BASE_PATH.'/class'));
+		
+		$config->setAutoGenerateHydratorClasses(true);
+		$config->setAutoGenerateProxyClasses(true);
+		
+		$accountServer = $this->siteConfig('accountServer');
+		$dm = DocumentManager::create(new Connection($accountServer['server']), $config);
+		PersistentObject::setObjectManager($dm);
+		/** END new connection create **/
+		
 		$remoteSiteId = $this->siteConfig('remoteSiteId');
-		$dm = $this->documentManager();
 		
 		$site = $dm->createQueryBuilder('Document\ServiceAccount\Site')
 			->field('remoteSiteId')->equals($remoteSiteId)
@@ -35,8 +56,25 @@ class DomainController extends AbstractRestfulController
 	
 	public function create($data)
 	{
+		/** new connection create **/
+		$config = new Configuration();
+		
+		$config->setProxyDir(BASE_PATH . '/cms2/doctrineCache');
+		$config->setProxyNamespace('DoctrineMongoProxy');
+		$config->setHydratorDir(BASE_PATH . '/cms2/doctrineCache');
+		$config->setHydratorNamespace('DoctrineMongoHydrator');
+		$config->setMetadataDriverImpl(AnnotationDriver::create(BASE_PATH.'/class'));
+		
+		$config->setAutoGenerateHydratorClasses(true);
+		$config->setAutoGenerateProxyClasses(true);
+		
+		$accountServer = $this->siteConfig('accountServer');
+		$dm = DocumentManager::create(new Connection($accountServer['server']), $config);
+		PersistentObject::setObjectManager($dm);
+		/** END new connection create **/
+		
 		$globalSiteId = $this->siteConfig('globalSiteId');
-		$dm = $this->documentManager();
+		//$dm = $this->documentManager();
 		
 		$dataStr = $data['model'];
 		$dataArr = Json::decode($dataStr, Json::TYPE_ARRAY);
@@ -79,8 +117,25 @@ class DomainController extends AbstractRestfulController
 	
 	public function delete($id)
 	{
+		/** new connection create **/
+		$config = new Configuration();
+		
+		$config->setProxyDir(BASE_PATH . '/cms2/doctrineCache');
+		$config->setProxyNamespace('DoctrineMongoProxy');
+		$config->setHydratorDir(BASE_PATH . '/cms2/doctrineCache');
+		$config->setHydratorNamespace('DoctrineMongoHydrator');
+		$config->setMetadataDriverImpl(AnnotationDriver::create(BASE_PATH.'/class'));
+		
+		$config->setAutoGenerateHydratorClasses(true);
+		$config->setAutoGenerateProxyClasses(true);
+		
+		$accountServer = $this->siteConfig('accountServer');
+		$dm = DocumentManager::create(new Connection($accountServer['server']), $config);
+		PersistentObject::setObjectManager($dm);
+		/** END new connection create **/
+		
 		$remoteSiteId = $this->siteConfig('remoteSiteId');
-		$dm = $this->documentManager();
+		//$dm = $this->documentManager();
 		
 		$site = $dm->createQueryBuilder('Document\ServiceAccount\Site')
 			->field('remoteSiteId')->equals($remoteSiteId)

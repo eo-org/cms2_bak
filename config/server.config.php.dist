@@ -1,5 +1,8 @@
 <?php
 return array(
 	'libVersion' => 'v4',
-	'fileServer' => 'lib.eo.test'
+	'fileServer' => 'lib.eo.test',
+	'accountServer' => array(
+		'server' => CENTER_DB
+	)
 );
