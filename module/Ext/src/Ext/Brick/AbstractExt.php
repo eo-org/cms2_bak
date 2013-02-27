@@ -52,6 +52,11 @@ abstract class AbstractExt
     	return null;
     }
     
+    public function documentManager()
+    {
+    	return $this->sm->get('DocumentManager');
+    }
+    
     public function dbFactory()
     {
     	return $this->sm->get('Core\Mongo\Factory');

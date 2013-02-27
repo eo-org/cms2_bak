@@ -125,10 +125,10 @@ class Product extends AbstractDocument
 		
 		$this->status = $data['status'];
 		
-		$this->attributesLabel = $this->setAttributesLabel($data);
+		$this->attributesLabel = $this->setAttributesLabel();
 	}
 	
-	private function setAttributesLabel($data)
+	private function setAttributesLabel()
 	{
 		if(is_null($this->attributesetDoc)) {
 			return;

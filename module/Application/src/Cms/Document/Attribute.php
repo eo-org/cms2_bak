@@ -56,10 +56,16 @@ class Attribute extends AbstractDocument
 	
 	public function getOptionLabel($optKey)
 	{
-		foreach($this->options as $key => $keyLabel) {
-			if($optKey === $key) {
-				return $keyLabel;
-			}
+		switch ($this->type) {
+			case 'select':
+				foreach($this->options as $key => $keyLabel) {
+					if($optKey === $key) {
+						return $keyLabel;
+					}
+				}
+				break;
+			case 'text':
+				return $optKey;
 		}
 		return null;
 	}

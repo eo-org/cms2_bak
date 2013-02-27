@@ -15,11 +15,11 @@ class Detail extends AbstractExt
     	$factory = $this->dbFactory();
     	$productDoc = $factory->_m('Product')->find($productId);
     	if($context->getType() == 'product' && $productDoc != null) {
-    		$title = $productDoc->label;
-    		if($this->getParam('showHits') == 'y') {
-    			$productDoc->hits++;
-    			$productDoc->save();
-    		}
+//     		$title = $productDoc->label;
+//     		if($this->getParam('showHits') == 'y') {
+//     			$productDoc->hits++;
+//     			$productDoc->save();
+//     		}
     	} else {
     		$this->_disableRender = 'brick-product-detail';
     	}
