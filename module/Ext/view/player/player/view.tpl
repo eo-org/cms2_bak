@@ -7,7 +7,7 @@ $(document).ready(function(){
 			}).jPlayer("play");
 		},
 		loop: true,
-		swfPath: "/js"
+		swfPath: "Jplayer.swf"
 	});
 });
 </script>
