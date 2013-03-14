@@ -170,13 +170,6 @@ abstract class AbstractExt
     		$systemTplList = $this->getTplList();
 	    	$this->view = new View();
 	    	
-// 	    	if(!array_key_exists($tplName, $systemTplList)) {
-// 	    		echo $systemTplList[$tplName];
-// 				//$this->view->setScriptPath(BASE_PATH.'/extension/view'.$this->path());
-// 	    	} else {
-// 				//$this->view->setScriptPath($this->twigPath());
-// 	    	}
-			
 			$this->view->assign($this->_params);
 			$this->prepare();
 			
@@ -199,28 +192,6 @@ abstract class AbstractExt
 			}
     	}
     }
-    
-//     public function configTplOptions($form)
-//     {
-//     	$tplArray = $this->getTplList();
-    	
-//     	$userFolder = TEMPLATE_PATH.$this->twigPath();
-//     	$userTplArray = array();
-// 		if(is_dir($userFolder)) {
-// 			$handle = opendir($userFolder);
-// 	    	while($file = readdir($handle)) {
-// 	    		if(strpos($file, '.tpl')) {
-// 	    			$userTplArray[$file] = $file;
-// 	    		}
-// 	    	}
-// 		}
-// 		if(count($userTplArray) > 0) {
-// 			$tplArray = array('system' => $tplArray, 'user' => $userTplArray);
-// 		}
-    	
-//     	$form->tplName->setMultiOptions($tplArray);
-//     	return $form;
-//     }
     
     public function getTplArray()
     {

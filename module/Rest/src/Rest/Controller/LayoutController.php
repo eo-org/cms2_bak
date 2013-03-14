@@ -1,6 +1,8 @@
 <?php
 namespace Rest\Controller;
 
+use Zend\View\Model\JsonModel;
+
 use Zend\Mvc\Controller\AbstractRestfulController;
 use Zend\Json\Json;
 
@@ -84,6 +86,7 @@ class LayoutController extends AbstractRestfulController
     	$doc->save();
     	
     	$this->getResponse()->getHeaders()->addHeaderLine('result', 'success');
+    	return new JsonModel(array('layoutId' => $id));
     }
     
     public function delete($id)

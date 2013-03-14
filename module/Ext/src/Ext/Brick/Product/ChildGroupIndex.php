@@ -23,6 +23,8 @@ class ChildGroupIndex extends AbstractExt
 	
 	public function getTplList()
 	{
-		return array('view' => 'product\childgroupindex\view.tpl');
+		return array(
+			'view' => 'product\childgroupindex\view.tpl'
+		);
 	}
 }

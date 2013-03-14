@@ -30,7 +30,7 @@ class Front
 		return $this->generalSiteInfo;
 	}
 	
-	public function initPageController($controller)
+	public function initActionController($controller)
 	{
 		$sm = $this->sm;
 		$infoDoc = $this->getGeneralSiteInfo();
@@ -88,6 +88,7 @@ class Front
 				}
 			}
 		}
+		return $viewModel;
 	}
 	
 	public function getStageList()

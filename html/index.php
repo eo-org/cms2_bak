@@ -67,5 +67,5 @@ $totaltime = ($endtime - $starttime);
 
 //echo $_SERVER['X-Requested-With'];
 if(!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest') {
-	echo $totaltime;
+	echo "<!--".$totaltime."-->";
 }

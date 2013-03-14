@@ -12,7 +12,6 @@ class Module
 	public function init($moduleManager)
 	{
 		$sharedEvents = StaticEventManager::getInstance();
-		$sharedEvents->attach('Zend\Mvc\Application', 'route', array($this, 'initLayout'), 0);
 		$sharedEvents->attach('Zend\Mvc\Application', 'dispatch.error', array($this, 'onError'), 100);
 		
 		$sessionAdmin = new SessionAdmin();
@@ -36,13 +35,6 @@ class Module
 				)
 			)
 		);
-	}
-	
-	public function initLayout(MvcEvent $e)
-	{
-		$application = $e->getTarget();
-		$sm = $application->getServiceManager();
-		$layoutFront = $sm->get('Cms\Layout\Front');
 	}
 	
 	public function onError(MvcEvent $e)

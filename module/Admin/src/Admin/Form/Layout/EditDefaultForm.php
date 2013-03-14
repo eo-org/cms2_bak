@@ -9,15 +9,15 @@ class EditDefaultForm extends Form
     {
     	parent::__construct('layout-edit-default');
     	
-		$this->add(array(
-			'name' => 'hideHead',
-			'type' => 'Zend\Form\Element\Checkbox',
-			'options' => array('label' => '隐藏页头')
-		));
-		$this->add(array(
-			'name' => 'hideTail',
-			'type' => 'Zend\Form\Element\Checkbox',
-			'options' => array('label' => '隐藏页脚')
-		));
+    	$this->add(array(
+    		'name' => 'useTpl',
+    		'type' => 'Zend\Form\Element\Checkbox',
+    		'options' => array('label' => '使用TPL')
+    	));
+    	$this->add(array(
+    		'name' => 'tplFileContent',
+    		'attributes' => array('type' => 'textarea', 'id' => 'codemirror-editor'),
+    		'options' => array('label' => 'TPL文件内容')
+    	));
     }
 }

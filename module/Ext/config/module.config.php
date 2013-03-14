@@ -189,6 +189,10 @@ return array(
 					'label' => '控制器内容输出',
 					'desc' => ''
 				),
+				'Ext_Brick_Player_Player' => array(
+					'label' => '播放器',
+					'desc' => ''
+				)
 			)
 		)
 	),

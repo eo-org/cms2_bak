@@ -1,10 +1,13 @@
 <?php
 namespace Cms;
 
+use Zend\Mvc\MvcEvent;
+
 use Zend\Stdlib\DispatchableInterface, Zend\Stdlib\RequestInterface as Request, Zend\Stdlib\ResponseInterface as Response;
 use Zend\Mvc\InjectApplicationEventInterface, Zend\EventManager\EventInterface as Event;
 use Zend\ServiceManager\ServiceLocatorAwareInterface, Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\I18n\Translator\Translator;
+use Zend\EventManager\StaticEventManager, Zend\EventManager\EventManager;
 use Fucms\Session\Admin as SessionAdmin;
 
 class ApplicationController implements
@@ -12,6 +15,12 @@ class ApplicationController implements
     InjectApplicationEventInterface,
     ServiceLocatorAwareInterface
 {
+	/**
+	 * 
+	 * @var \Zend\EventManager\EventManager
+	 */
+	protected $events;
+	
 	/**
 	 * 
 	 * @var \Zend\Mvc\MvcEvent
@@ -38,7 +47,7 @@ class ApplicationController implements
 		$this->getEvent()->setTarget($this);
 		
 		$layoutFront = $this->serviceManager->get('Cms\Layout\Front');
-		$layoutFront->initPageController($this);
+		$viewModel = $layoutFront->initActionController($this);
 		
 		$sm = $this->getServiceLocator();
 	
@@ -61,6 +70,14 @@ class ApplicationController implements
 			)
 		));
 		$sm->setService('translator', $translator);
+		
+		$viewModel->setVariables(array(
+			'layoutDoc' => $layoutFront->getLayoutDoc(),
+			'stageList' => $layoutFront->getStageList(),
+			'brickViewList' => $layoutFront->getBrickViewList(),
+		));
+		
+		$this->getEventManager()->trigger(MvcEvent::EVENT_DISPATCH, $this->getEvent());
 	}
 	
 	public function layout($template = null)
@@ -90,5 +107,18 @@ class ApplicationController implements
     public function getServiceLocator()
     {
     	return $this->serviceManager;
+    }
+    
+    public function getEventManager()
+    {
+    	if(!$this->events) {
+    		$this->setEventManager(new EventManager('Cms\ApplicationController'));
+    	}
+    	return $this->events;
+    }
+    
+    public function setEventManager(EventManager $events)
+    {
+    	$this->events = $events;
     }
 }

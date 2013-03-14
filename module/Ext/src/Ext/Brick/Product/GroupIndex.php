@@ -24,13 +24,15 @@ class GroupIndex extends AbstractExt
 		$this->view->currentGroupItemId = $groupItemId;
 	}
 	
-	public function getClass()
+	public function getFormClass()
 	{
 		return 'Ext\Form\Product\GroupIndex';
 	}
 	
 	public function getTplList()
 	{
-		return array('view' => 'product\groupindex\view.tpl');
+		return array(
+			'view' => 'product\groupindex\view.tpl'
+		);
 	}
 }

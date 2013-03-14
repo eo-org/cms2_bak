@@ -44,17 +44,6 @@ class View
     {
     	return self::$fileLoader;
     }
-    
-    public function __construct()
-    {
-//         $this->_twigEnv = new \Twig_Environment($loader, $envOptions);
-//         $this->_twigEnv->addFilter('outputImage',		new \Twig_Filter_Function('Brick\Helper\Twig\Filter::outputImage'));
-//         $this->_twigEnv->addFilter('graphicDataJson',	new \Twig_Filter_Function('Brick\Helper\Twig\Filter::graphicDataJson'));
-//         $this->_twigEnv->addFilter('substr',			new \Twig_Filter_Function('Brick\Helper\Twig\Filter::substr'));
-//         $this->_twigEnv->addFilter('url',				new \Twig_Filter_Function('Brick\Helper\Twig\Filter::url'));
-//         $this->_twigEnv->addFilter('pageLink',			new \Twig_Filter_Function('Brick\Helper\Twig\Filter::pageLink'));
-//         $this->_twigEnv->addFilter('translate',			new \Twig_Filter_Function('Brick\Helper\Twig\Filter::translate'));
-    }
 
     /**
      * Set the template loader

@@ -4,6 +4,7 @@ return array(
     	'DoctrineMongo',
     	'Ext',
 		'Application',
+//     	'ZfcTwig',
 		'Admin',
 		'Rest',
     	'User',

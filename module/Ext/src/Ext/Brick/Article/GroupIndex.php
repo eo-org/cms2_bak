@@ -26,7 +26,7 @@ class GroupIndex extends AbstractExt
 	
 	public function getFormClass()
 	{
-		return "Ext\Form\Article\GroupIndex";
+		return 'Ext\Form\Article\GroupIndex';
 	}
 	
 	public function getTplList()
