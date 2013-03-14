@@ -2,6 +2,7 @@
 namespace DisqusRest\Controller;
 
 use Zend\Mvc\Controller\AbstractRestfulController;
+use Zend\View\Model\JsonModel;
 use Disqus\Document\Thread,
 Disqus\Document\Post;
 
@@ -34,7 +35,7 @@ class ThreadController extends AbstractRestfulController
 		$result['dataSize'] = $dataSize;
 		$result['pageSize'] = $pageSize;
 		$result['currentPage'] = $currentPage;
-		return $result;
+		return new JsonModel($result);
 	}
 	
 	public function get($id)

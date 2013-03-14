@@ -4,6 +4,8 @@ namespace Rest\Controller;
 use MongoId;
 use MongoRegex;
 use Zend\Mvc\Controller\AbstractRestfulController;
+use Zend\Json\Json;
+use Zend\View\Model\JsonModel;
 
 class ProductController extends AbstractRestfulController
 {
@@ -64,7 +66,7 @@ class ProductController extends AbstractRestfulController
         $result['currentPage'] = $currentPage;
 		$result['groupCount'] = $dataGroupCount;
 		
-		return $result;
+		return new JsonModel($result);
 	}
 	
 	public function get($id)

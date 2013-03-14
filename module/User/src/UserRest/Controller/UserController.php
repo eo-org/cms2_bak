@@ -3,6 +3,7 @@ namespace UserRest\Controller;
 
 use Zend\Mvc\Controller\AbstractRestfulController;
 use User\Document\User;
+use Zend\View\Model\JsonModel;
 
 class UserController extends AbstractRestfulController
 {
@@ -32,7 +33,7 @@ class UserController extends AbstractRestfulController
 		$result['dataSize'] = $dataSize;
 		$result['pageSize'] = $pageSize;
 		$result['currentPage'] = $currentPage;
-		return $result;
+		return new JsonModel($result);
 	}
 	
 	public function get($id)

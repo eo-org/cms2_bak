@@ -50,7 +50,7 @@ class BookController extends AbstractRestfulController
         $result['pageSize'] = $pageSize;
         $result['currentPage'] = $currentPage;
 		
-		return $result;
+		return new JsonModel($result);
 	}
 	
 	public function get($id)
