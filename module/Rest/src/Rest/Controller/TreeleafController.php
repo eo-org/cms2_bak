@@ -104,7 +104,7 @@ class TreeleafController extends AbstractRestfulController
 		$doc->save();
 		
 		$this->getResponse()->getHeaders()->addHeaderLine('result', 'sucess');
-		return array('id' => $id);
+		return new JsonModel(array('id' => $id));
 	}
 	
 	public function delete($id)
@@ -134,5 +134,6 @@ class TreeleafController extends AbstractRestfulController
 			$this->getResponse()->getHeaders()->addHeaderLine('result', 'fail');
 			echo "不能删除非空的节点！";
 		}
+		return new JsonModel(array('id' => $id));
 	}
 }
