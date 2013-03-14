@@ -7,7 +7,7 @@ $(document).ready(function(){
 			}).jPlayer("play");
 		},
 		loop: true,
-		swfPath: "http://lib.enorange.com/cms/v4/front/script/effect/player/Jplayer.swf"
+		swfPath: "/js/Jplayer.swf"
 	});
 });
 </script>
