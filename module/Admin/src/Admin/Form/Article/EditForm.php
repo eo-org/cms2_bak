@@ -41,6 +41,11 @@ class EditForm extends Form
     		'attributes' => array('type' => 'hidden', 'value' => 'publish')
     	));
     	$this->add(array(
+    		'name' => 'created',
+    		'attributes' => array('type' => 'text'),
+    		'options' => array('label' => '创建时间')
+    	));
+    	$this->add(array(
     		'name' => 'introtext',
     		'attributes' => array('type' => 'textarea'),
     		'options' => array('label' => '文章摘要')
@@ -60,7 +65,7 @@ class EditForm extends Form
     {
     	return array(
     		array('handleLabel' => '基本信息', 'content' => array('label', 'groupId', 'fulltext', 'appendImage', 'status')),
-    		array('handleLabel' => '选填信息', 'content' => array('introtext', 'metakey', 'introicon'))
+    		array('handleLabel' => '选填信息', 'content' => array('created', 'introtext', 'metakey', 'introicon'))
     	);
     }
 }

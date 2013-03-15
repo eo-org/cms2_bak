@@ -22,6 +22,9 @@ class DatabaseLoader implements Twig_LoaderInterface
     	} else {
     		$template = $this->dm->getRepository('Ext\Document\Template')->findOneById($name);
     		if(is_null($template)) {
+    			$template = $this->dm->getRepository('Ext\Document\Template')->findOneByScriptName($name);
+    		}
+    		if(is_null($template)) {
     			die('ext template '.$name.' not found');
     		}
     		$templateFileContent = $template->getContent();

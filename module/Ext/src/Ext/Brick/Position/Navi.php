@@ -21,6 +21,9 @@ class Navi extends AbstractExt
     
     public function getTplList()
     {
-    	return array('view' => 'position\navi\view.tpl');
+    	return array(
+    		'view' => 'position\navi\view.tpl',
+    		'loop' => 'position\navi\_loopitem.tpl'
+    	);
     }
 }
