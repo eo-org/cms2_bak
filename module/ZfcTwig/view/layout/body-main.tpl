@@ -4,7 +4,8 @@
 
 {% for typeArr in stage.type|split('-') %}
 {% set spriteName = stage.stageId~'-'~loop.index0 %}
-<div stage-id='{{ stage.stageId }}' sprite-name='{{ spriteName }}' class='sprite grid-{{ typeArr }}'>
+{% set spriteDivId = stage.uniqueId~'-'~loop.index0 %}
+<div id='{{spriteDivId}}' stage-id='{{ stage.stageId }}' sprite-name='{{ spriteName }}' class='sprite grid-{{ typeArr }}'>
 {{ brickViewList[spriteName]|raw }}
 </div>
 {% endfor %}
