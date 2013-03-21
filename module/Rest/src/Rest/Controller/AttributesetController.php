@@ -4,6 +4,8 @@ namespace Rest\Controller;
 use MongoId;
 use MongoRegex;
 use Zend\Mvc\Controller\AbstractRestfulController;
+use Zend\Json\Json;
+use Zend\View\Model\JsonModel;
 
 class AttributesetController extends AbstractRestfulController
 {
@@ -37,7 +39,7 @@ class AttributesetController extends AbstractRestfulController
         $result['pageSize'] = $pageSize;
         $result['currentPage'] = $currentPage;
 		
-		return $result;
+		return new JsonModel($result);
 	}
 	
 	public function get($id)

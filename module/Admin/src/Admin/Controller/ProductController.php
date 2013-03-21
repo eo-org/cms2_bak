@@ -10,8 +10,8 @@ class ProductController extends AbstractActionController
 {
     public function indexAction()
     {
-		$this->brickConfig()->setActionMenu(array('create'))
-			->setActionTitle('产品列表');
+		$this->actionMenu = array('create');
+		$this->actionTitle = '产品列表';
 		
 		$factory = $this->dbFactory();
 		$groupDoc = $factory->_m('Group')->findProductGroup();
@@ -31,8 +31,8 @@ class ProductController extends AbstractActionController
 			->addFilter('type', 'product')
 			->fetchAll();
 		
-		$this->brickConfig()->setActionMenu(array())
-			->setActionTitle('选择产品类型');
+		$this->actionMenu = array();
+		$this->actionTitle = '选择产品类型';
 		
 		return array(
 			'attrRowset' => $attrDocSet

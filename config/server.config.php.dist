@@ -2,7 +2,7 @@
 return array(
 	'env' => 'production',
 	'libVersion' => 'v4',
-	'fileServer' => 'lib.enorange.com',
+	'fileServer' => 'lib.eo.test',
 	'accountServer' => array(
 		'server' => CENTER_DB
 	)

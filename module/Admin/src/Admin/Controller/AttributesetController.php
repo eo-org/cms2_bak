@@ -64,7 +64,18 @@ class AttributesetController extends AbstractActionController
     
     public function deleteAction()
     {
-    	
+    	$id = $this->params()->fromRoute('id');
+    	$dm = $this->documentManager();
+    	$attributesetDoc = $dm->getRepository('Cms\Document\Attributeset')->find($id);
+    	 
+    	if(is_null($attributesetDoc)) {
+    		throw new Exception('attributeset not found');
+    	}
+    	 
+    	$dm->remove($attributesetDoc);
+    	$dm->flush();
+    	$this->flashMessenger()->addMessage('产品类型:'.$attributesetDoc->getLabel().'已删除！');
+    	return $this->redirect()->toRoute('admin/actionroutes/wildcard', array('action' => 'index', 'controller' => 'product-type'));
     }
     
     public function resortAttributesAction()

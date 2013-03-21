@@ -21,7 +21,7 @@ class Attributeset extends AbstractDocument
 	/** @ODM\Field(type="string")  */
 	protected $label;
 	
-	/** @ODM\EmbedMany(targetDocument="Cms\Document\Attribute")  */
+	/** @ODM\ReferenceMany(cascade={"persist", "remove"})  */
 	protected $attributeList = array();
 	
 	/** @ODM\Field(type="boolean")  */

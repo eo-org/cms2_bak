@@ -7,6 +7,7 @@ return array(
 			'adminrest-book'		=> 'Rest\Controller\BookController',
 			//'adminrest-product-type'=> 'Rest\Controller\ProductTypeController',
 			'adminrest-product'		=> 'Rest\Controller\ProductController',
+			'adminrest-product-brand'	=> 'Rest\Controller\ProductBrandController',
 			'adminrest-ad-section'	=> 'Rest\Controller\AdSectionController',
 			'adminrest-ad'			=> 'Rest\Controller\AdController',
 			'adminrest-user'		=> 'Rest\Controller\UserController',

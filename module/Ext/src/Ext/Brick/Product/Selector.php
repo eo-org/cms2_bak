@@ -16,15 +16,25 @@ class Selector extends AbstractExt
     	}
     	$currentQuery = $context->getQuery()->toArray();
     	$filters = $this->getParam('filters');
-    	
     	$filterArr = \Zend\Json\Json::decode($filters, \Zend\Json\Json::TYPE_ARRAY);
     	
-//     	$twigEnv = \Ext\Twig\View::getTwigEnv();
-//     	$twigEnv->addFunction(new \Twig_SimpleFunction('check', function() {
-//     		return true;
-//     	}));
+    	$dm = $this->documentManager();
+		$qb = $dm->createQueryBuilder('Cms\Document\Attribute');
+		$cursor = $qb->field('UUID')->in($filterArr)
+			->sort('sort', -1)
+			->getQuery()
+			->execute();
+		$selectorArr = array();
+		foreach($cursor as $data) {
+			$code = $data->getCode();
+			$selectorArr[$code] = array(
+				'label' => $data->getLabel(),
+				'optVal' => $data->getOptions()
+			);
+		}
+    	
     	$this->view->currentQuery = $currentQuery;
-    	$this->view->filterArr = $filterArr;
+    	$this->view->filterArr = $selectorArr;
     }
     
 	public function getFormClass()

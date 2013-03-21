@@ -5,20 +5,42 @@ use Zend\Mvc\Controller\AbstractRestfulController;
 use Zend\Json\Json;
 use Zend\View\Model\JsonModel;
 
-class AttributeController extends AbstractRestfulController
+class ProductBrandController extends AbstractRestfulController
 {
 	public function getList()
-	{
-		$attributesetId = $this->getRequest()->getHeader('X-Attributeset-Id')->getFieldValue();
-		$dm = $this->documentManager();
-		$attributeDocs = $dm->getRepository('Cms\Document\Attribute')->findByAttributesetId($attributesetId);
+	{	
+		$filter = $this->getRequest()->getQuery(); 
 		
-		$data = array();
-		foreach($attributeDocs as $attribute) {
-			$data[] = $attribute->getArrayCopy();
+		$currentPage = $filter['page'];
+		$sIndex = $filter['sIndex'];
+		$sOrder = intval($filter['sOrder']);
+		$qGroup = $filter['qGroup'];
+		$queryStr = $filter['query'];
+		
+		$pageSize = 20;
+		if(empty($currentPage)) {
+			$currentPage = 1;
 		}
 		
-		return new JsonModel($data);
+		$skip = $pageSize * ($currentPage - 1);
+		
+		$dm = $this->documentManager();
+		$qb = $dm->createQueryBuilder('Cms\Document\Product\Brand');
+		
+		$cursor = $qb->limit($pageSize)->skip($skip)
+			->sort('_id', -1)
+			->hydrate(false)
+			->getQuery()
+			->execute();
+		$data = $this->formatData($cursor);
+		$dataSize = $qb->getQuery()->execute()->count();
+		
+		$result = array();
+		$result['data'] = $data;
+		$result['dataSize'] = $dataSize;
+		$result['pageSize'] = $pageSize;
+		$result['currentPage'] = $currentPage;
+		return new JsonModel($result);
 	}
 	
 	public function get($id)

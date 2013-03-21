@@ -60,9 +60,7 @@ return array(
         	'layout/toolbar-tail'		=> __DIR__ . '/../view/layout/toolbar-tail.tpl',
         	'layout/body-head'			=> __DIR__ . '/../view/layout/body-head.tpl',
         	'layout/body-main'			=> __DIR__ . '/../view/layout/body-main.tpl',
-        	'layout/body-tail'			=> __DIR__ . '/../view/layout/body-tail.tpl',
-        	'error/404'					=> __DIR__ . '/../view/error/404.phtml',
-        	'error/index'				=> __DIR__ . '/../view/error/index.phtml',
+        	'layout/body-tail'			=> __DIR__ . '/../view/layout/body-tail.tpl'
         ),
 	)
 );

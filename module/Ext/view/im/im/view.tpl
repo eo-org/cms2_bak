@@ -22,10 +22,13 @@
 		</li>
 	{% endfor %}
 	</ul>
+	
+	<div class='closer'>X</div>
 </div>
 
 <script type='text/javascript'>
 $('document').ready(function() {
+	var closer = $('.float-im-bg .closer');
 	var floatDiv = $('.float-im-bg');
 	
 	floatDiv.appendTo('body');
@@ -46,5 +49,7 @@ $('document').ready(function() {
 		rightPos+= 'px';
 		floatDiv.css({'left':rightPos});
 	});
+	
+	closer.click(function() {floatDiv.remove()});
 });
 </script>

@@ -12,6 +12,9 @@
 		<div class='attribute-library-item' attribute-type='select' label='单选下拉框'>
 			单选下拉框
 		</div>
+		<div class='attribute-library-item' attribute-type='brand' label='商标/品牌'>
+			商标/品牌
+		</div>
 		<!--div class='attribute-library-item' attribute-type='multicheckbox' label='多选框'>
 			多选框
 		</div>
@@ -45,6 +48,8 @@ var attributeset = {id: '<?php echo $this->id?>'};
 
 <script type='text/template' id='attribute-editor-template'>
 	<dl>
+	<dt>UUID</dt>
+	<dd><input class='attribute-field' type="text" name="UUID" value="{{ UUID }}" /></dd>
 	<dt>CODE</dt>
 	<dd><input class='attribute-field' type="text" name="code" value="{{ code }}" /></dd>
 	<dt>标题</dt>
@@ -129,6 +134,12 @@ switch(type) {
 	case 'label':
 %>
 			<hr style='width: 80%' />
+<%
+	break;
+	case 'brand':
+%>
+		<select disabled='disabled' style='width:100px'><option value='brand'>BRAND</option></select>
+
 <%
 	break;
 }

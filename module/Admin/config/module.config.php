@@ -7,6 +7,7 @@ return array(
 			'article'		=> 'Admin\Controller\ArticleController',
 			'book'			=> 'Admin\Controller\BookController',
 			'product-type'	=> 'Admin\Controller\ProductTypeController',
+        	'product-brand'	=> 'Admin\Controller\ProductBrandController',
 			'product'		=> 'Admin\Controller\ProductController',
 			'ad-section'	=> 'Admin\Controller\AdSectionController',
 			'ad'			=> 'Admin\Controller\AdController',
