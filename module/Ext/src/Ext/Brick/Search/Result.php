@@ -24,7 +24,7 @@ class Result extends AbstractExt
     		$page = 1;
     	}
     	
-    	$pageSize = 1;
+    	$pageSize = 20;
     	$data = array();
     	if(!empty($keywords)) {
     		$factory = $this->dbFactory();
