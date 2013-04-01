@@ -12,15 +12,13 @@ class Result extends AbstractExt
     {    	
     	$sm = $this->sm;
 		
-		$matches = $this->_controller->getEvent()->getRouteMatch();
-		$routeMatchParams = $matches->getParams();
-		$routeType = $matches->getMatchedRouteName();
-
-		return $this->getController()->getRequest()->getQuery($param, $default);
+		$layoutFront = $this->getLayoutFront();
+		$context = $layoutFront->getContext();
+		$params = $context->getQuery();
 		
-		$type = $this->getController()->getRequest()->getQuery('type');
-    	$keywords = $this->getController()->getRequest()->getQuery('kyewords');
-    	$page = $this->getController()->getRequest()->getQuery('page');
+		$type = $params['type'];
+    	$keywords = $params['keywords'];
+    	$page = $params['page'];
     	
     	if(empty($page)) {
     		$page = 1;
@@ -62,7 +60,7 @@ class Result extends AbstractExt
     	
     	$this->view->routeType = 'application/search';
 		$this->view->pages = $pages;
-		$this->view->routeMatchParams = $routeMatchParams;
+		$this->view->routeMatchParams = $params;
 		$this->view->getQueryParams = array(
 			'type' => 'type='.$type,
 			'keywords' => 'keywords='.$keywords,

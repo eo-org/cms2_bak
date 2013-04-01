@@ -60,7 +60,10 @@ class NaviController extends AbstractRestfulController
 	
 	public function create($data)
 	{
-	
+		$naviId = $data['naviId'];
+		$itemId = $data['itemId'];
+		$label = $data['label'];
+		return new JsonModel();
 	}
 	
 	public function update($id, $data)

@@ -66,6 +66,7 @@ var tree = {type: 'group', id: '<?php echo $this->doc->type?>'};
 		<!-- div class='leaf-page-edit'>
 			<a class='mini-icon-bg mini-icon-edit' href='/admin/group/edit-item/id/{{ id }}'></a>
 		</div -->
+		<div class='leaf-add-to-navi'>+</div>
 		<div class='leaf-layout-alias'>
 			{{ layoutAlias }}
 		</div>
@@ -99,6 +100,19 @@ var tree = {type: 'group', id: '<?php echo $this->doc->type?>'};
 
 		<a class='edit-save button' href='javascript:void(0)'>保存</a>
 		<a class='edit-delete button' href='javascript:void(0)'>删除</a>
+	</div>
+</script>
+
+<script type='text/template' id='add-to-navi-editor'>
+	<div class='editor-title'>添加到导航栏</div>
+	<div class='editor-contenr'>
+		<dt>目录组</dt>
+		<dd><select name='naviId' class='naviId'>
+			<% for(idx in navi) { %>
+			<option value='{{navi[idx].id}}'>{{navi[idx].label}}</option>
+			<% } %>
+		</select></dd>
+		<a class='edit-save button' href='javascript:void(0)'>添加</a>
 	</div>
 </script>
 

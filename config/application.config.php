@@ -3,10 +3,10 @@ return array(
     'modules' => array(
     	'DoctrineMongo',
     	'Ext',
-	'Application',
+		'Application',
      	'ZfcTwig',
-	'Admin',
-	'Rest',
+		'Admin',
+		'Rest',
     	'User',
     	'Disqus',
     ),

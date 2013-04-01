@@ -32,9 +32,16 @@ class Module implements BootstrapListenerInterface
 			$config->setAutoGenerateProxyClasses(true);
 		}
 		
-		$dm = DocumentManager::create(new Connection(), $config);
+		$connection = new Connection('127.0.0.1', array(
+			'username' => 'craftgavin',
+			'password' => 'whothirstformagic?',
+			'db' => 'admin'
+		));
+		$connection->initialize();
+		$dm = DocumentManager::create($connection, $config);
 		PersistentObject::setObjectManager($dm);
 		
+		$sm->setService('MongoClient', $connection->getMongo());
 		$sm->setService('DocumentManager', $dm);
 	}
 	
