@@ -61,6 +61,8 @@ var tree = {type: 'navi', id: '<?php echo $this->naviDoc->getId()?>'};
 		<dd><input class='edit-value' type='text' name='className' value='{{className}}' /></dd>
 		<dt>描述</dt>
 		<dd><input class='edit-value' type='text' name='description' value='{{description}}' /></dd>
+		<dt>Resource Id</dt>
+		<dd><input class='edit-value' type='text' name='resourceId' value='{{resourceId}}' /></dd>
 		<dd class='action-dd button edit-save'>SAVE</dd>
 <%if(id != null){%>
 		<dd class='action-dd button edit-delete'>DELETE</dd>
@@ -69,24 +71,11 @@ var tree = {type: 'navi', id: '<?php echo $this->naviDoc->getId()?>'};
 </script>
 
 <script>
-var showEditor = function(){
+var showEditor = function() {
 	var model = new Treeleaf();
 	var tlEditor = new TreeleafEditorView({
 		model:model
 	});
 	tlEditor.render();
 }
-//
-//var createAd = function() {
-//	ad = new Ad();
-//	var aeView = new AdEditorView({
-//		model: ad
-//	});
-//
-//	var prompt = Prompt.getInstance().appendEditorContent(
-//		aeView.render().el
-//	).showMask();
-//}
-
-
 </script>

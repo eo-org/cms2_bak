@@ -75,7 +75,7 @@ class NaviController extends AbstractRestfulController
 		$descStr = "";
 		$factory = $this->dbFactory();
 		$co = $factory->_m('Navi_Link');
-		$docs = $co->setFields(array('label', 'parentId', 'sort', 'link', 'className', 'description'))
+		$docs = $co->setFields(array('label', 'parentId', 'sort', 'link', 'className', 'description', 'resourceId'))
 			->addFilter('naviId', $treeId)
 			->sort('sort', 1)
 			->fetchDoc();
