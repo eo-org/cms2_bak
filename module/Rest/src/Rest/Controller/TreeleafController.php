@@ -16,7 +16,7 @@ class TreeleafController extends AbstractRestfulController
 			case 'navi':
 				$co = $factory->_m('Navi_Link')
 					->addFilter('naviId', $treeId)
-					->setFields(array('label', 'link', 'parentId', 'className', 'sort', 'description'));
+					->setFields(array('label', 'link', 'parentId', 'className', 'sort', 'description', 'resourceId'));
 				break;
 			case 'book':
 				$co = $factory->_m('Book_Page')
@@ -26,7 +26,7 @@ class TreeleafController extends AbstractRestfulController
 			case 'group':
 				$co = $factory->_m('Group_Item')
 					->addFilter('groupType', $treeId)
-					->setFields(array('label', 'alias', 'layoutAlias', 'parentId', 'className', 'iconName', 'bannerName', 'sort', 'disabled'));
+					->setFields(array('label', 'alias', 'layoutAlias', 'parentId', 'className', 'iconName', 'bannerName', 'sort', 'disabled', 'groupType'));
 				break;
 		}
 		
