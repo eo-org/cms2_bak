@@ -13,4 +13,4 @@ Thumbs.db
 # htaccess file #
 ######################
 .htaccess
-config\server.config.php.dist
+server.config.php.dist
