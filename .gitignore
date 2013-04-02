@@ -14,3 +14,4 @@ Thumbs.db
 ######################
 .htaccess
 server.config.php.dist
+local.php
